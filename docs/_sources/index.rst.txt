@@ -4,7 +4,7 @@
 QEpy - Quantum ESPRESSO in Python
 =================================
 
-QEpy_ turns `Quantum ESPRESSO (QE) <https://www.quantum-espresso.org/>`_ into a Python DFT engine for nonstandard workflows.
+QEpy_ turns `Quantum ESPRESSO (QE) <https://www.quantum-espresso.org/>`_ into a Python DFT engine for nonstandard workflows. QEpy_ allows the user to include external potentials, use custom xc functionals, and much much more.
 
 Contributors and funding
 ========================
@@ -39,7 +39,6 @@ Contents
    install
    tutorials/tutorials
    qepy/qepy
-   development/development
    faq
 
 .. _QEpy: https://github.com/Quantum-MultiScale/QEpy
