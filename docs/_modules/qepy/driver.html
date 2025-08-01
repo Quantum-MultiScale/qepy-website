@@ -1,0 +1,1511 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../../">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>qepy.driver &mdash; QEpy  &#34;7.2.0&#34;
+ documentation</title>
+      <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="../../_static/custom.css?v=9b3c20d5" />
+      <link rel="stylesheet" type="text/css" href="../../_static/copybutton.css?v=76b2166b" />
+      <link rel="stylesheet" type="text/css" href="../../_static/tabs.css?v=4c969af8" />
+      <link rel="stylesheet" type="text/css" href="../../_static/panels-main.c949a650a448cc0ae9fd3441c0e17fb0.css?v=2a6c4383" />
+      <link rel="stylesheet" type="text/css" href="../../_static/panels-bootstrap.5fd3999ee7762ccc51105388f4a9d115.css?v=45cf7dbc" />
+      <link rel="stylesheet" type="text/css" href="../../_static/panels-variables.06eb56fa6e07937060861dad626602ad.css?v=d290406d" />
+
+  
+      <script src="../../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../../_static/documentation_options.js?v=fb160149"></script>
+      <script src="../../_static/doctools.js?v=9bcbadda"></script>
+      <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
+      <script src="../../_static/clipboard.min.js?v=a7894cd8"></script>
+      <script src="../../_static/copybutton.js?v=f281be69"></script>
+      <script src="../../_static/tabs.js?v=3ee01567"></script>
+      <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+    <script src="../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../index.html" class="icon icon-home">
+            QEpy
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul>
+<li class="toctree-l1"><a class="reference internal" href="../../contact.html">Contact</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../install.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../tutorials/tutorials.html">Tutorials</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../qepy/qepy.html">Modules</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../development/development.html">Development</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../faq.html">Frequently Asked Questions</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">QEpy</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../index.html">Module code</a></li>
+      <li class="breadcrumb-item active">qepy.driver</li>
+      <li class="wy-breadcrumbs-aside">
+        
+      </li>
+    
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>Source code for qepy.driver</h1><div class="highlight"><pre>
+<span></span><span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">tempfile</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">functools</span><span class="w"> </span><span class="kn">import</span> <span class="n">wraps</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">qepy</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">qepy.qepy_modules</span> <span class="c1"># import the QE MPI first</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">qepy.core</span><span class="w"> </span><span class="kn">import</span> <span class="n">env</span><span class="p">,</span> <span class="n">qepy_clean_saved</span><span class="p">,</span> <span class="n">QEpyLibs</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">qepy.io</span><span class="w"> </span><span class="kn">import</span> <span class="n">QEInput</span>
+
+<span class="k">def</span><span class="w"> </span><span class="nf">gathered</span><span class="p">(</span><span class="n">function</span><span class="p">):</span>
+    <span class="nd">@wraps</span><span class="p">(</span><span class="n">function</span><span class="p">)</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">wrapper</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="n">out</span> <span class="o">=</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;out&#39;</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
+        <span class="n">gather</span> <span class="o">=</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;gather&#39;</span><span class="p">,</span> <span class="kc">True</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">out</span> <span class="ow">is</span> <span class="kc">None</span> <span class="p">:</span> <span class="n">out</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">create_array</span><span class="p">(</span><span class="n">gather</span><span class="o">=</span><span class="n">gather</span><span class="p">,</span> <span class="n">kind</span><span class="o">=</span><span class="s1">&#39;rho&#39;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">gather</span> <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">nproc</span> <span class="o">&gt;</span> <span class="mi">1</span> <span class="p">:</span>
+            <span class="n">arr</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">create_array</span><span class="p">(</span><span class="n">gather</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">kind</span><span class="o">=</span><span class="s1">&#39;rho&#39;</span><span class="p">)</span>
+        <span class="k">else</span> <span class="p">:</span>
+            <span class="n">arr</span> <span class="o">=</span> <span class="n">out</span>
+        <span class="c1">#</span>
+        <span class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;out&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">arr</span>
+        <span class="n">results</span> <span class="o">=</span> <span class="n">function</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+        <span class="c1">#</span>
+        <span class="k">if</span> <span class="n">gather</span> <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">nproc</span> <span class="o">&gt;</span> <span class="mi">1</span> <span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">qepy_pw</span><span class="o">.</span><span class="n">qepy_mod</span><span class="o">.</span><span class="n">qepy_get_value</span><span class="p">(</span><span class="n">arr</span><span class="p">,</span> <span class="n">out</span><span class="p">,</span> <span class="n">gather</span> <span class="o">=</span> <span class="kc">True</span><span class="p">)</span>
+            <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">results</span><span class="p">,</span> <span class="p">(</span><span class="nb">tuple</span><span class="p">,</span> <span class="nb">list</span><span class="p">)):</span>
+                <span class="n">results</span> <span class="o">=</span> <span class="n">out</span><span class="p">,</span> <span class="o">*</span><span class="n">results</span><span class="p">[</span><span class="mi">1</span><span class="p">:]</span>
+            <span class="k">else</span> <span class="p">:</span>
+                <span class="n">results</span> <span class="o">=</span> <span class="n">out</span>
+        <span class="k">return</span> <span class="n">results</span>
+    <span class="k">return</span> <span class="n">wrapper</span>
+
+<div class="viewcode-block" id="Driver">
+<a class="viewcode-back" href="../../qepy/driver.html#qepy.driver.Driver">[docs]</a>
+<span class="k">class</span><span class="w"> </span><span class="nc">Driver</span><span class="p">(</span><span class="n">metaclass</span><span class="o">=</span><span class="n">QEpyLibs</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    The driver of QEpy.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    inputfile : str</span>
+<span class="sd">        Name of QE input file</span>
+<span class="sd">    comm : object</span>
+<span class="sd">        Parallel communicator</span>
+<span class="sd">    ldescf : bool</span>
+<span class="sd">        If True, also print the SCF correction term for each SCF cycle</span>
+<span class="sd">    iterative : bool</span>
+<span class="sd">        Run SCF or real-time TDDFT one iteration at a time</span>
+<span class="sd">    task : str</span>
+<span class="sd">        Task to be performed by the driver :</span>
+
+<span class="sd">          - &#39;scf&#39; : Self consistent field</span>
+<span class="sd">          - &#39;nscf&#39; : initialization of Driver from previous SCF calculation</span>
+<span class="sd">          - &#39;optical&#39; : Optical absorption spectrum (real-time TDDFT with ce-tddft of Davide Ceresoli)</span>
+<span class="sd">          - &#39;tddfpt_davidson&#39; : TDDFPT with davidson algorithm</span>
+
+<span class="sd">    embed : object (Fortran)</span>
+<span class="sd">        embed object itialized in the Fortran side of QEpy needed to communicate with QE.</span>
+<span class="sd">    prefix : str</span>
+<span class="sd">        prefix of QE input/output</span>
+<span class="sd">    outdir : str</span>
+<span class="sd">        The output directory of QE</span>
+<span class="sd">    logfile : str, file or bool</span>
+<span class="sd">        The screen output of QE. If it is a file descriptor, it should open with &#39;w+&#39;.</span>
+
+<span class="sd">          - None : Show on the screen.</span>
+<span class="sd">          - str  : Save to the given file.</span>
+<span class="sd">          - True : Save to the temporary file, see also :func:`qepy.driver.Driver.get_output`.</span>
+
+<span class="sd">    outdir : str</span>
+<span class="sd">        The output directory of QE</span>
+<span class="sd">    qe_options : dict</span>
+<span class="sd">        A dictionary with input parameters for QE to generate QE input file.</span>
+<span class="sd">        See class QEInput</span>
+<span class="sd">    prog : str</span>
+<span class="sd">        The name of QE program, default is `pw` which is pw.x in QE.</span>
+<span class="sd">    progress : bool</span>
+<span class="sd">        If True, will continue run the QE without cleaning the workspace. Most times used for running TDDFT after scf.</span>
+<span class="sd">    atoms : object</span>
+<span class="sd">        An ase Atoms to generate the input file.</span>
+<span class="sd">    needwf : bool</span>
+<span class="sd">        If False, will not read wavefunctions and skip wavefunction-related initialization.</span>
+<span class="sd">    kwargs : dict</span>
+<span class="sd">        Other options</span>
+
+<span class="sd">    .. note::</span>
+
+<span class="sd">         - The bool `gather` parameter in functions means the data is gathered on root or distributed on all cpus.</span>
+<span class="sd">         - Units in QEpy are Bohr and Rydberg. These differ from ASE&#39;s units. Please, be careful!</span>
+
+<span class="sd">             + positions : Bohr</span>
+<span class="sd">             + lattice : Bohr</span>
+<span class="sd">             + energy : Ry</span>
+<span class="sd">             + forces : Ry/Bohr</span>
+<span class="sd">             + stress : Ry/Bohr**3</span>
+<span class="sd">             + potential : Ry</span>
+<span class="sd">             + density : 1.0/Bohr**3</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">POTNAMES</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;external&#39;</span> <span class="p">:</span> <span class="mi">0</span><span class="p">,</span> <span class="s1">&#39;localpp&#39;</span> <span class="p">:</span> <span class="mi">1</span><span class="p">,</span> <span class="s1">&#39;hartree&#39;</span> <span class="p">:</span> <span class="mi">2</span><span class="p">,</span> <span class="s1">&#39;xc&#39;</span> <span class="p">:</span> <span class="mi">4</span><span class="p">}</span>
+    <span class="n">FORCENAMES</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;ewald&#39;</span> <span class="p">:</span> <span class="mi">1</span><span class="p">,</span> <span class="s1">&#39;localpp&#39;</span> <span class="p">:</span> <span class="mi">2</span><span class="p">,</span> <span class="s1">&#39;nlcc&#39;</span> <span class="p">:</span> <span class="mi">4</span><span class="p">}</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">inputfile</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">comm</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">ldescf</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span> <span class="n">iterative</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
+             <span class="n">task</span> <span class="o">=</span> <span class="s1">&#39;scf&#39;</span><span class="p">,</span> <span class="n">embed</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">prefix</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">outdir</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">logfile</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+             <span class="n">qe_options</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">prog</span> <span class="o">=</span> <span class="s1">&#39;pw&#39;</span><span class="p">,</span> <span class="n">progress</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span> <span class="n">atoms</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">needwf</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span>
+             <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">task</span> <span class="o">=</span> <span class="n">task</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">embed</span> <span class="o">=</span> <span class="n">embed</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">comm</span> <span class="o">=</span> <span class="n">comm</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">inputfile</span> <span class="o">=</span> <span class="n">inputfile</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">iterative</span> <span class="o">=</span> <span class="n">iterative</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">prefix</span> <span class="o">=</span> <span class="n">prefix</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">outdir</span> <span class="o">=</span> <span class="n">outdir</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">logfile</span> <span class="o">=</span> <span class="n">logfile</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">qe_options</span> <span class="o">=</span> <span class="n">qe_options</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">prog</span> <span class="o">=</span> <span class="n">prog</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">progress</span> <span class="o">=</span> <span class="n">progress</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">atoms</span> <span class="o">=</span> <span class="n">atoms</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">needwf</span> <span class="o">=</span> <span class="n">needwf</span>
+        <span class="c1">#</span>
+        <span class="k">if</span> <span class="n">embed</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">embed</span><span class="o">.</span><span class="n">ldescf</span> <span class="o">=</span> <span class="n">ldescf</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">embed</span><span class="o">.</span><span class="n">iterative</span> <span class="o">=</span> <span class="n">iterative</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">embed</span><span class="o">.</span><span class="n">tddft</span><span class="o">.</span><span class="n">iterative</span> <span class="o">=</span> <span class="n">iterative</span>
+        <span class="c1">#</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">comm</span> <span class="o">=</span> <span class="n">comm</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">qepy</span> <span class="o">=</span> <span class="n">qepy</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">qeinput</span> <span class="o">=</span> <span class="n">QEInput</span><span class="p">()</span>
+        <span class="c1">#</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">driver_initialize</span><span class="p">()</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="fm">__getattr__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">attr</span><span class="p">):</span>
+        <span class="k">return</span> <span class="nb">getattr</span><span class="p">(</span><span class="nb">type</span><span class="p">(</span><span class="bp">self</span><span class="p">),</span> <span class="n">attr</span><span class="p">)</span>
+        <span class="c1"># return _getattr_qepylibs(self, attr)</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">_init_log</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;_initialize the QE output.&quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">fileobj_interact</span> <span class="o">=</span> <span class="kc">False</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">logfile</span> <span class="ow">in</span> <span class="p">[</span><span class="kc">None</span><span class="p">,</span> <span class="kc">False</span><span class="p">]:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">fileobj</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="k">else</span> <span class="p">:</span>
+            <span class="c1"># self.qepy_pw.qepy_mod.qepy_set_stdout(self.logfile)</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">logfile</span> <span class="ow">is</span> <span class="kc">True</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">fileobj_interact</span> <span class="o">=</span> <span class="kc">True</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">fileobj</span> <span class="o">=</span> <span class="n">tempfile</span><span class="o">.</span><span class="n">NamedTemporaryFile</span><span class="p">(</span><span class="s1">&#39;w+&#39;</span><span class="p">)</span>
+            <span class="k">elif</span> <span class="nb">hasattr</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">logfile</span><span class="p">,</span> <span class="s1">&#39;write&#39;</span><span class="p">):</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">fileobj</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">logfile</span>
+            <span class="k">else</span> <span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">fileobj</span> <span class="o">=</span> <span class="nb">open</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">logfile</span><span class="p">,</span> <span class="s1">&#39;w+&#39;</span><span class="p">)</span>
+        <span class="n">env</span><span class="p">[</span><span class="s1">&#39;STDOUT&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">fileobj</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">fileobj</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">embed</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_embed</span> <span class="ow">is</span> <span class="kc">None</span> <span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_embed</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">qepy_pw</span><span class="o">.</span><span class="n">qepy_common</span><span class="o">.</span><span class="n">embed_base</span><span class="p">()</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_embed</span>
+
+    <span class="nd">@embed</span><span class="o">.</span><span class="n">setter</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">embed</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">value</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_embed</span> <span class="o">=</span> <span class="n">value</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">comm</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_comm</span>
+
+    <span class="nd">@comm</span><span class="o">.</span><span class="n">setter</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">comm</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">value</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Sets the MPI communicator with value given by mpi4py&quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="n">value</span> <span class="ow">is</span> <span class="kc">True</span><span class="p">:</span>
+            <span class="k">try</span><span class="p">:</span>
+                <span class="kn">from</span><span class="w"> </span><span class="nn">mpi4py</span><span class="w"> </span><span class="kn">import</span> <span class="n">MPI</span>
+                <span class="n">value</span> <span class="o">=</span> <span class="n">MPI</span><span class="o">.</span><span class="n">COMM_WORLD</span>
+            <span class="k">except</span> <span class="ne">Exception</span><span class="p">:</span>
+                <span class="n">value</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_comm</span> <span class="o">=</span> <span class="n">value</span>
+        <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">comm</span><span class="p">,</span> <span class="s1">&#39;py2f&#39;</span><span class="p">)</span> <span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_commf</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">comm</span><span class="o">.</span><span class="n">py2f</span><span class="p">()</span>
+        <span class="k">else</span> <span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_commf</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">comm</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">commf</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_commf</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">is_root</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Whether it is the root.</span>
+
+<span class="sd">        If the comm is set, root is rank == 0.</span>
+<span class="sd">        If comm not set, root is ionode of QE.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">comm</span><span class="p">,</span> <span class="s1">&#39;rank&#39;</span><span class="p">):</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">comm</span><span class="o">.</span><span class="n">rank</span> <span class="o">==</span> <span class="mi">0</span>
+        <span class="k">else</span> <span class="p">:</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">qepy_modules</span><span class="o">.</span><span class="n">io_global</span><span class="o">.</span><span class="n">get_ionode</span><span class="p">()</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">nproc</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">comm</span><span class="p">,</span> <span class="s1">&#39;size&#39;</span><span class="p">):</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">comm</span><span class="o">.</span><span class="n">size</span>
+        <span class="k">else</span> <span class="p">:</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">qepy_modules</span><span class="o">.</span><span class="n">mp_world</span><span class="o">.</span><span class="n">get_nproc</span><span class="p">()</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">qe_is_mpi</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="nb">bool</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">qepy_pw</span><span class="o">.</span><span class="n">qepy_common</span><span class="o">.</span><span class="n">get_is_mpi</span><span class="p">())</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">qe_is_openmp</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="nb">bool</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">qepy_pw</span><span class="o">.</span><span class="n">qepy_common</span><span class="o">.</span><span class="n">get_is_openmp</span><span class="p">())</span>
+
+<div class="viewcode-block" id="Driver.restart">
+<a class="viewcode-back" href="../../qepy/driver.html#qepy.driver.Driver.restart">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">restart</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">prog</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Restart the driver losing all information about the previous driver&quot;&quot;&quot;</span>
+        <span class="n">prog</span> <span class="o">=</span> <span class="n">prog</span> <span class="ow">or</span> <span class="bp">self</span><span class="o">.</span><span class="n">prog</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">driver_initialize</span><span class="p">()</span></div>
+
+
+<div class="viewcode-block" id="Driver.driver_initialize">
+<a class="viewcode-back" href="../../qepy/driver.html#qepy.driver.Driver.driver_initialize">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">driver_initialize</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot; Initialize the driver</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        inputfile : str</span>
+<span class="sd">            Name of QE input file</span>
+<span class="sd">        commf : object</span>
+<span class="sd">            mpi4py parallel communicator to be sent to Fortran</span>
+<span class="sd">        task : str</span>
+<span class="sd">            Task to be performed by the driver :</span>
+
+<span class="sd">             - &#39;scf&#39; : Self consistent field</span>
+<span class="sd">             - &#39;nscf&#39; : initialization of Driver from previous SCF calculation</span>
+<span class="sd">             - &#39;optical&#39; : Optical absorption spectrum (real-time TDDFT with ce-tddft of Davide Ceresoli)</span>
+
+<span class="sd">        qe_options: dict</span>
+<span class="sd">            A dictionary with input parameters for QE to generate QE input file.</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c1"># stop the last driver and save new driver</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">progress</span> <span class="p">:</span>
+            <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">env</span><span class="p">[</span><span class="s1">&#39;DRIVER&#39;</span><span class="p">],</span> <span class="s1">&#39;stop&#39;</span><span class="p">):</span> <span class="n">env</span><span class="p">[</span><span class="s1">&#39;DRIVER&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">stop</span><span class="p">()</span>
+            <span class="n">env</span><span class="p">[</span><span class="s1">&#39;DRIVER&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span>
+        <span class="c1">#</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_init_log</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">qepy_pw</span><span class="o">.</span><span class="n">qepy_common</span><span class="o">.</span><span class="n">set_embed</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">embed</span><span class="p">)</span>
+        <span class="c1">#</span>
+        <span class="n">inputfile</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">inputfile</span>
+        <span class="n">commf</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">commf</span>
+        <span class="n">task</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">task</span>
+        <span class="n">qe_options</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">qe_options</span>
+        <span class="n">prog</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">prog</span>
+        <span class="c1">#</span>
+        <span class="k">if</span> <span class="n">qe_options</span> <span class="p">:</span>
+            <span class="n">inputfile</span><span class="p">,</span> <span class="n">basefile</span> <span class="o">=</span> <span class="s1">&#39;input_tmp.in&#39;</span><span class="p">,</span> <span class="n">inputfile</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">qeinput</span><span class="o">.</span><span class="n">write_qe_input</span><span class="p">(</span><span class="n">inputfile</span><span class="p">,</span> <span class="n">atoms</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">atoms</span><span class="p">,</span> <span class="n">basefile</span><span class="o">=</span><span class="n">basefile</span><span class="p">,</span> <span class="n">qe_options</span><span class="o">=</span><span class="n">qe_options</span><span class="p">,</span> <span class="n">prog</span><span class="o">=</span><span class="n">prog</span><span class="p">)</span>
+        <span class="c1">#</span>
+        <span class="k">if</span> <span class="n">task</span> <span class="o">==</span> <span class="s1">&#39;optical&#39;</span> <span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">tddft_initialize</span><span class="p">(</span><span class="n">inputfile</span><span class="o">=</span><span class="n">inputfile</span><span class="p">,</span> <span class="n">commf</span> <span class="o">=</span> <span class="n">commf</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="n">task</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s1">&#39;tddfpt_&#39;</span><span class="p">):</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">tddfpt_initialize</span><span class="p">(</span><span class="n">inputfile</span><span class="o">=</span><span class="n">inputfile</span><span class="p">,</span> <span class="n">commf</span> <span class="o">=</span> <span class="n">commf</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="n">task</span> <span class="o">==</span> <span class="s1">&#39;nscf&#39;</span> <span class="p">:</span>
+            <span class="n">inputobj</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">qepy_pw</span><span class="o">.</span><span class="n">qepy_common</span><span class="o">.</span><span class="n">input_base</span><span class="p">()</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">prefix</span> <span class="p">:</span> <span class="n">inputobj</span><span class="o">.</span><span class="n">prefix</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">prefix</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">outdir</span> <span class="p">:</span> <span class="n">inputobj</span><span class="o">.</span><span class="n">tmp_dir</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">outdir</span><span class="p">)</span> <span class="o">+</span> <span class="s1">&#39;/&#39;</span>
+            <span class="k">if</span> <span class="n">commf</span> <span class="p">:</span> <span class="n">inputobj</span><span class="o">.</span><span class="n">my_world_comm</span> <span class="o">=</span> <span class="n">commf</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">qepy_pw</span><span class="o">.</span><span class="n">qepy_initial</span><span class="p">(</span><span class="n">inputobj</span><span class="p">)</span>
+            <span class="c1"># tmpdir = inputobj.tmp_dir.decode().strip() + inputobj.prefix.decode().strip() + &#39;.save&#39; + &#39;/&#39;</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">needwf</span> <span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">qepy_pw</span><span class="o">.</span><span class="n">read_file</span><span class="p">()</span>
+            <span class="k">else</span> <span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">qepy_pw</span><span class="o">.</span><span class="n">read_file_new</span><span class="p">(</span><span class="kc">False</span><span class="p">)</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">needwf</span> <span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">qepy_pw</span><span class="o">.</span><span class="n">qepy_mod</span><span class="o">.</span><span class="n">qepy_open_files</span><span class="p">()</span>
+        <span class="k">else</span> <span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">qepy_pw</span><span class="o">.</span><span class="n">qepy_pwscf</span><span class="p">(</span><span class="n">inputfile</span><span class="p">,</span> <span class="n">commf</span><span class="p">)</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">embed</span><span class="o">.</span><span class="n">iterative</span> <span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">qepy_modules</span><span class="o">.</span><span class="n">control_flags</span><span class="o">.</span><span class="n">set_niter</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+        <span class="c1">#</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">density</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">iter</span> <span class="o">=</span> <span class="mi">0</span></div>
+
+
+<div class="viewcode-block" id="Driver.tddft_initialize">
+<a class="viewcode-back" href="../../qepy/driver.html#qepy.driver.Driver.tddft_initialize">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">tddft_initialize</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">inputfile</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">commf</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot; Initialize the tddft</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        inputfile : str</span>
+<span class="sd">            Name of QE input file, which also contains `&amp;inputtddft` section.</span>
+<span class="sd">        commf : object</span>
+<span class="sd">            mpi4py parallel communicator to be sent to Fortran</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="n">inputfile</span> <span class="ow">is</span> <span class="kc">None</span> <span class="p">:</span> <span class="n">inputfile</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">inputfile</span>
+        <span class="k">if</span> <span class="n">commf</span> <span class="ow">is</span> <span class="kc">None</span> <span class="p">:</span> <span class="n">commf</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">commf</span>
+        <span class="c1">#</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">progress</span> <span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">qepy_pw</span><span class="o">.</span><span class="n">wvfct</span><span class="o">.</span><span class="n">get_array_g2kin</span><span class="p">()</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">qepy_cetddft</span><span class="o">.</span><span class="n">qepy_tddft_readin</span><span class="p">(</span><span class="n">inputfile</span><span class="p">)</span>
+        <span class="k">else</span> <span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">qepy_cetddft</span><span class="o">.</span><span class="n">qepy_tddft_main_initial</span><span class="p">(</span><span class="n">inputfile</span><span class="p">,</span> <span class="n">commf</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">qepy_pw</span><span class="o">.</span><span class="n">read_file</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">qepy_cetddft</span><span class="o">.</span><span class="n">qepy_tddft_main_setup</span><span class="p">()</span></div>
+
+
+<div class="viewcode-block" id="Driver.tddfpt_initialize">
+<a class="viewcode-back" href="../../qepy/driver.html#qepy.driver.Driver.tddfpt_initialize">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">tddfpt_initialize</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">inputfile</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">commf</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot; Initialize the tddft</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        inputfile : str</span>
+<span class="sd">            Name of QE input file, which also contains `&amp;inputtddft` section.</span>
+<span class="sd">        commf : object</span>
+<span class="sd">            mpi4py parallel communicator to be sent to Fortran</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="n">inputfile</span> <span class="ow">is</span> <span class="kc">None</span> <span class="p">:</span> <span class="n">inputfile</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">inputfile</span>
+        <span class="k">if</span> <span class="n">commf</span> <span class="ow">is</span> <span class="kc">None</span> <span class="p">:</span> <span class="n">commf</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">commf</span>
+        <span class="c1">#</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">progress</span> <span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">AttributeError</span><span class="p">(</span><span class="s2">&quot;Not support &#39;progress&#39; now&quot;</span><span class="p">)</span>
+            <span class="c1"># self.qepy_pw.wvfct.get_array_g2kin()</span>
+            <span class="c1"># self.qepy_cetddft.qepy_tddft_readin(inputfile)</span>
+        <span class="k">else</span> <span class="p">:</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">task</span> <span class="o">!=</span> <span class="s1">&#39;tddfpt_davidson&#39;</span> <span class="p">:</span>
+                <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Only support &#39;davidson&#39; algorithm now.&quot;</span><span class="p">)</span>
+            <span class="c1"># Fix the io problem if the job directly started after a PW calculation</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">qepy_modules</span><span class="o">.</span><span class="n">control_flags</span><span class="o">.</span><span class="n">set_io_level</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+            <span class="c1">#</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">qepy_tddfpt</span><span class="o">.</span><span class="n">qepy_lr_dav_main_initial</span><span class="p">(</span><span class="n">inputfile</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="Driver.diagonalize">
+<a class="viewcode-back" href="../../qepy/driver.html#qepy.driver.Driver.diagonalize">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">diagonalize</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">print_level</span> <span class="o">=</span> <span class="mi">2</span><span class="p">,</span> <span class="n">nscf</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Diagonalize the Hamiltonian</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        print_level :</span>
+<span class="sd">            The level of output of QE</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">embed</span><span class="o">.</span><span class="n">lmovecell</span> <span class="o">=</span> <span class="kc">False</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">iter</span> <span class="o">+=</span> <span class="mi">1</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">task</span> <span class="o">==</span> <span class="s1">&#39;optical&#39;</span> <span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">qepy_cetddft</span><span class="o">.</span><span class="n">qepy_molecule_optical_absorption</span><span class="p">()</span>
+        <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">task</span> <span class="o">==</span> <span class="s1">&#39;tddfpt_davidson&#39;</span> <span class="p">:</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">qepy_tddfpt</span><span class="o">.</span><span class="n">lr_dav_variables</span><span class="o">.</span><span class="n">get_if_check_orth</span><span class="p">():</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">qepy_tddfpt</span><span class="o">.</span><span class="n">lr_dav_debug</span><span class="o">.</span><span class="n">check_orth</span><span class="p">()</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">qepy_tddfpt</span><span class="o">.</span><span class="n">lr_dav_routines</span><span class="o">.</span><span class="n">one_dav_step</span><span class="p">()</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">qepy_tddfpt</span><span class="o">.</span><span class="n">lr_dav_routines</span><span class="o">.</span><span class="n">dav_calc_residue</span><span class="p">()</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">qepy_tddfpt</span><span class="o">.</span><span class="n">lr_dav_routines</span><span class="o">.</span><span class="n">dav_expan_basis</span><span class="p">()</span>
+        <span class="k">elif</span> <span class="n">nscf</span> <span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">embed</span><span class="o">.</span><span class="n">task</span> <span class="o">=</span> <span class="s1">&#39;nscf&#39;</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">qepy_pw</span><span class="o">.</span><span class="n">qepy_electrons_scf</span><span class="p">(</span><span class="n">print_level</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
+        <span class="k">else</span> <span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">embed</span><span class="o">.</span><span class="n">mix_coef</span> <span class="o">=</span> <span class="o">-</span><span class="mf">1.0</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">qepy_pw</span><span class="o">.</span><span class="n">qepy_electrons_scf</span><span class="p">(</span><span class="n">print_level</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span></div>
+
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">propagate</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">diagonalize</span><span class="p">(</span><span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+
+<div class="viewcode-block" id="Driver.mix">
+<a class="viewcode-back" href="../../qepy/driver.html#qepy.driver.Driver.mix">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">mix</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">mix_coef</span> <span class="o">=</span> <span class="mf">0.7</span><span class="p">,</span> <span class="n">print_level</span> <span class="o">=</span> <span class="mi">2</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Mix the density with the QE density mixing</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        print_level :</span>
+<span class="sd">            The level of output of QE</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">task</span> <span class="o">==</span> <span class="s1">&#39;optical&#39;</span> <span class="p">:</span> <span class="k">return</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">embed</span><span class="o">.</span><span class="n">mix_coef</span> <span class="o">=</span> <span class="n">mix_coef</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">qepy_pw</span><span class="o">.</span><span class="n">qepy_electrons_scf</span><span class="p">(</span><span class="n">print_level</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="Driver.check_convergence">
+<a class="viewcode-back" href="../../qepy/driver.html#qepy.driver.Driver.check_convergence">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">check_convergence</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Check the convergence of the SCF&quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">task</span> <span class="o">==</span> <span class="s1">&#39;scf&#39;</span> <span class="p">:</span>
+            <span class="n">converged</span> <span class="o">=</span> <span class="nb">bool</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">qepy_modules</span><span class="o">.</span><span class="n">control_flags</span><span class="o">.</span><span class="n">get_conv_elec</span><span class="p">())</span>
+            <span class="k">if</span> <span class="n">converged</span> <span class="ow">and</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">embed</span><span class="o">.</span><span class="n">initial</span> <span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">end_scf</span><span class="p">()</span>
+        <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">task</span> <span class="o">==</span> <span class="s1">&#39;tddfpt_davidson&#39;</span> <span class="p">:</span>
+            <span class="n">converged</span> <span class="o">=</span> <span class="nb">bool</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">qepy_tddfpt</span><span class="o">.</span><span class="n">lr_dav_variables</span><span class="o">.</span><span class="n">get_dav_conv</span><span class="p">())</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">converged</span> <span class="o">=</span> <span class="kc">False</span>
+        <span class="k">return</span> <span class="n">converged</span></div>
+
+
+<div class="viewcode-block" id="Driver.get_scf_error">
+<a class="viewcode-back" href="../../qepy/driver.html#qepy.driver.Driver.get_scf_error">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">get_scf_error</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Return the error of the SCF compared to previous cycle&quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">embed</span><span class="o">.</span><span class="n">iterative</span> <span class="p">:</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">embed</span><span class="o">.</span><span class="n">dnorm</span>
+        <span class="k">else</span> <span class="p">:</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">qepy_modules</span><span class="o">.</span><span class="n">control_flags</span><span class="o">.</span><span class="n">get_scf_error</span><span class="p">()</span></div>
+
+
+<div class="viewcode-block" id="Driver.get_scf_steps">
+<a class="viewcode-back" href="../../qepy/driver.html#qepy.driver.Driver.get_scf_steps">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">get_scf_steps</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Return the number of SCF steps&quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">embed</span><span class="o">.</span><span class="n">iterative</span> <span class="p">:</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">iter</span>
+        <span class="k">else</span> <span class="p">:</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">qepy_modules</span><span class="o">.</span><span class="n">control_flags</span><span class="o">.</span><span class="n">get_n_scf_steps</span><span class="p">()</span></div>
+
+
+<div class="viewcode-block" id="Driver.scf">
+<a class="viewcode-back" href="../../qepy/driver.html#qepy.driver.Driver.scf">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">scf</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">print_level</span> <span class="o">=</span> <span class="mi">2</span><span class="p">,</span> <span class="n">maxiter</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">original</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span> <span class="n">nscf</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Run the scf/tddft until converged or reached the maximum number of iterations&quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="n">maxiter</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">embed</span><span class="o">.</span><span class="n">iterative</span> <span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">qepy_modules</span><span class="o">.</span><span class="n">control_flags</span><span class="o">.</span><span class="n">set_niter</span><span class="p">(</span><span class="n">maxiter</span><span class="p">)</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">task</span> <span class="o">==</span> <span class="s1">&#39;optical&#39;</span> <span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">qepy_cetddft</span><span class="o">.</span><span class="n">qepy_molecule_optical_absorption</span><span class="p">()</span>
+        <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">task</span><span class="o">==</span><span class="s1">&#39;tddfpt_davidson&#39;</span> <span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">tddfpt_davidson_scf</span><span class="p">()</span>
+        <span class="k">elif</span> <span class="n">nscf</span> <span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">embed</span><span class="o">.</span><span class="n">task</span> <span class="o">=</span> <span class="s1">&#39;nscf&#39;</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">qepy_pw</span><span class="o">.</span><span class="n">qepy_electrons_scf</span><span class="p">(</span><span class="n">print_level</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">embed</span><span class="o">.</span><span class="n">iterative</span> <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">embed</span><span class="o">.</span><span class="n">exttype</span> <span class="o">&lt;</span> <span class="mi">2</span> <span class="p">:</span>
+            <span class="c1"># Use electrons to support hybrid xc functional</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">electrons</span><span class="p">(</span><span class="n">original</span><span class="o">=</span><span class="n">original</span><span class="p">)</span>
+        <span class="k">else</span> <span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">qepy_pw</span><span class="o">.</span><span class="n">qepy_electrons_scf</span><span class="p">(</span><span class="n">print_level</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">embed</span><span class="o">.</span><span class="n">etotal</span></div>
+
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">optical_absorption</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">scf</span><span class="p">(</span><span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">tddfpt_davidson_scf</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="n">max_iter</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">qepy_tddfpt</span><span class="o">.</span><span class="n">lr_dav_variables</span><span class="o">.</span><span class="n">get_max_iter</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">scf_conv_type</span> <span class="o">=</span> <span class="s1">&#39;maxiter&#39;</span>
+        <span class="k">for</span> <span class="n">dav_iter</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">max_iter</span><span class="p">):</span>
+            <span class="c1"># if self.qepy_tddfpt.lr_dav_variables.get_if_check_orth():</span>
+                <span class="c1"># self.qepy_tddfpt.lr_dav_debug.check_orth()</span>
+            <span class="c1"># self.qepy_tddfpt.lr_dav_routines.one_dav_step()</span>
+            <span class="c1"># self.qepy_tddfpt.lr_dav_routines.dav_calc_residue()</span>
+            <span class="c1"># self.qepy_tddfpt.lr_dav_routines.dav_expan_basis()</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">diagonalize</span><span class="p">(</span><span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">qepy_tddfpt</span><span class="o">.</span><span class="n">lr_dav_variables</span><span class="o">.</span><span class="n">get_dav_conv</span><span class="p">():</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">scf_conv_type</span> <span class="o">=</span> <span class="s1">&#39;conv&#39;</span>
+                <span class="k">break</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">qepy_modules</span><span class="o">.</span><span class="n">check_stop</span><span class="o">.</span><span class="n">check_stop_now</span><span class="p">():</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">qepy_tddfpt</span><span class="o">.</span><span class="n">lr_dav_routines</span><span class="o">.</span><span class="n">lr_write_restart_dav</span><span class="p">()</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">scf_conv_type</span> <span class="o">=</span> <span class="s1">&#39;maxtime&#39;</span>
+                <span class="k">break</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">tddfpt_davidson_interpret</span><span class="p">(</span><span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">tddfpt_davidson_interpret</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">qepy_tddfpt</span><span class="o">.</span><span class="n">lr_dav_routines</span><span class="o">.</span><span class="n">interpret_eign</span><span class="p">(</span><span class="s1">&#39;END&#39;</span><span class="p">)</span>
+        <span class="n">lplot_drho</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">qepy_tddfpt</span><span class="o">.</span><span class="n">lr_dav_variables</span><span class="o">.</span><span class="n">get_lplot_drho</span><span class="p">()</span>
+        <span class="k">if</span> <span class="n">lplot_drho</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">qepy_tddfpt</span><span class="o">.</span><span class="n">lr_dav_routines</span><span class="o">.</span><span class="n">plot_drho</span><span class="p">()</span>
+
+<div class="viewcode-block" id="Driver.non_scf">
+<a class="viewcode-back" href="../../qepy/driver.html#qepy.driver.Driver.non_scf">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">non_scf</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Single &quot;non-selfconsistent&quot; calculation&quot;&quot;&quot;</span>
+        <span class="c1"># fix some saved variables from last scf calculations</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">qepy_modules</span><span class="o">.</span><span class="n">control_flags</span><span class="o">.</span><span class="n">set_lscf</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">qepy_modules</span><span class="o">.</span><span class="n">control_flags</span><span class="o">.</span><span class="n">set_lbfgs</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">qepy_modules</span><span class="o">.</span><span class="n">control_flags</span><span class="o">.</span><span class="n">set_lmd</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">qepy_modules</span><span class="o">.</span><span class="n">control_flags</span><span class="o">.</span><span class="n">set_lwf</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+        <span class="c1">#</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">qepy_pw</span><span class="o">.</span><span class="n">non_scf</span><span class="p">()</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">qepy_pw</span><span class="o">.</span><span class="n">ener</span><span class="o">.</span><span class="n">get_etot</span><span class="p">()</span></div>
+
+
+<div class="viewcode-block" id="Driver.electrons">
+<a class="viewcode-back" href="../../qepy/driver.html#qepy.driver.Driver.electrons">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">electrons</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">original</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Execute original QE routine &quot;electrons&quot; &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="n">original</span> <span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">qepy_pw</span><span class="o">.</span><span class="n">electrons</span><span class="p">()</span>
+        <span class="k">else</span> <span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">qepy_pw</span><span class="o">.</span><span class="n">qepy_electrons</span><span class="p">()</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">qepy_pw</span><span class="o">.</span><span class="n">ener</span><span class="o">.</span><span class="n">get_etot</span><span class="p">()</span></div>
+
+
+<div class="viewcode-block" id="Driver.end_scf">
+<a class="viewcode-back" href="../../qepy/driver.html#qepy.driver.Driver.end_scf">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">end_scf</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">nscf</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Ends the SCF and cleans the SCF workspace. Only run when in iterative mode (i.e., one cycle at a time)&quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">embed</span><span class="o">.</span><span class="n">iterative</span> <span class="p">:</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">task</span> <span class="o">==</span> <span class="s1">&#39;optical&#39;</span> <span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">embed</span><span class="o">.</span><span class="n">tddft</span><span class="o">.</span><span class="n">finish</span> <span class="o">=</span> <span class="kc">True</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">qepy_cetddft</span><span class="o">.</span><span class="n">qepy_molecule_optical_absorption</span><span class="p">()</span>
+            <span class="k">else</span> <span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">embed</span><span class="o">.</span><span class="n">finish</span> <span class="o">=</span> <span class="kc">True</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">qepy_pw</span><span class="o">.</span><span class="n">qepy_electrons_scf</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="Driver.stop">
+<a class="viewcode-back" href="../../qepy/driver.html#qepy.driver.Driver.stop">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">stop</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">exit_status</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span> <span class="n">what</span> <span class="o">=</span> <span class="s1">&#39;all&#39;</span><span class="p">,</span> <span class="n">print_flag</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Stop the driver. This must be done anytime a new driver is created.</span>
+<span class="sd">        This method is invoked automatically if a running driver is detected. Only</span>
+<span class="sd">        one driver can run at any given time.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        exit_status : int</span>
+<span class="sd">            0 : QE will remove it temporary files</span>
+<span class="sd">        print_flag : int</span>
+<span class="sd">            0 : Not print time informations</span>
+<span class="sd">        what : str</span>
+<span class="sd">             see :func:`qepy.driver.Driver.save`.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">task</span> <span class="o">==</span> <span class="s1">&#39;optical&#39;</span> <span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">tddft_stop</span><span class="p">(</span><span class="n">exit_status</span><span class="p">,</span> <span class="n">print_flag</span> <span class="o">=</span> <span class="n">print_flag</span><span class="p">,</span> <span class="n">what</span> <span class="o">=</span> <span class="n">what</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">task</span> <span class="o">==</span> <span class="s1">&#39;tddfpt_davidson&#39;</span> <span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">tddfpt_davidson_stop</span><span class="p">(</span><span class="n">exit_status</span><span class="p">,</span> <span class="n">print_flag</span> <span class="o">=</span> <span class="n">print_flag</span><span class="p">,</span> <span class="n">what</span> <span class="o">=</span> <span class="n">what</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+        <span class="k">else</span> <span class="p">:</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">embed</span><span class="o">.</span><span class="n">initial</span> <span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">end_scf</span><span class="p">()</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">qepy_pw</span><span class="o">.</span><span class="n">qepy_stop_run</span><span class="p">(</span><span class="n">exit_status</span><span class="p">,</span> <span class="n">print_flag</span> <span class="o">=</span> <span class="n">print_flag</span><span class="p">,</span> <span class="n">what</span> <span class="o">=</span> <span class="n">what</span><span class="p">,</span> <span class="n">finalize</span> <span class="o">=</span> <span class="kc">False</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">fileobj</span><span class="p">,</span> <span class="s1">&#39;close&#39;</span><span class="p">):</span> <span class="bp">self</span><span class="o">.</span><span class="n">fileobj</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+        <span class="n">qepy_clean_saved</span><span class="p">()</span>
+        <span class="c1"># qepy_clean_saved(self.qepy_modules)</span>
+        <span class="c1"># qepy_clean_saved(self.qepy_pw)</span>
+        <span class="c1"># if self.task == &#39;optical&#39; :</span>
+            <span class="c1"># qepy_clean_saved(self.qepy_cetddft)</span>
+        <span class="c1">#</span>
+        <span class="n">env</span><span class="p">[</span><span class="s1">&#39;DRIVER&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="n">env</span><span class="p">[</span><span class="s1">&#39;STDOUT&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span></div>
+
+
+<div class="viewcode-block" id="Driver.tddft_restart">
+<a class="viewcode-back" href="../../qepy/driver.html#qepy.driver.Driver.tddft_restart">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">tddft_restart</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">istep</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Restarts the TDDFT from previous interrupted run.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        istep : int</span>
+<span class="sd">            Start number of steps, just for output.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">qepy_cetddft</span><span class="o">.</span><span class="n">qepy_tddft_mod</span><span class="o">.</span><span class="n">qepy_cetddft_wfc2rho</span><span class="p">()</span>
+        <span class="k">if</span> <span class="n">istep</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">embed</span><span class="o">.</span><span class="n">tddft</span><span class="o">.</span><span class="n">istep</span> <span class="o">=</span> <span class="n">istep</span></div>
+
+
+<div class="viewcode-block" id="Driver.tddft_stop">
+<a class="viewcode-back" href="../../qepy/driver.html#qepy.driver.Driver.tddft_stop">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">tddft_stop</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">exit_status</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span> <span class="n">what</span> <span class="o">=</span> <span class="s1">&#39;no&#39;</span><span class="p">,</span> <span class="n">print_flag</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Stops TDDFT run&quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">embed</span><span class="o">.</span><span class="n">tddft</span><span class="o">.</span><span class="n">initial</span> <span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">end_scf</span><span class="p">()</span>
+        <span class="c1">#! Do not save the PW files, otherwise the initial wfcs will be overwritten.</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">qepy_pw</span><span class="o">.</span><span class="n">qepy_stop_run</span><span class="p">(</span><span class="n">exit_status</span><span class="p">,</span> <span class="n">print_flag</span> <span class="o">=</span> <span class="n">print_flag</span><span class="p">,</span> <span class="n">what</span> <span class="o">=</span> <span class="s1">&#39;no&#39;</span><span class="p">,</span> <span class="n">finalize</span> <span class="o">=</span> <span class="kc">False</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">qepy_cetddft</span><span class="o">.</span><span class="n">qepy_stop_tddft</span><span class="p">(</span><span class="n">exit_status</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="Driver.tddfpt_davidson_stop">
+<a class="viewcode-back" href="../../qepy/driver.html#qepy.driver.Driver.tddfpt_davidson_stop">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">tddfpt_davidson_stop</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">exit_status</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span> <span class="n">what</span> <span class="o">=</span> <span class="s1">&#39;no&#39;</span><span class="p">,</span> <span class="n">print_flag</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Stops TDDFPT run&quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">qepy_tddfpt</span><span class="o">.</span><span class="n">qepy_lr_dav_main_finalise</span><span class="p">()</span></div>
+
+
+<div class="viewcode-block" id="Driver.save">
+<a class="viewcode-back" href="../../qepy/driver.html#qepy.driver.Driver.save">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">save</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">what</span> <span class="o">=</span> <span class="s1">&#39;all&#39;</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Save the QE data to the disk in original QE files that can be accessed via post-processing</span>
+<span class="sd">        or read with a QEpy driver</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        what : str</span>
+
+<span class="sd">          * what = &#39;all&#39; : write xml data file, charge density, wavefunctions</span>
+<span class="sd">                           (for final data);</span>
+<span class="sd">          * what = &#39;config&#39; : write xml data file and charge density; also,</span>
+<span class="sd">                              for nks=1, wavefunctions in plain binary format</span>
+<span class="sd">                              (see why in comments below). For intermediate</span>
+<span class="sd">                              or incomplete results;</span>
+<span class="sd">          * what = &#39;config-nowf&#39; : write xml data file and charge density only;</span>
+<span class="sd">                           (save density);</span>
+<span class="sd">          * what = &#39;config-init&#39; : write xml data file only excluding final results</span>
+<span class="sd">                                   (for dry run, can be called at early stages).</span>
+
+<span class="sd">          see PW/src/punch.f90</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">qepy_pw</span><span class="o">.</span><span class="n">punch</span><span class="p">(</span><span class="n">what</span><span class="p">)</span></div>
+
+        <span class="c1"># self.qepy_pw.close_files(False)</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">update_run_options</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">qe_options</span> <span class="o">=</span> <span class="p">{},</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="k">pass</span>
+
+<div class="viewcode-block" id="Driver.get_energy">
+<a class="viewcode-back" href="../../qepy/driver.html#qepy.driver.Driver.get_energy">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">get_energy</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Return the total energy.</span>
+<span class="sd">        Nota bene: Only use for regular QE runs (i.e., not when doing embedding).&quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="nb">abs</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">qepy_pw</span><span class="o">.</span><span class="n">ener</span><span class="o">.</span><span class="n">get_etot</span><span class="p">())</span> <span class="o">&gt;</span> <span class="mf">1E-16</span> <span class="p">:</span>
+            <span class="n">energy</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">qepy_pw</span><span class="o">.</span><span class="n">ener</span><span class="o">.</span><span class="n">get_etot</span><span class="p">()</span>
+        <span class="k">elif</span> <span class="nb">abs</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">embed</span><span class="o">.</span><span class="n">etotal</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mf">1E-16</span> <span class="p">:</span>
+            <span class="n">energy</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">embed</span><span class="o">.</span><span class="n">etotal</span>
+        <span class="k">else</span> <span class="p">:</span>
+            <span class="n">energy</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">calc_energy</span><span class="p">(</span><span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">energy</span></div>
+
+
+<div class="viewcode-block" id="Driver.calc_energy">
+<a class="viewcode-back" href="../../qepy/driver.html#qepy.driver.Driver.calc_energy">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">calc_energy</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Calculate the energy with PW2CASINO of QE.</span>
+<span class="sd">        Use this only if you have a good reason to use it! For example</span>
+<span class="sd">        embedding calculations.&quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">qepy_pw</span><span class="o">.</span><span class="n">qepy_calc_energies</span><span class="p">()</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">embed</span><span class="o">.</span><span class="n">etotal</span></div>
+
+
+<div class="viewcode-block" id="Driver.update_ions">
+<a class="viewcode-back" href="../../qepy/driver.html#qepy.driver.Driver.update_ions">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">update_ions</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">positions</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">lattice</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">update</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;update the ions of QE. This is used for dynamic runs.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        positions : np.ndarray (n, 3)</span>
+<span class="sd">            positions of ions</span>
+<span class="sd">        lattice : 3x3 matrix</span>
+<span class="sd">            lattice of ions</span>
+<span class="sd">        update : int</span>
+<span class="sd">             - 0 : update everything (default)</span>
+<span class="sd">             - 1 : only update atomic information, not update potential</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">positions</span> <span class="o">=</span> <span class="n">positions</span><span class="o">.</span><span class="n">T</span>
+        <span class="k">if</span> <span class="n">lattice</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="p">:</span>
+            <span class="n">lattice</span> <span class="o">=</span> <span class="n">lattice</span><span class="o">.</span><span class="n">T</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">qepy_pw</span><span class="o">.</span><span class="n">cellmd</span><span class="o">.</span><span class="n">get_lmovecell</span><span class="p">():</span>
+                <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot; Lattice update only works for variable-cell simulations.</span><span class="se">\n</span><span class="s2"> Please restart the QEpy with calculation= &#39;vc-relax&#39; or &#39;vc-md&#39;&quot;</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">qepy_pw</span><span class="o">.</span><span class="n">qepy_mod</span><span class="o">.</span><span class="n">qepy_update_ions</span><span class="p">(</span><span class="n">positions</span><span class="p">,</span> <span class="n">update</span><span class="p">,</span> <span class="n">lattice</span><span class="p">)</span>
+        <span class="k">else</span> <span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">qepy_pw</span><span class="o">.</span><span class="n">qepy_mod</span><span class="o">.</span><span class="n">qepy_update_ions</span><span class="p">(</span><span class="n">positions</span><span class="p">,</span> <span class="n">update</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="Driver.pwscf_restart">
+<a class="viewcode-back" href="../../qepy/driver.html#qepy.driver.Driver.pwscf_restart">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">pwscf_restart</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">starting_pot</span><span class="o">=</span><span class="s1">&#39;file&#39;</span><span class="p">,</span> <span class="n">starting_wfc</span><span class="o">=</span><span class="s1">&#39;file&#39;</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Read PW ouput/restart files.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">qepy_pw</span><span class="o">.</span><span class="n">qepy_mod</span><span class="o">.</span><span class="n">qepy_restart_from_xml</span><span class="p">()</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">qepy_pw</span><span class="o">.</span><span class="n">basis</span><span class="o">.</span><span class="n">get_starting_pot</span><span class="p">()</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span> <span class="o">!=</span> <span class="n">starting_pot</span> <span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">qepy_pw</span><span class="o">.</span><span class="n">basis</span><span class="o">.</span><span class="n">set_starting_pot</span><span class="p">(</span><span class="n">starting_pot</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">qepy_pw</span><span class="o">.</span><span class="n">potinit</span><span class="p">()</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">qepy_pw</span><span class="o">.</span><span class="n">basis</span><span class="o">.</span><span class="n">get_starting_wfc</span><span class="p">()</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span> <span class="o">!=</span> <span class="n">starting_wfc</span> <span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">qepy_pw</span><span class="o">.</span><span class="n">basis</span><span class="o">.</span><span class="n">set_starting_wfc</span><span class="p">(</span><span class="n">starting_wfc</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">qepy_pw</span><span class="o">.</span><span class="n">wfcinit</span><span class="p">()</span></div>
+
+
+<div class="viewcode-block" id="Driver.create_array">
+<a class="viewcode-back" href="../../qepy/driver.html#qepy.driver.Driver.create_array">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">create_array</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">gather</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span> <span class="n">kind</span> <span class="o">=</span> <span class="s1">&#39;rho&#39;</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Returns an empty array in real space.</span>
+<span class="sd">        Nota bene: this is for real-space arrays like the density (rho) and potentials.&quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="n">kind</span> <span class="o">==</span> <span class="s1">&#39;rho&#39;</span> <span class="p">:</span>
+            <span class="n">nspin</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">qepy_pw</span><span class="o">.</span><span class="n">lsda_mod</span><span class="o">.</span><span class="n">get_nspin</span><span class="p">()</span>
+            <span class="k">if</span> <span class="n">gather</span> <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">nproc</span> <span class="o">&gt;</span> <span class="mi">1</span> <span class="p">:</span>
+                <span class="n">nr</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_number_of_grid_points</span><span class="p">(</span><span class="n">gather</span> <span class="o">=</span> <span class="n">gather</span><span class="p">)</span>
+                <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">embed</span><span class="o">.</span><span class="n">dfftp</span><span class="o">.</span><span class="n">mype</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+                    <span class="n">out</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="n">np</span><span class="o">.</span><span class="n">prod</span><span class="p">(</span><span class="n">nr</span><span class="p">),</span> <span class="n">nspin</span><span class="p">),</span> <span class="n">order</span> <span class="o">=</span> <span class="s1">&#39;F&#39;</span><span class="p">)</span>
+                <span class="k">else</span> <span class="p">:</span>
+                    <span class="n">out</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="mi">1</span><span class="p">,</span> <span class="n">nspin</span><span class="p">),</span> <span class="n">order</span> <span class="o">=</span> <span class="s1">&#39;F&#39;</span><span class="p">)</span>
+            <span class="k">else</span> <span class="p">:</span>
+                <span class="n">nnr</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">embed</span><span class="o">.</span><span class="n">dfftp</span><span class="o">.</span><span class="n">nnr</span>
+                <span class="n">out</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="n">nnr</span><span class="p">,</span> <span class="n">nspin</span><span class="p">),</span> <span class="n">order</span> <span class="o">=</span> <span class="s1">&#39;F&#39;</span><span class="p">)</span>
+        <span class="k">else</span> <span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s1">&#39;Only support &quot;rho&quot;&#39;</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">out</span></div>
+
+
+<div class="viewcode-block" id="Driver.get_density">
+<a class="viewcode-back" href="../../qepy/driver.html#qepy.driver.Driver.get_density">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">get_density</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">gather</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span> <span class="n">out</span> <span class="o">=</span> <span class="kc">None</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Returns valence pseudodensity array in real space.&quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="n">out</span> <span class="ow">is</span> <span class="kc">None</span> <span class="p">:</span> <span class="n">out</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">create_array</span><span class="p">(</span><span class="n">gather</span><span class="o">=</span><span class="n">gather</span><span class="p">,</span> <span class="n">kind</span><span class="o">=</span><span class="s1">&#39;rho&#39;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">qepy_pw</span><span class="o">.</span><span class="n">qepy_mod</span><span class="o">.</span><span class="n">qepy_get_rho</span><span class="p">(</span><span class="n">out</span><span class="p">,</span> <span class="n">gather</span> <span class="o">=</span> <span class="n">gather</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">out</span></div>
+
+
+<div class="viewcode-block" id="Driver.get_core_density">
+<a class="viewcode-back" href="../../qepy/driver.html#qepy.driver.Driver.get_core_density">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">get_core_density</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">gather</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span> <span class="n">out</span> <span class="o">=</span> <span class="kc">None</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Returns core density array in real space.&quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="n">out</span> <span class="ow">is</span> <span class="kc">None</span> <span class="p">:</span> <span class="n">out</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">create_array</span><span class="p">(</span><span class="n">gather</span><span class="o">=</span><span class="n">gather</span><span class="p">,</span> <span class="n">kind</span><span class="o">=</span><span class="s1">&#39;rho&#39;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">qepy_pw</span><span class="o">.</span><span class="n">qepy_mod</span><span class="o">.</span><span class="n">qepy_get_rho_core</span><span class="p">(</span><span class="n">out</span><span class="p">,</span> <span class="n">gather</span> <span class="o">=</span> <span class="n">gather</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">out</span></div>
+
+
+<div class="viewcode-block" id="Driver.get_kinetic_energy_density">
+<a class="viewcode-back" href="../../qepy/driver.html#qepy.driver.Driver.get_kinetic_energy_density">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">get_kinetic_energy_density</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">gather</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span> <span class="n">out</span> <span class="o">=</span> <span class="kc">None</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Returns KS kinetic energy density array in real space.&quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="n">out</span> <span class="ow">is</span> <span class="kc">None</span> <span class="p">:</span> <span class="n">out</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">create_array</span><span class="p">(</span><span class="n">gather</span><span class="o">=</span><span class="n">gather</span><span class="p">,</span> <span class="n">kind</span><span class="o">=</span><span class="s1">&#39;rho&#39;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">qepy_pw</span><span class="o">.</span><span class="n">qepy_mod</span><span class="o">.</span><span class="n">qepy_get_tau</span><span class="p">(</span><span class="n">out</span><span class="p">,</span> <span class="n">gather</span> <span class="o">=</span> <span class="n">gather</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">out</span></div>
+
+
+<div class="viewcode-block" id="Driver.get_wave_function">
+<a class="viewcode-back" href="../../qepy/driver.html#qepy.driver.Driver.get_wave_function">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">get_wave_function</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">band</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">kpt</span><span class="o">=</span><span class="mi">0</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Returns wave-function array in real space.&quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">qepy_pw</span><span class="o">.</span><span class="n">qepy_mod</span><span class="o">.</span><span class="n">qepy_get_evc</span><span class="p">(</span><span class="n">kpt</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span>
+        <span class="n">nrs</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="n">dtype</span> <span class="o">=</span> <span class="s1">&#39;int32&#39;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">qepy_pw</span><span class="o">.</span><span class="n">qepy_mod</span><span class="o">.</span><span class="n">qepy_get_grid_smooth</span><span class="p">(</span><span class="n">nrs</span><span class="p">)</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">is_root</span> <span class="p">:</span>
+            <span class="n">wf</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">empty</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">prod</span><span class="p">(</span><span class="n">nrs</span><span class="p">),</span> <span class="n">order</span> <span class="o">=</span> <span class="s1">&#39;F&#39;</span><span class="p">,</span> <span class="n">dtype</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">complex128</span><span class="p">)</span>
+        <span class="k">else</span> <span class="p">:</span>
+            <span class="n">wf</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">empty</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">order</span> <span class="o">=</span> <span class="s1">&#39;F&#39;</span><span class="p">,</span> <span class="n">dtype</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">complex128</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">band</span> <span class="ow">is</span> <span class="kc">None</span> <span class="p">:</span>
+            <span class="n">band</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">get_number_of_bands</span><span class="p">())</span>
+        <span class="k">else</span> <span class="p">:</span>
+            <span class="n">band</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">band</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">band</span><span class="o">.</span><span class="n">ndim</span> <span class="o">==</span> <span class="mi">0</span> <span class="p">:</span> <span class="n">band</span> <span class="o">=</span> <span class="p">[</span><span class="n">band</span><span class="p">]</span>
+        <span class="n">wfs</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">for</span> <span class="n">ibnd</span> <span class="ow">in</span> <span class="n">band</span> <span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">qepy_pw</span><span class="o">.</span><span class="n">qepy_mod</span><span class="o">.</span><span class="n">qepy_get_wf</span><span class="p">(</span><span class="n">kpt</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span> <span class="n">ibnd</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span> <span class="n">wf</span><span class="p">)</span>
+            <span class="n">wfs</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">wf</span><span class="o">.</span><span class="n">copy</span><span class="p">())</span>
+        <span class="k">return</span> <span class="n">wfs</span></div>
+
+
+<div class="viewcode-block" id="Driver.get_dipole_tddft">
+<a class="viewcode-back" href="../../qepy/driver.html#qepy.driver.Driver.get_dipole_tddft">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">get_dipole_tddft</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Return the total dipole computed by a TDDFT run.</span>
+<span class="sd">        Nota bene: only available during TDDFT runs.&quot;&quot;&quot;</span>
+        <span class="c1"># dipole = self.qepy_cetddft.qepy_tddft_common.get_array_dipole().copy()</span>
+        <span class="n">dipole</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">embed</span><span class="o">.</span><span class="n">tddft</span><span class="o">.</span><span class="n">dipole</span>
+        <span class="k">return</span> <span class="n">dipole</span></div>
+
+
+<div class="viewcode-block" id="Driver.set_density">
+<a class="viewcode-back" href="../../qepy/driver.html#qepy.driver.Driver.set_density">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">set_density</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">density</span><span class="p">,</span> <span class="n">gather</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Set density array in real space.&quot;&quot;&quot;</span>
+        <span class="c1">#</span>
+        <span class="k">if</span> <span class="n">density</span> <span class="ow">is</span> <span class="kc">None</span> <span class="p">:</span> <span class="n">density</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">))</span>
+        <span class="k">if</span> <span class="n">density</span><span class="o">.</span><span class="n">ndim</span> <span class="o">!=</span> <span class="mi">2</span> <span class="p">:</span> <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;The array should be 2-d.&quot;</span><span class="p">)</span>
+        <span class="c1">#</span>
+        <span class="k">if</span> <span class="n">gather</span> <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">nproc</span> <span class="o">&gt;</span> <span class="mi">1</span> <span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">qepy_pw</span><span class="o">.</span><span class="n">qepy_mod</span><span class="o">.</span><span class="n">_mp_bcast_group_real_2</span><span class="p">(</span><span class="n">density</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">qepy_pw</span><span class="o">.</span><span class="n">qepy_mod</span><span class="o">.</span><span class="n">qepy_set_rho</span><span class="p">(</span><span class="n">density</span><span class="p">,</span> <span class="n">gather</span> <span class="o">=</span> <span class="n">gather</span><span class="p">)</span></div>
+
+
+
+<div class="viewcode-block" id="Driver.set_external_potential">
+<a class="viewcode-back" href="../../qepy/driver.html#qepy.driver.Driver.set_external_potential">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">set_external_potential</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">potential</span><span class="p">,</span> <span class="n">exttype</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">gather</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span> <span class="n">extene</span>  <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Set an external potential in addition to the ones already included in the QEpy run</span>
+<span class="sd">        according to the logic enumerated below.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        potential : (nnr, nspin)</span>
+<span class="sd">            The external potential</span>
+<span class="sd">        exttype : list or int</span>
+<span class="sd">            The type of external potential. It can be a list of name or a integer.</span>
+<span class="sd">            e.g.  `exttype = (&#39;localpp&#39;, &#39;xc&#39;)` or `exttype = 5`. `external` stands for an</span>
+<span class="sd">            additional external potential.</span>
+
+<span class="sd">                 ==== ============================== ===</span>
+<span class="sd">                 type potential                      bin</span>
+<span class="sd">                 ==== ============================== ===</span>
+<span class="sd">                  0   external                       000</span>
+<span class="sd">                  1   localpp                        001</span>
+<span class="sd">                  2   hartree                        010</span>
+<span class="sd">                  4   xc                             100</span>
+<span class="sd">                 ==== ============================== ===</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="n">exttype</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="p">:</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">exttype</span><span class="p">,</span> <span class="nb">int</span><span class="p">):</span> <span class="n">exttype</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">potname2type</span><span class="p">(</span><span class="n">exttype</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">embed</span><span class="o">.</span><span class="n">exttype</span> <span class="o">=</span> <span class="n">exttype</span>
+        <span class="k">if</span> <span class="n">extene</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">embed</span><span class="o">.</span><span class="n">extene</span> <span class="o">=</span> <span class="n">extene</span>
+        <span class="k">else</span> <span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">embed</span><span class="o">.</span><span class="n">extene</span> <span class="o">=</span> <span class="mf">0.0</span>
+        <span class="c1">#</span>
+        <span class="k">if</span> <span class="n">potential</span> <span class="ow">is</span> <span class="kc">None</span> <span class="p">:</span> <span class="n">potential</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">))</span>
+        <span class="k">if</span> <span class="n">potential</span><span class="o">.</span><span class="n">ndim</span> <span class="o">!=</span> <span class="mi">2</span> <span class="p">:</span> <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;The array should be 2-d.&quot;</span><span class="p">)</span>
+        <span class="c1">#</span>
+        <span class="k">if</span> <span class="n">gather</span> <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">nproc</span> <span class="o">&gt;</span> <span class="mi">1</span> <span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">qepy_pw</span><span class="o">.</span><span class="n">qepy_mod</span><span class="o">.</span><span class="n">_mp_bcast_group_real_2</span><span class="p">(</span><span class="n">potential</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">qepy_pw</span><span class="o">.</span><span class="n">qepy_mod</span><span class="o">.</span><span class="n">qepy_set_extpot</span><span class="p">(</span><span class="n">potential</span><span class="p">,</span> <span class="n">gather</span> <span class="o">=</span> <span class="n">gather</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="Driver.get_output">
+<a class="viewcode-back" href="../../qepy/driver.html#qepy.driver.Driver.get_output">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">get_output</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Return the output of QE.</span>
+
+<span class="sd">        It depends on the `logfile` of the initialization of the driver :</span>
+
+<span class="sd">          - None : return None.</span>
+<span class="sd">          - str  : return all outputs.</span>
+<span class="sd">          - True : It will return the output from last time.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">fileobj</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="p">:</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">fileobj_interact</span> <span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">fileobj</span><span class="o">.</span><span class="n">flush</span><span class="p">()</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">fileobj</span><span class="o">.</span><span class="n">seek</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+                <span class="n">lines</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">fileobj</span><span class="o">.</span><span class="n">readlines</span><span class="p">()</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">fileobj</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+                <span class="c1">#</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">_init_log</span><span class="p">()</span>
+                <span class="c1">#</span>
+                <span class="k">return</span> <span class="n">lines</span>
+            <span class="k">else</span> <span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">fileobj</span><span class="o">.</span><span class="n">seek</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+                <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">fileobj</span><span class="o">.</span><span class="n">readlines</span><span class="p">()</span>
+        <span class="k">else</span> <span class="p">:</span>
+            <span class="k">return</span> <span class="kc">None</span></div>
+
+
+<div class="viewcode-block" id="Driver.get_elf">
+<a class="viewcode-back" href="../../qepy/driver.html#qepy.driver.Driver.get_elf">[docs]</a>
+    <span class="nd">@gathered</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">get_elf</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">gather</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span> <span class="n">out</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Return electron localization function.&quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">qepy_pp</span><span class="o">.</span><span class="n">do_elf</span><span class="p">(</span><span class="n">out</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">out</span></div>
+
+
+<div class="viewcode-block" id="Driver.get_rdg">
+<a class="viewcode-back" href="../../qepy/driver.html#qepy.driver.Driver.get_rdg">[docs]</a>
+    <span class="nd">@gathered</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">get_rdg</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">gather</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span> <span class="n">out</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Return reduced density gradient.&quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">qepy_pp</span><span class="o">.</span><span class="n">do_rdg</span><span class="p">(</span><span class="n">out</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">out</span></div>
+
+<span class="c1">#-----------------------------------------------------------------------</span>
+
+<div class="viewcode-block" id="Driver.get_local_pp">
+<a class="viewcode-back" href="../../qepy/driver.html#qepy.driver.Driver.get_local_pp">[docs]</a>
+    <span class="nd">@gathered</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">get_local_pp</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">gather</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span> <span class="n">out</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Return local component of the pseudopotential.&quot;&quot;&quot;</span>
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">out</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]):</span>
+            <span class="n">out</span><span class="p">[:,</span> <span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">qepy_pw</span><span class="o">.</span><span class="n">scf</span><span class="o">.</span><span class="n">get_array_vltot</span><span class="p">()</span>
+        <span class="k">return</span> <span class="n">out</span></div>
+
+
+<div class="viewcode-block" id="Driver.get_hartree">
+<a class="viewcode-back" href="../../qepy/driver.html#qepy.driver.Driver.get_hartree">[docs]</a>
+    <span class="nd">@gathered</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">get_hartree</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">gather</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span> <span class="n">out</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">add</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Return information about Hartree energy:</span>
+<span class="sd">            tuple (potential, energy, total charge)</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">add</span> <span class="p">:</span> <span class="n">out</span><span class="p">[:]</span> <span class="o">=</span> <span class="mf">0.0</span>
+        <span class="n">ehart</span><span class="p">,</span> <span class="n">charge</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">qepy_pw</span><span class="o">.</span><span class="n">v_h</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">embed</span><span class="o">.</span><span class="n">rho</span><span class="o">.</span><span class="n">of_g</span><span class="p">[:,</span><span class="mi">0</span><span class="p">],</span> <span class="n">out</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">out</span><span class="p">,</span> <span class="n">ehart</span><span class="p">,</span> <span class="n">charge</span></div>
+
+
+<div class="viewcode-block" id="Driver.get_exchange_correlation">
+<a class="viewcode-back" href="../../qepy/driver.html#qepy.driver.Driver.get_exchange_correlation">[docs]</a>
+    <span class="nd">@gathered</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">get_exchange_correlation</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">gather</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span> <span class="n">out</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">tau</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Return information about the exchange-correlation:</span>
+<span class="sd">        LDA, GGA: tuple (potential, energy, v*rho)</span>
+<span class="sd">        MGGA:     tuple (potential, energy, v*rho, tau)</span>
+
+<span class="sd">        TODO :</span>
+<span class="sd">            The interface will changed in the new version of QE!</span>
+
+<span class="sd">        Note :</span>
+<span class="sd">            For metaGGA, only return scattered tau</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">etxc</span> <span class="o">=</span> <span class="n">vtxc</span> <span class="o">=</span> <span class="mf">0.0</span>
+        <span class="n">rho_obj</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">embed</span><span class="o">.</span><span class="n">rho</span>
+        <span class="n">rho_core</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">qepy_pw</span><span class="o">.</span><span class="n">scf</span><span class="o">.</span><span class="n">get_array_rho_core</span><span class="p">()</span>
+        <span class="n">rhog_core</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">qepy_pw</span><span class="o">.</span><span class="n">scf</span><span class="o">.</span><span class="n">get_array_rhog_core</span><span class="p">()</span>
+        <span class="n">is_meta</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">qepy_xclib</span><span class="o">.</span><span class="n">dft_setting_routines</span><span class="o">.</span><span class="n">xclib_dft_is</span><span class="p">(</span><span class="s1">&#39;meta&#39;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">is_meta</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">tau</span> <span class="ow">is</span> <span class="kc">None</span> <span class="p">:</span> <span class="n">tau</span> <span class="o">=</span> <span class="n">out</span><span class="o">*</span><span class="mf">0.0</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">qepy_pw</span><span class="o">.</span><span class="n">v_xc_meta</span><span class="p">(</span><span class="n">rho_obj</span><span class="p">,</span> <span class="n">rho_core</span><span class="p">,</span> <span class="n">rhog_core</span><span class="p">,</span> <span class="n">etxc</span><span class="p">,</span> <span class="n">vtxc</span><span class="p">,</span> <span class="n">out</span><span class="p">,</span> <span class="n">tau</span><span class="p">)</span>
+            <span class="k">return</span> <span class="n">out</span><span class="p">,</span> <span class="n">etxc</span><span class="p">,</span> <span class="n">vtxc</span><span class="p">,</span> <span class="n">tau</span>
+        <span class="k">else</span> <span class="p">:</span>
+            <span class="n">etxc</span><span class="p">,</span> <span class="n">vtxc</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">qepy_pw</span><span class="o">.</span><span class="n">v_xc</span><span class="p">(</span><span class="n">rho_obj</span><span class="p">,</span> <span class="n">rho_core</span><span class="p">,</span> <span class="n">rhog_core</span><span class="p">,</span> <span class="n">out</span><span class="p">)</span>
+            <span class="k">return</span> <span class="n">out</span><span class="p">,</span> <span class="n">etxc</span><span class="p">,</span> <span class="n">vtxc</span></div>
+
+
+<div class="viewcode-block" id="Driver.get_density_functional">
+<a class="viewcode-back" href="../../qepy/driver.html#qepy.driver.Driver.get_density_functional">[docs]</a>
+    <span class="nd">@gathered</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">get_density_functional</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">gather</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span> <span class="n">out</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">add</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Return effective potential information.</span>
+
+<span class="sd">        Note :</span>
+<span class="sd">            Then final potential is saved in the v_obj</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">rho_obj</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">embed</span><span class="o">.</span><span class="n">rho</span>
+        <span class="n">rho_core</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">qepy_pw</span><span class="o">.</span><span class="n">scf</span><span class="o">.</span><span class="n">get_array_rho_core</span><span class="p">()</span>
+        <span class="n">rhog_core</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">qepy_pw</span><span class="o">.</span><span class="n">scf</span><span class="o">.</span><span class="n">get_array_rhog_core</span><span class="p">()</span>
+        <span class="n">v_obj</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">embed</span><span class="o">.</span><span class="n">v</span>
+        <span class="n">etotefield</span> <span class="o">=</span> <span class="mf">0.0</span>
+        <span class="c1">#</span>
+        <span class="n">v_obj</span><span class="o">.</span><span class="n">of_r</span><span class="p">[:]</span> <span class="o">=</span> <span class="mf">0.0</span>
+        <span class="n">ehart</span><span class="p">,</span> <span class="n">etxc</span><span class="p">,</span> <span class="n">vtxc</span><span class="p">,</span> <span class="n">eth</span><span class="p">,</span> <span class="n">charge</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">qepy_pw</span><span class="o">.</span><span class="n">qepy_v_of_rho</span><span class="p">(</span><span class="n">rho_obj</span><span class="p">,</span> <span class="n">rho_core</span><span class="p">,</span> <span class="n">rhog_core</span><span class="p">,</span> <span class="n">etotefield</span><span class="p">,</span> <span class="n">v_obj</span><span class="p">)</span>
+        <span class="n">info</span> <span class="o">=</span> <span class="p">[</span><span class="n">ehart</span><span class="p">,</span> <span class="n">etxc</span><span class="p">,</span> <span class="n">vtxc</span><span class="p">,</span> <span class="n">eth</span><span class="p">,</span> <span class="n">etotefield</span><span class="p">,</span> <span class="n">charge</span><span class="p">]</span>
+        <span class="k">if</span> <span class="n">add</span> <span class="p">:</span>
+            <span class="n">out</span> <span class="o">+=</span> <span class="n">v_obj</span><span class="o">.</span><span class="n">of_r</span>
+        <span class="k">else</span> <span class="p">:</span>
+            <span class="n">out</span><span class="p">[:]</span> <span class="o">=</span> <span class="n">v_obj</span><span class="o">.</span><span class="n">of_r</span>
+        <span class="k">return</span> <span class="n">out</span><span class="p">,</span> <span class="n">info</span></div>
+
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">get_hartree_potential</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">gather</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span> <span class="n">out</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_hartree</span><span class="p">(</span><span class="n">gather</span><span class="o">=</span><span class="n">gather</span><span class="p">,</span> <span class="n">out</span><span class="o">=</span><span class="n">out</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">get_exchange_correlation_potential</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">gather</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span> <span class="n">out</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_exchange_correlation</span><span class="p">(</span><span class="n">gather</span><span class="o">=</span><span class="n">gather</span><span class="p">,</span> <span class="n">out</span><span class="o">=</span><span class="n">out</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">get_density_functional_potential</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">gather</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span> <span class="n">out</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_density_functional</span><span class="p">(</span><span class="n">gather</span><span class="o">=</span><span class="n">gather</span><span class="p">,</span> <span class="n">out</span><span class="o">=</span><span class="n">out</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">get_effective_potential</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">gather</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span> <span class="n">out</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="n">out</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_local_pp</span><span class="p">(</span><span class="n">gather</span><span class="o">=</span><span class="n">gather</span><span class="p">,</span> <span class="n">out</span><span class="o">=</span><span class="n">out</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+        <span class="n">out</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_density_functional_potential</span><span class="p">(</span><span class="n">gather</span><span class="o">=</span><span class="n">gather</span><span class="p">,</span> <span class="n">out</span><span class="o">=</span><span class="n">out</span><span class="p">,</span> <span class="n">add</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">out</span>
+<span class="c1">#-----------------------------------------------------------------------</span>
+
+<span class="c1">#-----------------------------------------------------------------------</span>
+    <span class="c1">#ASE Calculator</span>
+<div class="viewcode-block" id="Driver.get_potential_energy">
+<a class="viewcode-back" href="../../qepy/driver.html#qepy.driver.Driver.get_potential_energy">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">get_potential_energy</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Return the potential energy.&quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_energy</span><span class="p">()</span></div>
+
+
+<div class="viewcode-block" id="Driver.get_forces">
+<a class="viewcode-back" href="../../qepy/driver.html#qepy.driver.Driver.get_forces">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">get_forces</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">icalc</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span> <span class="n">ignore</span> <span class="o">=</span> <span class="p">(),</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Return the total forces. (n, 3)</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        icalc : int</span>
+
+<span class="sd">            ===== ============================= ===</span>
+<span class="sd">            icalc without                       bin</span>
+<span class="sd">            ===== ============================= ===</span>
+<span class="sd">              0   all                           000</span>
+<span class="sd">              1   no ewald                      001</span>
+<span class="sd">              2   no localpp                    010</span>
+<span class="sd">              4   no nlcc                       100</span>
+<span class="sd">            ===== ============================= ===</span>
+<span class="sd">        ignore : list</span>
+<span class="sd">            ignore some forces, which does same job as `icalc`.</span>
+
+<span class="sd">              - ewald (1)</span>
+<span class="sd">              - localpp (2)</span>
+<span class="sd">              - nlcc (4)</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">ignore</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">0</span> <span class="p">:</span> <span class="n">icalc</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">forcename2type</span><span class="p">(</span><span class="n">ignore</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">qepy_pw</span><span class="o">.</span><span class="n">qepy_forces</span><span class="p">(</span><span class="n">icalc</span><span class="p">)</span>
+        <span class="n">forces</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">qepy_pw</span><span class="o">.</span><span class="n">force_mod</span><span class="o">.</span><span class="n">get_array_force</span><span class="p">()</span><span class="o">.</span><span class="n">T</span>
+        <span class="k">return</span> <span class="n">forces</span></div>
+
+
+<div class="viewcode-block" id="Driver.get_stress">
+<a class="viewcode-back" href="../../qepy/driver.html#qepy.driver.Driver.get_stress">[docs]</a>
+    <span class="nd">@classmethod</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">get_stress</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Return the stress (3, 3).&quot;&quot;&quot;</span>
+        <span class="n">stress</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="mi">3</span><span class="p">,</span> <span class="mi">3</span><span class="p">),</span> <span class="n">order</span><span class="o">=</span><span class="s1">&#39;F&#39;</span><span class="p">)</span>
+        <span class="bp">cls</span><span class="o">.</span><span class="n">qepy_pw</span><span class="o">.</span><span class="n">stress</span><span class="p">(</span><span class="n">stress</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">stress</span></div>
+
+
+    <span class="c1">#ASE DFTCalculator</span>
+<div class="viewcode-block" id="Driver.get_number_of_bands">
+<a class="viewcode-back" href="../../qepy/driver.html#qepy.driver.Driver.get_number_of_bands">[docs]</a>
+    <span class="nd">@classmethod</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">get_number_of_bands</span><span class="p">(</span><span class="bp">cls</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Return the number of bands.&quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">cls</span><span class="o">.</span><span class="n">qepy_pw</span><span class="o">.</span><span class="n">wvfct</span><span class="o">.</span><span class="n">get_nbnd</span><span class="p">()</span></div>
+
+
+<div class="viewcode-block" id="Driver.get_xc_functional">
+<a class="viewcode-back" href="../../qepy/driver.html#qepy.driver.Driver.get_xc_functional">[docs]</a>
+    <span class="nd">@classmethod</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">get_xc_functional</span><span class="p">(</span><span class="bp">cls</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Return the XC-functional identifier.</span>
+
+<span class="sd">        &#39;LDA&#39;, &#39;PBE&#39;, ...&quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">cls</span><span class="o">.</span><span class="n">qepy_modules</span><span class="o">.</span><span class="n">funct</span><span class="o">.</span><span class="n">get_dft_short</span><span class="p">()</span><span class="o">.</span><span class="n">decode</span><span class="p">(</span><span class="s2">&quot;utf-8&quot;</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="Driver.get_bz_k_points">
+<a class="viewcode-back" href="../../qepy/driver.html#qepy.driver.Driver.get_bz_k_points">[docs]</a>
+    <span class="nd">@classmethod</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">get_bz_k_points</span><span class="p">(</span><span class="bp">cls</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Return all the k-points in the 1. Brillouin zone.</span>
+
+<span class="sd">        The coordinates are relative to reciprocal latice vectors.&quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">cls</span><span class="o">.</span><span class="n">qepy_pw</span><span class="o">.</span><span class="n">klist</span><span class="o">.</span><span class="n">get_array_xk</span><span class="p">()</span></div>
+
+
+<div class="viewcode-block" id="Driver.get_number_of_spins">
+<a class="viewcode-back" href="../../qepy/driver.html#qepy.driver.Driver.get_number_of_spins">[docs]</a>
+    <span class="nd">@classmethod</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">get_number_of_spins</span><span class="p">(</span><span class="bp">cls</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Return the number of spins in the calculation.</span>
+
+<span class="sd">        Spin-paired calculations: 1, spin-polarized calculation: 2.&quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">cls</span><span class="o">.</span><span class="n">qepy_pw</span><span class="o">.</span><span class="n">lsda_mod</span><span class="o">.</span><span class="n">get_nspin</span><span class="p">()</span></div>
+
+
+<div class="viewcode-block" id="Driver.get_spin_polarized">
+<a class="viewcode-back" href="../../qepy/driver.html#qepy.driver.Driver.get_spin_polarized">[docs]</a>
+    <span class="nd">@classmethod</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">get_spin_polarized</span><span class="p">(</span><span class="bp">cls</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Is it a spin-polarized calculation?&quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="nb">bool</span><span class="p">(</span><span class="bp">cls</span><span class="o">.</span><span class="n">qepy_pw</span><span class="o">.</span><span class="n">lsda_mod</span><span class="o">.</span><span class="n">get_lsda</span><span class="p">())</span></div>
+
+
+<div class="viewcode-block" id="Driver.get_ibz_k_points">
+<a class="viewcode-back" href="../../qepy/driver.html#qepy.driver.Driver.get_ibz_k_points">[docs]</a>
+    <span class="nd">@classmethod</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">get_ibz_k_points</span><span class="p">(</span><span class="bp">cls</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Return k-points in the irreducible part of the Brillouin zone.</span>
+
+<span class="sd">        The coordinates are relative to reciprocal latice vectors.&quot;&quot;&quot;</span>
+        <span class="n">xk</span> <span class="o">=</span> <span class="bp">cls</span><span class="o">.</span><span class="n">qepy_pw</span><span class="o">.</span><span class="n">klist</span><span class="o">.</span><span class="n">get_array_xk</span><span class="p">()[:,</span> <span class="p">:</span><span class="bp">cls</span><span class="o">.</span><span class="n">get_number_of_k_points</span><span class="p">()]</span><span class="o">.</span><span class="n">T</span>
+        <span class="k">return</span> <span class="n">xk</span> <span class="o">@</span> <span class="bp">cls</span><span class="o">.</span><span class="n">qepy_modules</span><span class="o">.</span><span class="n">cell_base</span><span class="o">.</span><span class="n">get_array_at</span><span class="p">()</span></div>
+
+
+<div class="viewcode-block" id="Driver.get_k_point_weights">
+<a class="viewcode-back" href="../../qepy/driver.html#qepy.driver.Driver.get_k_point_weights">[docs]</a>
+    <span class="nd">@classmethod</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">get_k_point_weights</span><span class="p">(</span><span class="bp">cls</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Weights of the k-points.</span>
+
+<span class="sd">        The sum of all weights is one.&quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">cls</span><span class="o">.</span><span class="n">qepy_pw</span><span class="o">.</span><span class="n">klist</span><span class="o">.</span><span class="n">get_array_wk</span><span class="p">()[:</span><span class="bp">cls</span><span class="o">.</span><span class="n">get_number_of_k_points</span><span class="p">()]</span></div>
+
+
+<div class="viewcode-block" id="Driver.get_pseudo_density">
+<a class="viewcode-back" href="../../qepy/driver.html#qepy.driver.Driver.get_pseudo_density">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">get_pseudo_density</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">spin</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">pad</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">gather</span> <span class="o">=</span> <span class="kc">True</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Return pseudo-density array.</span>
+
+<span class="sd">        If *spin* is not given, then the total density is returned.</span>
+<span class="sd">        Otherwise, the spin up or down density is returned (spin=0 or</span>
+<span class="sd">        1).&quot;&quot;&quot;</span>
+        <span class="n">density</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_density</span><span class="p">(</span><span class="n">gather</span> <span class="o">=</span> <span class="n">gather</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">spin</span> <span class="ow">is</span> <span class="kc">None</span> <span class="p">:</span>
+            <span class="k">return</span> <span class="n">density</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+        <span class="k">else</span> <span class="p">:</span>
+            <span class="k">return</span> <span class="n">density</span><span class="p">[:,</span> <span class="n">spin</span><span class="p">]</span></div>
+
+
+<div class="viewcode-block" id="Driver.get_pseudo_wave_function">
+<a class="viewcode-back" href="../../qepy/driver.html#qepy.driver.Driver.get_pseudo_wave_function">[docs]</a>
+    <span class="nd">@classmethod</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">get_pseudo_wave_function</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">band</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">kpt</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">spin</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">broadcast</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+                                 <span class="n">pad</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Return pseudo-wave-function array.&quot;&quot;&quot;</span>
+        <span class="bp">cls</span><span class="o">.</span><span class="n">qepy_pw</span><span class="o">.</span><span class="n">qepy_mod</span><span class="o">.</span><span class="n">qepy_get_evc</span><span class="p">(</span><span class="n">kpt</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span>
+        <span class="n">evc</span> <span class="o">=</span> <span class="bp">cls</span><span class="o">.</span><span class="n">qepy_modules</span><span class="o">.</span><span class="n">wavefunctions</span><span class="o">.</span><span class="n">get_array_evc</span><span class="p">()</span>
+        <span class="k">if</span> <span class="n">band</span> <span class="ow">is</span> <span class="kc">None</span> <span class="p">:</span>
+            <span class="k">return</span> <span class="n">evc</span>
+        <span class="k">else</span> <span class="p">:</span>
+            <span class="k">return</span> <span class="n">evc</span><span class="p">[:,</span> <span class="n">band</span><span class="p">]</span></div>
+
+
+<div class="viewcode-block" id="Driver.get_eigenvalues">
+<a class="viewcode-back" href="../../qepy/driver.html#qepy.driver.Driver.get_eigenvalues">[docs]</a>
+    <span class="nd">@classmethod</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">get_eigenvalues</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">kpt</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">spin</span><span class="o">=</span><span class="mi">0</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Return eigenvalue array.&quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">cls</span><span class="o">.</span><span class="n">qepy_pw</span><span class="o">.</span><span class="n">wvfct</span><span class="o">.</span><span class="n">get_array_et</span><span class="p">()</span><span class="o">.</span><span class="n">T</span><span class="p">[</span><span class="n">kpt</span><span class="p">]</span></div>
+
+
+<div class="viewcode-block" id="Driver.get_occupation_numbers">
+<a class="viewcode-back" href="../../qepy/driver.html#qepy.driver.Driver.get_occupation_numbers">[docs]</a>
+    <span class="nd">@classmethod</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">get_occupation_numbers</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">kpt</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">spin</span><span class="o">=</span><span class="mi">0</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Return occupation number array.&quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">cls</span><span class="o">.</span><span class="n">qepy_pw</span><span class="o">.</span><span class="n">wvfct</span><span class="o">.</span><span class="n">get_array_wg</span><span class="p">()</span><span class="o">.</span><span class="n">T</span><span class="p">[</span><span class="n">kpt</span><span class="p">]</span></div>
+
+
+<div class="viewcode-block" id="Driver.get_fermi_level">
+<a class="viewcode-back" href="../../qepy/driver.html#qepy.driver.Driver.get_fermi_level">[docs]</a>
+    <span class="nd">@classmethod</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">get_fermi_level</span><span class="p">(</span><span class="bp">cls</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Return the Fermi level.&quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">cls</span><span class="o">.</span><span class="n">qepy_pw</span><span class="o">.</span><span class="n">ener</span><span class="o">.</span><span class="n">get_ef</span><span class="p">()</span></div>
+
+
+    <span class="c1"># def initial_wannier(self, initialwannier, kpointgrid, fixedstates,</span>
+                        <span class="c1"># edf, spin, nbands):</span>
+        <span class="c1"># &quot;&quot;&quot;Initial guess for the shape of wannier functions.</span>
+
+        <span class="c1"># Use initial guess for wannier orbitals to determine rotation</span>
+        <span class="c1"># matrices U and C.</span>
+        <span class="c1"># &quot;&quot;&quot;</span>
+        <span class="c1"># raise NotImplementedError</span>
+
+    <span class="c1"># def get_wannier_localization_matrix(self, nbands, dirG, kpoint,</span>
+                                        <span class="c1"># nextkpoint, G_I, spin):</span>
+        <span class="c1"># &quot;&quot;&quot;Calculate integrals for maximally localized Wannier functions.&quot;&quot;&quot;</span>
+        <span class="c1"># raise NotImplementedError</span>
+
+<div class="viewcode-block" id="Driver.get_magnetic_moment">
+<a class="viewcode-back" href="../../qepy/driver.html#qepy.driver.Driver.get_magnetic_moment">[docs]</a>
+    <span class="nd">@classmethod</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">get_magnetic_moment</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Return the total magnetic moment.&quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">cls</span><span class="o">.</span><span class="n">qepy_pw</span><span class="o">.</span><span class="n">lsda_mod</span><span class="o">.</span><span class="n">get_magtot</span><span class="p">()</span></div>
+
+
+<div class="viewcode-block" id="Driver.get_number_of_grid_points">
+<a class="viewcode-back" href="../../qepy/driver.html#qepy.driver.Driver.get_number_of_grid_points">[docs]</a>
+    <span class="nd">@classmethod</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">get_number_of_grid_points</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">gather</span> <span class="o">=</span> <span class="kc">True</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Return the shape of arrays.&quot;&quot;&quot;</span>
+        <span class="n">nr</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="n">dtype</span> <span class="o">=</span> <span class="s1">&#39;int32&#39;</span><span class="p">)</span>
+        <span class="bp">cls</span><span class="o">.</span><span class="n">qepy_pw</span><span class="o">.</span><span class="n">qepy_mod</span><span class="o">.</span><span class="n">qepy_get_grid</span><span class="p">(</span><span class="n">nr</span><span class="p">,</span> <span class="n">gather</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">nr</span></div>
+
+    <span class="c1">#ASE DFTCalculator END</span>
+<span class="c1">#-----------------------------------------------------------------------</span>
+
+<div class="viewcode-block" id="Driver.get_number_of_k_points">
+<a class="viewcode-back" href="../../qepy/driver.html#qepy.driver.Driver.get_number_of_k_points">[docs]</a>
+    <span class="nd">@classmethod</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">get_number_of_k_points</span><span class="p">(</span><span class="bp">cls</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Return the number of kpoints.&quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">cls</span><span class="o">.</span><span class="n">qepy_pw</span><span class="o">.</span><span class="n">klist</span><span class="o">.</span><span class="n">get_nkstot</span><span class="p">()</span></div>
+
+
+<div class="viewcode-block" id="Driver.get_volume">
+<a class="viewcode-back" href="../../qepy/driver.html#qepy.driver.Driver.get_volume">[docs]</a>
+    <span class="nd">@classmethod</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">get_volume</span><span class="p">(</span><span class="bp">cls</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Return the volume.&quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">cls</span><span class="o">.</span><span class="n">qepy_modules</span><span class="o">.</span><span class="n">cell_base</span><span class="o">.</span><span class="n">get_omega</span><span class="p">()</span></div>
+
+
+<div class="viewcode-block" id="Driver.get_ecutrho">
+<a class="viewcode-back" href="../../qepy/driver.html#qepy.driver.Driver.get_ecutrho">[docs]</a>
+    <span class="nd">@classmethod</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">get_ecutrho</span><span class="p">(</span><span class="bp">cls</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Return the cutoff for density.&quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">cls</span><span class="o">.</span><span class="n">qepy_modules</span><span class="o">.</span><span class="n">gvect</span><span class="o">.</span><span class="n">get_ecutrho</span><span class="p">()</span></div>
+
+
+<div class="viewcode-block" id="Driver.get_ions_lattice">
+<a class="viewcode-back" href="../../qepy/driver.html#qepy.driver.Driver.get_ions_lattice">[docs]</a>
+    <span class="nd">@classmethod</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">get_ions_lattice</span><span class="p">(</span><span class="bp">cls</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Return the matrix of the lattice vectors in Bohrs.&quot;&quot;&quot;</span>
+        <span class="n">alat</span> <span class="o">=</span> <span class="bp">cls</span><span class="o">.</span><span class="n">qepy_modules</span><span class="o">.</span><span class="n">cell_base</span><span class="o">.</span><span class="n">get_alat</span><span class="p">()</span>
+        <span class="n">lattice</span> <span class="o">=</span> <span class="bp">cls</span><span class="o">.</span><span class="n">qepy_modules</span><span class="o">.</span><span class="n">cell_base</span><span class="o">.</span><span class="n">get_array_at</span><span class="p">()</span> <span class="o">*</span> <span class="n">alat</span>
+        <span class="k">return</span> <span class="n">lattice</span><span class="o">.</span><span class="n">T</span></div>
+
+
+<div class="viewcode-block" id="Driver.get_ions_positions">
+<a class="viewcode-back" href="../../qepy/driver.html#qepy.driver.Driver.get_ions_positions">[docs]</a>
+    <span class="nd">@classmethod</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">get_ions_positions</span><span class="p">(</span><span class="bp">cls</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Return the cartesian positions of ions in Bohrs.&quot;&quot;&quot;</span>
+        <span class="n">alat</span> <span class="o">=</span> <span class="bp">cls</span><span class="o">.</span><span class="n">qepy_modules</span><span class="o">.</span><span class="n">cell_base</span><span class="o">.</span><span class="n">get_alat</span><span class="p">()</span>
+        <span class="n">pos</span> <span class="o">=</span> <span class="bp">cls</span><span class="o">.</span><span class="n">qepy_modules</span><span class="o">.</span><span class="n">ions_base</span><span class="o">.</span><span class="n">get_array_tau</span><span class="p">()</span><span class="o">.</span><span class="n">T</span> <span class="o">*</span> <span class="n">alat</span>
+        <span class="k">return</span> <span class="n">pos</span></div>
+
+
+<div class="viewcode-block" id="Driver.get_ions_symbols">
+<a class="viewcode-back" href="../../qepy/driver.html#qepy.driver.Driver.get_ions_symbols">[docs]</a>
+    <span class="nd">@classmethod</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">get_ions_symbols</span><span class="p">(</span><span class="bp">cls</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Return the symbols of ions.&quot;&quot;&quot;</span>
+        <span class="n">ityp</span> <span class="o">=</span> <span class="bp">cls</span><span class="o">.</span><span class="n">qepy_modules</span><span class="o">.</span><span class="n">ions_base</span><span class="o">.</span><span class="n">get_array_ityp</span><span class="p">()</span> <span class="o">-</span> <span class="mi">1</span>
+        <span class="n">nat</span> <span class="o">=</span> <span class="bp">cls</span><span class="o">.</span><span class="n">qepy_modules</span><span class="o">.</span><span class="n">ions_base</span><span class="o">.</span><span class="n">get_nat</span><span class="p">()</span>
+        <span class="n">label</span> <span class="o">=</span> <span class="bp">cls</span><span class="o">.</span><span class="n">qepy_modules</span><span class="o">.</span><span class="n">ions_base</span><span class="o">.</span><span class="n">get_array_atm</span><span class="p">()</span><span class="o">.</span><span class="n">T</span><span class="o">.</span><span class="n">view</span><span class="p">(</span><span class="s1">&#39;S3&#39;</span><span class="p">)[:,</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="s1">&#39;U3&#39;</span><span class="p">)</span>
+        <span class="n">label</span> <span class="o">=</span> <span class="p">[</span><span class="n">x</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">label</span><span class="p">]</span>
+        <span class="n">symbols</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">nat</span><span class="p">):</span>
+            <span class="n">symbols</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">label</span><span class="p">[</span><span class="n">ityp</span><span class="p">[</span><span class="n">i</span><span class="p">]])</span>
+        <span class="k">return</span> <span class="n">symbols</span></div>
+
+
+<div class="viewcode-block" id="Driver.data2field">
+<a class="viewcode-back" href="../../qepy/driver.html#qepy.driver.Driver.data2field">[docs]</a>
+    <span class="nd">@classmethod</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">data2field</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">data</span><span class="p">,</span> <span class="n">cell</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">grid</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">rank</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">cplx</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;QE data to DFTpy DirectField.</span>
+<span class="sd">        If data is None or small temporary array will return np.zeros(1).</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="kn">from</span><span class="w"> </span><span class="nn">dftpy.field</span><span class="w"> </span><span class="kn">import</span> <span class="n">DirectField</span>
+        <span class="kn">from</span><span class="w"> </span><span class="nn">dftpy.grid</span><span class="w"> </span><span class="kn">import</span> <span class="n">DirectGrid</span>
+        <span class="c1">#</span>
+        <span class="k">if</span> <span class="n">data</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">or</span> <span class="n">data</span><span class="o">.</span><span class="n">size</span> <span class="o">&lt;</span> <span class="mi">8</span> <span class="p">:</span> <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+        <span class="c1">#</span>
+        <span class="k">if</span> <span class="n">cell</span> <span class="ow">is</span> <span class="kc">None</span> <span class="p">:</span> <span class="n">cell</span> <span class="o">=</span> <span class="bp">cls</span><span class="o">.</span><span class="n">get_ions_lattice</span><span class="p">()</span>
+        <span class="k">if</span> <span class="n">grid</span> <span class="ow">is</span> <span class="kc">None</span> <span class="p">:</span> <span class="n">grid</span> <span class="o">=</span> <span class="n">DirectGrid</span><span class="p">(</span><span class="n">lattice</span><span class="o">=</span><span class="n">cell</span><span class="p">,</span> <span class="n">nr</span><span class="o">=</span><span class="bp">cls</span><span class="o">.</span><span class="n">get_number_of_grid_points</span><span class="p">(),</span> <span class="n">ecut</span><span class="o">=</span><span class="bp">cls</span><span class="o">.</span><span class="n">get_ecutrho</span><span class="p">(),</span> <span class="n">cplx</span><span class="o">=</span><span class="n">cplx</span><span class="p">)</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">rank</span> <span class="p">:</span>
+            <span class="n">rank</span> <span class="o">=</span> <span class="n">data</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="k">if</span> <span class="n">data</span><span class="o">.</span><span class="n">ndim</span> <span class="o">==</span> <span class="mi">2</span> <span class="k">else</span> <span class="mi">1</span>
+        <span class="c1">#</span>
+        <span class="k">if</span> <span class="n">data</span><span class="o">.</span><span class="n">size</span> <span class="o">!=</span> <span class="n">grid</span><span class="o">.</span><span class="n">nnrR</span><span class="o">*</span><span class="n">rank</span> <span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s1">&#39;The size of data not match the grid,</span><span class="se">\</span>
+<span class="s1">                    please check the data or set another grid&#39;</span><span class="p">,</span> <span class="n">data</span><span class="o">.</span><span class="n">size</span><span class="p">,</span> <span class="n">grid</span><span class="o">.</span><span class="n">nnrR</span><span class="o">*</span><span class="n">rank</span><span class="p">)</span>
+        <span class="c1">#</span>
+        <span class="n">field</span> <span class="o">=</span> <span class="n">DirectField</span><span class="p">(</span><span class="n">grid</span><span class="o">=</span><span class="n">grid</span><span class="p">,</span> <span class="n">data</span><span class="o">=</span><span class="n">data</span><span class="o">.</span><span class="n">ravel</span><span class="p">(</span><span class="n">order</span><span class="o">=</span><span class="s1">&#39;C&#39;</span><span class="p">),</span> <span class="n">order</span><span class="o">=</span><span class="s1">&#39;F&#39;</span><span class="p">,</span> <span class="n">rank</span><span class="o">=</span><span class="n">rank</span><span class="p">,</span> <span class="n">cplx</span><span class="o">=</span><span class="n">cplx</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">field</span></div>
+
+
+<div class="viewcode-block" id="Driver.field2data">
+<a class="viewcode-back" href="../../qepy/driver.html#qepy.driver.Driver.field2data">[docs]</a>
+    <span class="nd">@classmethod</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">field2data</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">field</span><span class="p">,</span> <span class="n">data</span> <span class="o">=</span> <span class="kc">None</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;DFTpy DirectField to QE data.</span>
+<span class="sd">        If the input field is not 3d array, will return np.zeros((1, 1)).</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c1">#</span>
+        <span class="k">if</span> <span class="n">field</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">or</span> <span class="n">field</span><span class="o">.</span><span class="n">ndim</span> <span class="o">&lt;</span> <span class="mi">3</span> <span class="p">:</span> <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">))</span>
+        <span class="c1">#</span>
+        <span class="n">ns</span> <span class="o">=</span> <span class="n">field</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="k">if</span> <span class="n">field</span><span class="o">.</span><span class="n">ndim</span> <span class="o">==</span> <span class="mi">4</span> <span class="k">else</span> <span class="mi">1</span>
+        <span class="k">if</span> <span class="n">data</span> <span class="ow">is</span> <span class="kc">None</span> <span class="p">:</span>
+            <span class="n">nnrR</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">prod</span><span class="p">(</span><span class="bp">cls</span><span class="o">.</span><span class="n">get_number_of_grid_points</span><span class="p">())</span>
+            <span class="n">data</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">empty</span><span class="p">((</span><span class="n">nnrR</span><span class="p">,</span> <span class="n">ns</span><span class="p">))</span>
+        <span class="c1">#</span>
+        <span class="k">if</span> <span class="n">data</span><span class="o">.</span><span class="n">size</span> <span class="o">!=</span> <span class="n">field</span><span class="o">.</span><span class="n">size</span> <span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s1">&#39;The size of field is different with data,</span><span class="se">\</span>
+<span class="s1">                    please check the field or set another data&#39;</span><span class="p">,</span> <span class="n">field</span><span class="o">.</span><span class="n">size</span><span class="p">,</span> <span class="n">data</span><span class="o">.</span><span class="n">size</span><span class="p">)</span>
+        <span class="c1">#</span>
+        <span class="k">if</span> <span class="n">ns</span> <span class="o">==</span> <span class="mi">1</span> <span class="p">:</span> <span class="n">field</span> <span class="o">=</span> <span class="p">[</span><span class="n">field</span><span class="p">]</span>
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">ns</span><span class="p">):</span>
+            <span class="n">data</span><span class="p">[:,</span> <span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">field</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">ravel</span><span class="p">(</span><span class="n">order</span> <span class="o">=</span> <span class="s1">&#39;F&#39;</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">data</span></div>
+
+
+<div class="viewcode-block" id="Driver.get_dftpy_grid">
+<a class="viewcode-back" href="../../qepy/driver.html#qepy.driver.Driver.get_dftpy_grid">[docs]</a>
+    <span class="nd">@classmethod</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">get_dftpy_grid</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">nr</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">cell</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">mp</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Return the DFTpy DirectGrid from QE.&quot;&quot;&quot;</span>
+        <span class="kn">from</span><span class="w"> </span><span class="nn">dftpy.grid</span><span class="w"> </span><span class="kn">import</span> <span class="n">DirectGrid</span>
+        <span class="k">if</span> <span class="n">cell</span> <span class="ow">is</span> <span class="kc">None</span> <span class="p">:</span> <span class="n">cell</span> <span class="o">=</span> <span class="bp">cls</span><span class="o">.</span><span class="n">get_ions_lattice</span><span class="p">()</span>
+        <span class="k">if</span> <span class="n">nr</span> <span class="ow">is</span> <span class="kc">None</span> <span class="p">:</span>
+            <span class="n">nr</span> <span class="o">=</span> <span class="bp">cls</span><span class="o">.</span><span class="n">get_number_of_grid_points</span><span class="p">()</span>
+            <span class="n">ecut</span> <span class="o">=</span> <span class="bp">cls</span><span class="o">.</span><span class="n">get_ecutrho</span><span class="p">()</span>
+        <span class="k">else</span> <span class="p">:</span>
+            <span class="n">ecut</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="n">grid</span> <span class="o">=</span> <span class="n">DirectGrid</span><span class="p">(</span><span class="n">lattice</span><span class="o">=</span><span class="n">cell</span><span class="p">,</span> <span class="n">nr</span><span class="o">=</span><span class="n">nr</span><span class="p">,</span> <span class="n">ecut</span><span class="o">=</span><span class="n">ecut</span><span class="p">,</span> <span class="n">mp</span><span class="o">=</span><span class="n">mp</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">grid</span></div>
+
+
+<div class="viewcode-block" id="Driver.get_ase_atoms">
+<a class="viewcode-back" href="../../qepy/driver.html#qepy.driver.Driver.get_ase_atoms">[docs]</a>
+    <span class="nd">@classmethod</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">get_ase_atoms</span><span class="p">(</span><span class="bp">cls</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Return the atom.Atoms from QE to ASE (using ASE units).&quot;&quot;&quot;</span>
+        <span class="kn">from</span><span class="w"> </span><span class="nn">ase.atoms</span><span class="w"> </span><span class="kn">import</span> <span class="n">Atoms</span>
+        <span class="n">units_Bohr</span> <span class="o">=</span> <span class="bp">cls</span><span class="o">.</span><span class="n">qepy_modules</span><span class="o">.</span><span class="n">constants</span><span class="o">.</span><span class="n">BOHR_RADIUS_SI</span> <span class="o">*</span> <span class="mf">1E10</span>
+        <span class="c1">#</span>
+        <span class="n">symbols</span> <span class="o">=</span> <span class="bp">cls</span><span class="o">.</span><span class="n">get_ions_symbols</span><span class="p">()</span>
+        <span class="n">positions</span> <span class="o">=</span> <span class="bp">cls</span><span class="o">.</span><span class="n">get_ions_positions</span><span class="p">()</span> <span class="o">*</span> <span class="n">units_Bohr</span>
+        <span class="n">lattice</span> <span class="o">=</span> <span class="bp">cls</span><span class="o">.</span><span class="n">get_ions_lattice</span><span class="p">()</span> <span class="o">*</span> <span class="n">units_Bohr</span>
+        <span class="n">atoms</span> <span class="o">=</span> <span class="n">Atoms</span><span class="p">(</span><span class="n">symbols</span> <span class="o">=</span> <span class="n">symbols</span><span class="p">,</span> <span class="n">positions</span> <span class="o">=</span> <span class="n">positions</span><span class="p">,</span> <span class="n">cell</span> <span class="o">=</span> <span class="n">lattice</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">atoms</span></div>
+
+
+<div class="viewcode-block" id="Driver.get_dftpy_ions">
+<a class="viewcode-back" href="../../qepy/driver.html#qepy.driver.Driver.get_dftpy_ions">[docs]</a>
+    <span class="nd">@classmethod</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">get_dftpy_ions</span><span class="p">(</span><span class="bp">cls</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Return the DFTpy.Ions from QE. (with DFTpy units)&quot;&quot;&quot;</span>
+        <span class="kn">from</span><span class="w"> </span><span class="nn">dftpy.ions</span><span class="w"> </span><span class="kn">import</span> <span class="n">Ions</span>
+        <span class="n">atoms</span> <span class="o">=</span> <span class="bp">cls</span><span class="o">.</span><span class="n">get_ase_atoms</span><span class="p">()</span>
+        <span class="k">return</span> <span class="n">Ions</span><span class="o">.</span><span class="n">from_ase</span><span class="p">(</span><span class="n">atoms</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="Driver.switch_nlpp">
+<a class="viewcode-back" href="../../qepy/driver.html#qepy.driver.Driver.switch_nlpp">[docs]</a>
+    <span class="nd">@classmethod</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">switch_nlpp</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">nhm</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">nbetam</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">nkb</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">nh</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Switch on/off the nonlocal part of the pseudopotential&quot;&quot;&quot;</span>
+        <span class="n">nhm_</span> <span class="o">=</span> <span class="bp">cls</span><span class="o">.</span><span class="n">qepy_upflib</span><span class="o">.</span><span class="n">uspp_param</span><span class="o">.</span><span class="n">get_nhm</span><span class="p">()</span>
+        <span class="n">nbetam_</span> <span class="o">=</span> <span class="bp">cls</span><span class="o">.</span><span class="n">qepy_upflib</span><span class="o">.</span><span class="n">uspp_param</span><span class="o">.</span><span class="n">get_nbetam</span><span class="p">()</span>
+        <span class="n">nh_</span> <span class="o">=</span> <span class="bp">cls</span><span class="o">.</span><span class="n">qepy_upflib</span><span class="o">.</span><span class="n">uspp_param</span><span class="o">.</span><span class="n">get_array_nh</span><span class="p">()</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+        <span class="n">nkb_</span> <span class="o">=</span> <span class="bp">cls</span><span class="o">.</span><span class="n">qepy_upflib</span><span class="o">.</span><span class="n">uspp</span><span class="o">.</span><span class="n">get_nkb</span><span class="p">()</span>
+
+        <span class="k">if</span> <span class="n">nh</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span> <span class="n">nh</span> <span class="o">=</span> <span class="n">nh_</span> <span class="o">*</span> <span class="mi">0</span>
+
+        <span class="bp">cls</span><span class="o">.</span><span class="n">qepy_upflib</span><span class="o">.</span><span class="n">uspp_param</span><span class="o">.</span><span class="n">set_nhm</span><span class="p">(</span><span class="n">nhm</span><span class="p">)</span>
+        <span class="bp">cls</span><span class="o">.</span><span class="n">qepy_upflib</span><span class="o">.</span><span class="n">uspp_param</span><span class="o">.</span><span class="n">set_nbetam</span><span class="p">(</span><span class="n">nbetam</span><span class="p">)</span>
+        <span class="bp">cls</span><span class="o">.</span><span class="n">qepy_upflib</span><span class="o">.</span><span class="n">uspp</span><span class="o">.</span><span class="n">set_nkb</span><span class="p">(</span><span class="n">nkb</span><span class="p">)</span>
+        <span class="bp">cls</span><span class="o">.</span><span class="n">qepy_upflib</span><span class="o">.</span><span class="n">uspp_param</span><span class="o">.</span><span class="n">set_array_nh</span><span class="p">(</span><span class="n">nh</span><span class="p">)</span>
+
+        <span class="n">pp_options</span> <span class="o">=</span> <span class="p">{</span>
+            <span class="s1">&#39;nhm&#39;</span> <span class="p">:</span> <span class="n">nhm_</span><span class="p">,</span>
+            <span class="s1">&#39;nbetam&#39;</span> <span class="p">:</span> <span class="n">nbetam_</span><span class="p">,</span>
+            <span class="s1">&#39;nh&#39;</span><span class="p">:</span> <span class="n">nh_</span><span class="p">,</span>
+            <span class="s1">&#39;nkb&#39;</span><span class="p">:</span> <span class="n">nkb_</span><span class="p">,</span>
+        <span class="p">}</span>
+
+        <span class="k">return</span> <span class="n">pp_options</span></div>
+
+
+<div class="viewcode-block" id="Driver.update_exchange_correlation">
+<a class="viewcode-back" href="../../qepy/driver.html#qepy.driver.Driver.update_exchange_correlation">[docs]</a>
+    <span class="nd">@classmethod</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">update_exchange_correlation</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">xc</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">libxc</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Switch XC on the fly&quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="n">libxc</span> <span class="p">:</span> <span class="n">xc</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="bp">cls</span><span class="o">.</span><span class="n">qepy_pw</span><span class="o">.</span><span class="n">qepy_mod</span><span class="o">.</span><span class="n">qepy_set_dft</span><span class="p">(</span><span class="n">xc</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="Driver.sum_band">
+<a class="viewcode-back" href="../../qepy/driver.html#qepy.driver.Driver.sum_band">[docs]</a>
+    <span class="nd">@classmethod</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">sum_band</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">occupations</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Same as sum_band of QE with input occupations:</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        occupations: np.ndarray (nbnd, nk)</span>
+<span class="sd">            occupation numbers</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">cls</span><span class="o">.</span><span class="n">qepy_pw</span><span class="o">.</span><span class="n">qepy_mod</span><span class="o">.</span><span class="n">qepy_sum_band</span><span class="p">(</span><span class="n">occupations</span><span class="p">)</span></div>
+
+
+    <span class="nd">@staticmethod</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">name2type</span><span class="p">(</span><span class="n">dictionary</span><span class="p">,</span> <span class="n">name</span><span class="p">):</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="nb">int</span><span class="p">):</span>
+            <span class="n">value</span> <span class="o">=</span> <span class="p">[]</span>
+            <span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">dictionary</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+                <span class="k">if</span> <span class="n">name</span> <span class="o">&amp;</span> <span class="n">v</span> <span class="o">==</span> <span class="n">v</span> <span class="p">:</span> <span class="n">value</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">k</span><span class="p">)</span>
+        <span class="k">else</span> <span class="p">:</span>
+            <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="nb">str</span><span class="p">):</span> <span class="n">name</span> <span class="o">=</span> <span class="p">[</span><span class="n">name</span><span class="p">]</span>
+            <span class="n">value</span> <span class="o">=</span> <span class="mi">0</span>
+            <span class="k">for</span> <span class="n">key</span> <span class="ow">in</span> <span class="n">name</span> <span class="p">:</span>
+                <span class="n">i</span> <span class="o">=</span> <span class="n">dictionary</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">key</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
+                <span class="k">if</span> <span class="n">i</span> <span class="ow">is</span> <span class="kc">None</span> <span class="p">:</span>
+                    <span class="k">raise</span> <span class="ne">AttributeError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;The key &#39;</span><span class="si">{</span><span class="n">key</span><span class="si">}</span><span class="s2">&#39; not in the given dictionary.&quot;</span><span class="p">)</span>
+                <span class="n">value</span> <span class="o">+=</span> <span class="n">i</span>
+            <span class="k">return</span> <span class="n">value</span>
+        <span class="k">return</span> <span class="n">value</span>
+
+    <span class="nd">@classmethod</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">potname2type</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">name</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">cls</span><span class="o">.</span><span class="n">name2type</span><span class="p">(</span><span class="bp">cls</span><span class="o">.</span><span class="n">POTNAMES</span><span class="p">,</span> <span class="n">name</span><span class="p">)</span>
+
+    <span class="nd">@classmethod</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">forcename2type</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">name</span> <span class="o">=</span> <span class="kc">None</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">cls</span><span class="o">.</span><span class="n">name2type</span><span class="p">(</span><span class="bp">cls</span><span class="o">.</span><span class="n">FORCENAMES</span><span class="p">,</span> <span class="n">name</span><span class="p">)</span></div>
+
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2019-2024 QEpy community.
+      <span class="lastupdated">Last updated on Friday, 01 Aug 2025 06:10:53.
+      </span></p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+  
+<button onclick="topFunction()" id="btn" title="Go to top">Top</button>
+
+<script>
+var mybutton = document.getElementById("btn");
+
+window.onscroll = function() {scrollFunction()};
+
+function scrollFunction() {
+  if (document.body.scrollTop > 20 || document.documentElement.scrollTop > 20) {
+    mybutton.style.display = "block";
+  } else {
+    mybutton.style.display = "none";
+  }
+}
+
+function topFunction() {
+  document.body.scrollTop = 0;
+  document.documentElement.scrollTop = 0;
+}
+</script>
+
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

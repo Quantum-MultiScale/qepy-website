@@ -1,0 +1,433 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>The QEpyCalculator object &mdash; QEpy  &#34;7.2.0&#34;
+ documentation</title>
+      <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="../_static/custom.css?v=9b3c20d5" />
+      <link rel="stylesheet" type="text/css" href="../_static/copybutton.css?v=76b2166b" />
+      <link rel="stylesheet" type="text/css" href="../_static/tabs.css?v=4c969af8" />
+      <link rel="stylesheet" type="text/css" href="../_static/panels-main.c949a650a448cc0ae9fd3441c0e17fb0.css?v=2a6c4383" />
+      <link rel="stylesheet" type="text/css" href="../_static/panels-bootstrap.5fd3999ee7762ccc51105388f4a9d115.css?v=45cf7dbc" />
+      <link rel="stylesheet" type="text/css" href="../_static/panels-variables.06eb56fa6e07937060861dad626602ad.css?v=d290406d" />
+
+  
+      <script src="../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../_static/documentation_options.js?v=fb160149"></script>
+      <script src="../_static/doctools.js?v=9bcbadda"></script>
+      <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+      <script src="../_static/clipboard.min.js?v=a7894cd8"></script>
+      <script src="../_static/copybutton.js?v=f281be69"></script>
+      <script src="../_static/tabs.js?v=3ee01567"></script>
+      <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="The QEInput object" href="io.html" />
+    <link rel="prev" title="The Driver object" href="driver.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../index.html" class="icon icon-home">
+            QEpy
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../contact.html">Contact</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../install.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../tutorials/tutorials.html">Tutorials</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="qepy.html">Modules</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="driver.html">The Driver object</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">The QEpyCalculator object</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#list-of-all-methods">List of all Methods</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#qepy.calculator.QEpyCalculator"><code class="docutils literal notranslate"><span class="pre">QEpyCalculator</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="io.html">The QEInput object</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../development/development.html">Development</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../faq.html">Frequently Asked Questions</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">QEpy</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="qepy.html">Modules</a></li>
+      <li class="breadcrumb-item active">The QEpyCalculator object</li>
+      <li class="wy-breadcrumbs-aside">
+        
+			<a href=../genindex.html>Index</a>
+		
+          
+			<a href="https://gitlab.com/shaoxc/qepy/tree/master/doc/source/qepy/calculator.rst">Source</a>
+          
+        
+      </li>
+    
+  </ul><div class="rst-breadcrumbs-buttons" role="navigation" aria-label="Sequential page navigation">
+        <a href="driver.html" class="btn btn-neutral float-left" title="The Driver object" accesskey="p"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="io.html" class="btn btn-neutral float-right" title="The QEInput object" accesskey="n">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+  </div>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="the-qepycalculator-object">
+<span id="module-qepy.calculator"></span><h1>The QEpyCalculator object<a class="headerlink" href="#the-qepycalculator-object" title="Link to this heading"></a></h1>
+<p>The <a class="reference internal" href="#qepy.calculator.QEpyCalculator" title="qepy.calculator.QEpyCalculator"><code class="xref py py-class docutils literal notranslate"><span class="pre">QEpyCalculator</span></code></a> object is a calculator for <a class="reference external" href="https://gitlab.com/ase/ase">ASE</a>:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">qepy.calculator</span><span class="w"> </span><span class="kn">import</span> <span class="n">QEpyCalculator</span>
+<span class="n">driver</span> <span class="o">=</span> <span class="n">QEpyCalculator</span><span class="p">(</span><span class="n">inputfile</span><span class="o">=</span><span class="s1">&#39;qe_in.in&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>The units of <a class="reference external" href="https://wiki.fysik.dtu.dk/ase/ase/calculators/calculators.html">ASE Calculator</a> is different from <a class="reference internal" href="driver.html#qepy.driver.Driver" title="qepy.driver.Driver"><code class="xref py py-class docutils literal notranslate"><span class="pre">qepy.driver.Driver</span></code></a> object.</p>
+</div>
+<section id="list-of-all-methods">
+<h2>List of all Methods<a class="headerlink" href="#list-of-all-methods" title="Link to this heading"></a></h2>
+<dl class="py class">
+<dt class="sig sig-object py" id="qepy.calculator.QEpyCalculator">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">qepy.calculator.</span></span><span class="sig-name descname"><span class="pre">QEpyCalculator</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">atoms</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">inputfile</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">from_file</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">wrap</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">extrapolation</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ase_espresso</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">qe_options</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">comm</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ldescf</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">iterative</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">task</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'scf'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">embed</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">prefix</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">outdir</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">logfile</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">prog</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'pw'</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/qepy/calculator.html#QEpyCalculator"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#qepy.calculator.QEpyCalculator" title="Link to this definition"></a></dt>
+<dd><p>QEpy Calculator for ASE.</p>
+<p>QEpy initialization depends on the input file. Here are some ways to generate input file :</p>
+<blockquote>
+<div><ul class="simple">
+<li><p>Give a file <cite>inputfile</cite> or/and a dict <cite>qe_options</cite> will generate a temporary input file with new atomic information.</p></li>
+<li><p>Give input file name <cite>inputfile</cite> and <cite>from_file = True</cite> will read the structures to atoms (ase.Atoms) from <cite>inputfile</cite> and initialize the QEpy with <cite>inputfile</cite>.</p></li>
+<li><p>Give dict <cite>ase_espresso</cite> will generate a temporary input file with <a class="reference external" href="https://wiki.fysik.dtu.dk/ase/ase/io/formatoptions.html#ase.io.espresso.write_espresso_in">ase.io.espresso.write_espresso_in</a> (Only works for program PW).</p></li>
+</ul>
+</div></blockquote>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>atoms</strong> (<em>ase.Atoms</em>) -- ASE atoms object</p></li>
+<li><p><strong>inputfile</strong> (<em>str</em>) -- Name of QE input file</p></li>
+<li><p><strong>from_file</strong> (<em>str</em>) -- Read the structure from inputfile, and use the inputfile for the QE Initialization.</p></li>
+<li><p><strong>wrap</strong> (<em>bool</em>) -- If True, wrap the atoms back to cell before update the ions.</p></li>
+<li><p><strong>extrapolation</strong> (<em>str</em><em> or </em><em>bool</em>) -- If False, every step will re-run the QE from file.</p></li>
+<li><p><strong>ase_espresso</strong> (<em>dict</em>) -- A dictionary with some parameters to generate PW input.</p></li>
+<li><p><strong>qe_options</strong> (<em>dict</em>) -- A dictionary with input parameters for QE to generate QE input file.</p></li>
+<li><p><strong>comm</strong> (<em>object</em>) -- Parallel communicator</p></li>
+<li><p><strong>ldescf</strong> (<em>bool</em>) -- If True, also print the scf correction term in the iteratively mode</p></li>
+<li><p><strong>iterative</strong> (<em>bool</em>) -- Iteratively run the scf or tddft</p></li>
+<li><p><strong>task</strong> (<em>str</em>) -- <p>Task of the driver :</p>
+<blockquote>
+<div><ul>
+<li><p>'scf' : scf task</p></li>
+<li><p>'optical' : Optical absorption spectrum (TDDFT)</p></li>
+<li><p>'nscf' : read file from scf</p></li>
+</ul>
+</div></blockquote>
+</p></li>
+<li><p><strong>embed</strong> (<em>object</em><em> (</em><em>Fortran</em><em>)</em>) -- embed object for QE</p></li>
+<li><p><strong>prefix</strong> (<em>str</em>) -- prefix of QE input/output</p></li>
+<li><p><strong>outdir</strong> (<em>str</em>) -- The output directory of QE</p></li>
+<li><p><strong>logfile</strong> (<em>str</em><em>, </em><em>file</em><em> or </em><em>bool</em>) -- <p>The screen output of QE. If it is a file descriptor, it should open with 'w+'.</p>
+<blockquote>
+<div><ul>
+<li><p>None : Show on the screen.</p></li>
+<li><p>str  : Save to the given file.</p></li>
+<li><p>True : Save to the temporary file, see also <a class="reference internal" href="driver.html#qepy.driver.Driver.get_output" title="qepy.driver.Driver.get_output"><code class="xref py py-func docutils literal notranslate"><span class="pre">qepy.driver.Driver.get_output()</span></code></a>.</p></li>
+</ul>
+</div></blockquote>
+</p></li>
+</ul>
+</dd>
+</dl>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<ul>
+<li><p>if <cite>from_file</cite> is True, the qe_options will not use.</p></li>
+<li><p>The bool <cite>gather</cite> parameter in functions means the data is gathered in root or distributed in all cpus.</p></li>
+<li><p>if <cite>ase_espresso</cite> is set, will use ase module to write QE input file. <cite>ase_espresso</cite> contains :</p>
+<blockquote>
+<div><blockquote>
+<div><ul class="simple">
+<li><p>input_data: dict</p></li>
+<li><p>pseudopotentials: dict</p></li>
+<li><p>kpts: (int, int, int) or dict</p></li>
+<li><p>koffset: (int, int, int)</p></li>
+<li><p>crystal_coordinates: bool</p></li>
+</ul>
+</div></blockquote>
+<p>More details, see <a class="reference external" href="https://wiki.fysik.dtu.dk/ase/ase/io/formatoptions.html#ase.io.espresso.write_espresso_in">ase.io.espresso.write_espresso_in</a>.</p>
+</div></blockquote>
+</li>
+</ul>
+</div>
+<dl class="py method">
+<dt class="sig sig-object py" id="qepy.calculator.QEpyCalculator.get_atoms_from_qepy">
+<em class="property"><span class="pre">static</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">get_atoms_from_qepy</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/qepy/calculator.html#QEpyCalculator.get_atoms_from_qepy"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#qepy.calculator.QEpyCalculator.get_atoms_from_qepy" title="Link to this definition"></a></dt>
+<dd><p>Return the atom.Atoms from QE.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="qepy.calculator.QEpyCalculator.get_band_structure">
+<span class="sig-name descname"><span class="pre">get_band_structure</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">qe_options</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">kpts</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">reference</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">inputfile</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/qepy/calculator.html#QEpyCalculator.get_band_structure"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#qepy.calculator.QEpyCalculator.get_band_structure" title="Link to this definition"></a></dt>
+<dd><p>calculate band structure and return ase BandStructure.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>qe_options</strong> (<em>dict</em>) -- A dictionary with input parameters for QE to generate QE input file.</p></li>
+<li><p><strong>kpts</strong> (<em>ase.dft.kpoints.bandpath</em>) -- A band path</p></li>
+<li><p><strong>reference</strong> (<em>float</em>) -- Fermi level which should come from the SCF or DOS calculation.
+If not set, will try to use previous calculation instead of band structure calculation.</p></li>
+<li><p><strong>inputfile</strong> (<em>str</em>) -- Directly use the inputfile to run the QE calculation.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="qepy.calculator.QEpyCalculator.get_bz_k_points">
+<span class="sig-name descname"><span class="pre">get_bz_k_points</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/qepy/calculator.html#QEpyCalculator.get_bz_k_points"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#qepy.calculator.QEpyCalculator.get_bz_k_points" title="Link to this definition"></a></dt>
+<dd><p>See <a class="reference internal" href="driver.html#qepy.driver.Driver.get_bz_k_points" title="qepy.driver.Driver.get_bz_k_points"><code class="xref py py-func docutils literal notranslate"><span class="pre">qepy.driver.Driver.get_bz_k_points()</span></code></a></p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="qepy.calculator.QEpyCalculator.get_density">
+<span class="sig-name descname"><span class="pre">get_density</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">gather</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/qepy/calculator.html#QEpyCalculator.get_density"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#qepy.calculator.QEpyCalculator.get_density" title="Link to this definition"></a></dt>
+<dd><p>See <a class="reference internal" href="driver.html#qepy.driver.Driver.get_density" title="qepy.driver.Driver.get_density"><code class="xref py py-func docutils literal notranslate"><span class="pre">qepy.driver.Driver.get_density()</span></code></a></p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="qepy.calculator.QEpyCalculator.get_dos">
+<span class="sig-name descname"><span class="pre">get_dos</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">qe_options</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">spin</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">inputfile</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/qepy/calculator.html#QEpyCalculator.get_dos"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#qepy.calculator.QEpyCalculator.get_dos" title="Link to this definition"></a></dt>
+<dd><p>calculate density of states (DOS) and return the tuple (energies, dos)</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>qe_options</strong> (<em>dict</em>) -- A dictionary with input parameters for QE to generate QE input file.</p></li>
+<li><p><strong>spin</strong> (<em>int</em>) -- <ul>
+<li><p>None : total DOS</p></li>
+<li><p>0 : up</p></li>
+<li><p>1 : down</p></li>
+</ul>
+</p></li>
+<li><p><strong>inputfile</strong> (<em>str</em>) -- Directly use the inputfile to run the QE calculation.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="qepy.calculator.QEpyCalculator.get_eigenvalues">
+<span class="sig-name descname"><span class="pre">get_eigenvalues</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">kpt</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">spin</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/qepy/calculator.html#QEpyCalculator.get_eigenvalues"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#qepy.calculator.QEpyCalculator.get_eigenvalues" title="Link to this definition"></a></dt>
+<dd><p>See <a class="reference internal" href="driver.html#qepy.driver.Driver.get_eigenvalues" title="qepy.driver.Driver.get_eigenvalues"><code class="xref py py-func docutils literal notranslate"><span class="pre">qepy.driver.Driver.get_eigenvalues()</span></code></a></p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="qepy.calculator.QEpyCalculator.get_fermi_level">
+<span class="sig-name descname"><span class="pre">get_fermi_level</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/qepy/calculator.html#QEpyCalculator.get_fermi_level"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#qepy.calculator.QEpyCalculator.get_fermi_level" title="Link to this definition"></a></dt>
+<dd><p>See <a class="reference internal" href="driver.html#qepy.driver.Driver.get_fermi_level" title="qepy.driver.Driver.get_fermi_level"><code class="xref py py-func docutils literal notranslate"><span class="pre">qepy.driver.Driver.get_fermi_level()</span></code></a></p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="qepy.calculator.QEpyCalculator.get_forces">
+<span class="sig-name descname"><span class="pre">get_forces</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">atoms</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">icalc</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/qepy/calculator.html#QEpyCalculator.get_forces"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#qepy.calculator.QEpyCalculator.get_forces" title="Link to this definition"></a></dt>
+<dd><p>See <a class="reference internal" href="driver.html#qepy.driver.Driver.get_forces" title="qepy.driver.Driver.get_forces"><code class="xref py py-func docutils literal notranslate"><span class="pre">qepy.driver.Driver.get_forces()</span></code></a></p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="qepy.calculator.QEpyCalculator.get_ibz_k_points">
+<span class="sig-name descname"><span class="pre">get_ibz_k_points</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/qepy/calculator.html#QEpyCalculator.get_ibz_k_points"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#qepy.calculator.QEpyCalculator.get_ibz_k_points" title="Link to this definition"></a></dt>
+<dd><p>See <a class="reference internal" href="driver.html#qepy.driver.Driver.get_ibz_k_points" title="qepy.driver.Driver.get_ibz_k_points"><code class="xref py py-func docutils literal notranslate"><span class="pre">qepy.driver.Driver.get_ibz_k_points()</span></code></a></p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="qepy.calculator.QEpyCalculator.get_k_point_weights">
+<span class="sig-name descname"><span class="pre">get_k_point_weights</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/qepy/calculator.html#QEpyCalculator.get_k_point_weights"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#qepy.calculator.QEpyCalculator.get_k_point_weights" title="Link to this definition"></a></dt>
+<dd><p>See <a class="reference internal" href="driver.html#qepy.driver.Driver.get_k_point_weights" title="qepy.driver.Driver.get_k_point_weights"><code class="xref py py-func docutils literal notranslate"><span class="pre">qepy.driver.Driver.get_k_point_weights()</span></code></a></p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="qepy.calculator.QEpyCalculator.get_magnetic_moment">
+<span class="sig-name descname"><span class="pre">get_magnetic_moment</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">atoms</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/qepy/calculator.html#QEpyCalculator.get_magnetic_moment"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#qepy.calculator.QEpyCalculator.get_magnetic_moment" title="Link to this definition"></a></dt>
+<dd><p>See <a class="reference internal" href="driver.html#qepy.driver.Driver.get_magnetic_moment" title="qepy.driver.Driver.get_magnetic_moment"><code class="xref py py-func docutils literal notranslate"><span class="pre">qepy.driver.Driver.get_magnetic_moment()</span></code></a></p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="qepy.calculator.QEpyCalculator.get_number_of_bands">
+<span class="sig-name descname"><span class="pre">get_number_of_bands</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/qepy/calculator.html#QEpyCalculator.get_number_of_bands"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#qepy.calculator.QEpyCalculator.get_number_of_bands" title="Link to this definition"></a></dt>
+<dd><p>See <a class="reference internal" href="driver.html#qepy.driver.Driver.get_number_of_bands" title="qepy.driver.Driver.get_number_of_bands"><code class="xref py py-func docutils literal notranslate"><span class="pre">qepy.driver.Driver.get_number_of_bands()</span></code></a></p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="qepy.calculator.QEpyCalculator.get_number_of_grid_points">
+<span class="sig-name descname"><span class="pre">get_number_of_grid_points</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">gather</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/qepy/calculator.html#QEpyCalculator.get_number_of_grid_points"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#qepy.calculator.QEpyCalculator.get_number_of_grid_points" title="Link to this definition"></a></dt>
+<dd><p>See <a class="reference internal" href="driver.html#qepy.driver.Driver.get_number_of_grid_points" title="qepy.driver.Driver.get_number_of_grid_points"><code class="xref py py-func docutils literal notranslate"><span class="pre">qepy.driver.Driver.get_number_of_grid_points()</span></code></a></p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="qepy.calculator.QEpyCalculator.get_number_of_k_points">
+<span class="sig-name descname"><span class="pre">get_number_of_k_points</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/qepy/calculator.html#QEpyCalculator.get_number_of_k_points"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#qepy.calculator.QEpyCalculator.get_number_of_k_points" title="Link to this definition"></a></dt>
+<dd><p>See <a class="reference internal" href="driver.html#qepy.driver.Driver.get_number_of_k_points" title="qepy.driver.Driver.get_number_of_k_points"><code class="xref py py-func docutils literal notranslate"><span class="pre">qepy.driver.Driver.get_number_of_k_points()</span></code></a></p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="qepy.calculator.QEpyCalculator.get_number_of_spins">
+<span class="sig-name descname"><span class="pre">get_number_of_spins</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/qepy/calculator.html#QEpyCalculator.get_number_of_spins"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#qepy.calculator.QEpyCalculator.get_number_of_spins" title="Link to this definition"></a></dt>
+<dd><p>See <a class="reference internal" href="driver.html#qepy.driver.Driver.get_number_of_spins" title="qepy.driver.Driver.get_number_of_spins"><code class="xref py py-func docutils literal notranslate"><span class="pre">qepy.driver.Driver.get_number_of_spins()</span></code></a></p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="qepy.calculator.QEpyCalculator.get_occupation_numbers">
+<span class="sig-name descname"><span class="pre">get_occupation_numbers</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">kpt</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">spin</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/qepy/calculator.html#QEpyCalculator.get_occupation_numbers"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#qepy.calculator.QEpyCalculator.get_occupation_numbers" title="Link to this definition"></a></dt>
+<dd><p>See <a class="reference internal" href="driver.html#qepy.driver.Driver.get_occupation_numbers" title="qepy.driver.Driver.get_occupation_numbers"><code class="xref py py-func docutils literal notranslate"><span class="pre">qepy.driver.Driver.get_occupation_numbers()</span></code></a></p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="qepy.calculator.QEpyCalculator.get_potential_energy">
+<span class="sig-name descname"><span class="pre">get_potential_energy</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">atoms</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/qepy/calculator.html#QEpyCalculator.get_potential_energy"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#qepy.calculator.QEpyCalculator.get_potential_energy" title="Link to this definition"></a></dt>
+<dd><p>See <a class="reference internal" href="driver.html#qepy.driver.Driver.get_potential_energy" title="qepy.driver.Driver.get_potential_energy"><code class="xref py py-func docutils literal notranslate"><span class="pre">qepy.driver.Driver.get_potential_energy()</span></code></a></p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="qepy.calculator.QEpyCalculator.get_pseudo_density">
+<span class="sig-name descname"><span class="pre">get_pseudo_density</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">spin</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">pad</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">gather</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/qepy/calculator.html#QEpyCalculator.get_pseudo_density"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#qepy.calculator.QEpyCalculator.get_pseudo_density" title="Link to this definition"></a></dt>
+<dd><p>See <a class="reference internal" href="driver.html#qepy.driver.Driver.get_pseudo_density" title="qepy.driver.Driver.get_pseudo_density"><code class="xref py py-func docutils literal notranslate"><span class="pre">qepy.driver.Driver.get_pseudo_density()</span></code></a></p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="qepy.calculator.QEpyCalculator.get_pseudo_wave_function">
+<span class="sig-name descname"><span class="pre">get_pseudo_wave_function</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">band</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">kpt</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">spin</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">broadcast</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">pad</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/qepy/calculator.html#QEpyCalculator.get_pseudo_wave_function"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#qepy.calculator.QEpyCalculator.get_pseudo_wave_function" title="Link to this definition"></a></dt>
+<dd><p>See <a class="reference internal" href="driver.html#qepy.driver.Driver.get_pseudo_wave_function" title="qepy.driver.Driver.get_pseudo_wave_function"><code class="xref py py-func docutils literal notranslate"><span class="pre">qepy.driver.Driver.get_pseudo_wave_function()</span></code></a></p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="qepy.calculator.QEpyCalculator.get_spin_polarized">
+<span class="sig-name descname"><span class="pre">get_spin_polarized</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/qepy/calculator.html#QEpyCalculator.get_spin_polarized"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#qepy.calculator.QEpyCalculator.get_spin_polarized" title="Link to this definition"></a></dt>
+<dd><p>See <a class="reference internal" href="driver.html#qepy.driver.Driver.get_spin_polarized" title="qepy.driver.Driver.get_spin_polarized"><code class="xref py py-func docutils literal notranslate"><span class="pre">qepy.driver.Driver.get_spin_polarized()</span></code></a></p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="qepy.calculator.QEpyCalculator.get_stress">
+<span class="sig-name descname"><span class="pre">get_stress</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">atoms</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/qepy/calculator.html#QEpyCalculator.get_stress"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#qepy.calculator.QEpyCalculator.get_stress" title="Link to this definition"></a></dt>
+<dd><p>Return the stress tensor in the Voigt order (xx, yy, zz, yz, xz, xy)</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="qepy.calculator.QEpyCalculator.get_wave_function">
+<span class="sig-name descname"><span class="pre">get_wave_function</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">band</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">kpt</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/qepy/calculator.html#QEpyCalculator.get_wave_function"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#qepy.calculator.QEpyCalculator.get_wave_function" title="Link to this definition"></a></dt>
+<dd><p>See <a class="reference internal" href="driver.html#qepy.driver.Driver.get_wave_function" title="qepy.driver.Driver.get_wave_function"><code class="xref py py-func docutils literal notranslate"><span class="pre">qepy.driver.Driver.get_wave_function()</span></code></a></p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="qepy.calculator.QEpyCalculator.get_xc_functional">
+<span class="sig-name descname"><span class="pre">get_xc_functional</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/qepy/calculator.html#QEpyCalculator.get_xc_functional"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#qepy.calculator.QEpyCalculator.get_xc_functional" title="Link to this definition"></a></dt>
+<dd><p>See <a class="reference internal" href="driver.html#qepy.driver.Driver.get_xc_functional" title="qepy.driver.Driver.get_xc_functional"><code class="xref py py-func docutils literal notranslate"><span class="pre">qepy.driver.Driver.get_xc_functional()</span></code></a></p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="qepy.calculator.QEpyCalculator.implemented_properties">
+<span class="sig-name descname"><span class="pre">implemented_properties</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">['energy',</span> <span class="pre">'forces',</span> <span class="pre">'stress']</span></em><a class="headerlink" href="#qepy.calculator.QEpyCalculator.implemented_properties" title="Link to this definition"></a></dt>
+<dd><p>Properties calculator can handle (energy, forces, ...)</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="qepy.calculator.QEpyCalculator.is_root">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">is_root</span></span><a class="headerlink" href="#qepy.calculator.QEpyCalculator.is_root" title="Link to this definition"></a></dt>
+<dd><p>See <a class="reference internal" href="driver.html#qepy.driver.Driver.is_root" title="qepy.driver.Driver.is_root"><code class="xref py py-func docutils literal notranslate"><span class="pre">qepy.driver.Driver.is_root()</span></code></a></p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="qepy.calculator.QEpyCalculator.stop">
+<span class="sig-name descname"><span class="pre">stop</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">what</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'all'</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/qepy/calculator.html#QEpyCalculator.stop"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#qepy.calculator.QEpyCalculator.stop" title="Link to this definition"></a></dt>
+<dd><p>See <a class="reference internal" href="driver.html#qepy.driver.Driver.stop" title="qepy.driver.Driver.stop"><code class="xref py py-func docutils literal notranslate"><span class="pre">qepy.driver.Driver.stop()</span></code></a></p>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="driver.html" class="btn btn-neutral float-left" title="The Driver object" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="io.html" class="btn btn-neutral float-right" title="The QEInput object" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2019-2024 QEpy community.
+      <span class="lastupdated">Last updated on Friday, 01 Aug 2025 06:10:53.
+      </span></p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+  
+<button onclick="topFunction()" id="btn" title="Go to top">Top</button>
+
+<script>
+var mybutton = document.getElementById("btn");
+
+window.onscroll = function() {scrollFunction()};
+
+function scrollFunction() {
+  if (document.body.scrollTop > 20 || document.documentElement.scrollTop > 20) {
+    mybutton.style.display = "block";
+  } else {
+    mybutton.style.display = "none";
+  }
+}
+
+function topFunction() {
+  document.body.scrollTop = 0;
+  document.documentElement.scrollTop = 0;
+}
+</script>
+
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

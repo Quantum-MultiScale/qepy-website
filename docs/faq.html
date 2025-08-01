@@ -1,0 +1,384 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="./">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Frequently Asked Questions &mdash; QEpy  &#34;7.2.0&#34;
+ documentation</title>
+      <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="_static/custom.css?v=9b3c20d5" />
+      <link rel="stylesheet" type="text/css" href="_static/copybutton.css?v=76b2166b" />
+      <link rel="stylesheet" type="text/css" href="_static/tabs.css?v=4c969af8" />
+      <link rel="stylesheet" type="text/css" href="_static/panels-main.c949a650a448cc0ae9fd3441c0e17fb0.css?v=2a6c4383" />
+      <link rel="stylesheet" type="text/css" href="_static/panels-bootstrap.5fd3999ee7762ccc51105388f4a9d115.css?v=45cf7dbc" />
+      <link rel="stylesheet" type="text/css" href="_static/panels-variables.06eb56fa6e07937060861dad626602ad.css?v=d290406d" />
+
+  
+      <script src="_static/jquery.js?v=5d32c60e"></script>
+      <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="_static/documentation_options.js?v=fb160149"></script>
+      <script src="_static/doctools.js?v=9bcbadda"></script>
+      <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+      <script src="_static/clipboard.min.js?v=a7894cd8"></script>
+      <script src="_static/copybutton.js?v=f281be69"></script>
+      <script src="_static/tabs.js?v=3ee01567"></script>
+      <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="prev" title="Documentation" href="development/documentation.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="index.html" class="icon icon-home">
+            QEpy
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="contact.html">Contact</a></li>
+<li class="toctree-l1"><a class="reference internal" href="install.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="tutorials/tutorials.html">Tutorials</a></li>
+<li class="toctree-l1"><a class="reference internal" href="qepy/qepy.html">Modules</a></li>
+<li class="toctree-l1"><a class="reference internal" href="development/development.html">Development</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Frequently Asked Questions</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#installation">Installation</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#what-is-the-tddft-yes">What is the <cite>tddft=yes</cite>?</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#can-i-use-cmake-for-qe-installation">Can I use CMake for QE installation?</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#running">Running</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#error-in-routine-allocate-fft-or-error-in-routine-fft-type-set"><em>Error in routine allocate_fft</em> or <em>Error in routine  fft_type_set</em></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#some-intel-mkl-errors-occur-what-do-i-do">Some Intel MKL errors occur. What do I do?</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#some-intel-mpi-errors-occur">Some Intel MPI errors occur.</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#why-cant-i-read-the-wavefunctions-why-does-it-hang">Why can’t I read the wavefunctions? Why does it hang?</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#some-f90wrap-errors-occur-what-do-i-do">Some f90wrap errors occur. What do I do?</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#signal-segmentation-fault">Signal: Segmentation fault...</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#bad-termination-of-one-of-your-application-processes">BAD TERMINATION OF ONE OF YOUR APPLICATION PROCESSES</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#bugs">Bugs</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#gcc">GCC</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#gfortran">Gfortran</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#intel-compiler">Intel Compiler</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#openmpi">OpenMPI</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#macos">MacOS</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#qe">QE</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#abandon">Abandon</a></li>
+</ul>
+</li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">QEpy</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">Frequently Asked Questions</li>
+      <li class="wy-breadcrumbs-aside">
+        
+			<a href=genindex.html>Index</a>
+		
+          
+			<a href="https://gitlab.com/shaoxc/qepy/tree/master/doc/source/faq.rst">Source</a>
+          
+        
+      </li>
+    
+  </ul><div class="rst-breadcrumbs-buttons" role="navigation" aria-label="Sequential page navigation">
+        <a href="development/documentation.html" class="btn btn-neutral float-left" title="Documentation" accesskey="p"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+  </div>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="frequently-asked-questions">
+<span id="faq"></span><h1>Frequently Asked Questions<a class="headerlink" href="#frequently-asked-questions" title="Link to this heading"></a></h1>
+<section id="installation">
+<h2>Installation<a class="headerlink" href="#installation" title="Link to this heading"></a></h2>
+<section id="what-is-the-tddft-yes">
+<h3>What is the <cite>tddft=yes</cite>?<a class="headerlink" href="#what-is-the-tddft-yes" title="Link to this heading"></a></h3>
+<blockquote>
+<div><p>Support real-time TDDFT by using <a class="reference external" href="https://github.com/dceresoli/ce-tddft">ce-tddft</a>. And the real-time TDDFT also support adding/replacing external potential.</p>
+</div></blockquote>
+</section>
+<section id="can-i-use-cmake-for-qe-installation">
+<h3>Can I use CMake for QE installation?<a class="headerlink" href="#can-i-use-cmake-for-qe-installation" title="Link to this heading"></a></h3>
+<blockquote>
+<div><p>No. Please use the traditional <cite>configure</cite> way to compile QE.</p>
+</div></blockquote>
+</section>
+</section>
+<section id="running">
+<h2>Running<a class="headerlink" href="#running" title="Link to this heading"></a></h2>
+<section id="error-in-routine-allocate-fft-or-error-in-routine-fft-type-set">
+<h3><em>Error in routine allocate_fft</em> or <em>Error in routine  fft_type_set</em><a class="headerlink" href="#error-in-routine-allocate-fft-or-error-in-routine-fft-type-set" title="Link to this heading"></a></h3>
+<blockquote>
+<div><p>The qepy has to be imported before the mpi4py package. The simplest approach to fix is add <code class="docutils literal notranslate"><span class="pre">import</span> <span class="pre">qepy</span></code> as the first line of the script.</p>
+</div></blockquote>
+</section>
+<section id="some-intel-mkl-errors-occur-what-do-i-do">
+<h3>Some Intel MKL errors occur. What do I do?<a class="headerlink" href="#some-intel-mkl-errors-occur-what-do-i-do" title="Link to this heading"></a></h3>
+<blockquote>
+<div><p>Try:</p>
+<blockquote>
+<div><div class="highlight-shell notranslate"><div class="highlight"><pre><span></span><span class="nb">export</span><span class="w"> </span><span class="nv">LD_PRELOAD</span><span class="o">=</span>/opt/intel/oneapi/mkl/latest/lib/libmkl_rt.so
+</pre></div>
+</div>
+</div></blockquote>
+</div></blockquote>
+</section>
+<section id="some-intel-mpi-errors-occur">
+<h3>Some Intel MPI errors occur.<a class="headerlink" href="#some-intel-mpi-errors-occur" title="Link to this heading"></a></h3>
+<blockquote>
+<div><p>Try:</p>
+<blockquote>
+<div><div class="highlight-shell notranslate"><div class="highlight"><pre><span></span><span class="nb">export</span><span class="w"> </span><span class="nv">LD_PRELOAD</span><span class="o">=</span>/opt/intel/oneapi/mpi/latest/lib/libmpifort.so
+</pre></div>
+</div>
+</div></blockquote>
+</div></blockquote>
+</section>
+<section id="why-cant-i-read-the-wavefunctions-why-does-it-hang">
+<h3>Why can’t I read the wavefunctions? Why does it hang?<a class="headerlink" href="#why-cant-i-read-the-wavefunctions-why-does-it-hang" title="Link to this heading"></a></h3>
+<ul>
+<li><p>There are two different ways to store wavefunctions in QE, which is controls by PW parameter <a class="reference external" href="http://www.quantum-espresso.org/Doc/INPUT_PW.html#idm68">wf_collect</a>.  In doubt, simply use one processor to read.</p></li>
+<li><p>If the wavefunctions were stored by old version QE (&lt;6.4) or <a class="reference external" href="http://eqe.rutgers.edu">eQE</a>, please use the old version of QEpy by:</p>
+<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>python<span class="w"> </span>-m<span class="w"> </span>pip<span class="w"> </span>install<span class="w"> </span><span class="nv">qepy</span><span class="o">==</span><span class="m">6</span>.5.0
+</pre></div>
+</div>
+</li>
+</ul>
+</section>
+<section id="some-f90wrap-errors-occur-what-do-i-do">
+<h3>Some f90wrap errors occur. What do I do?<a class="headerlink" href="#some-f90wrap-errors-occur-what-do-i-do" title="Link to this heading"></a></h3>
+<blockquote>
+<div><p>Please try install the latest <a class="reference external" href="https://github.com/jameskermode/f90wrap">f90wrap</a> . e.g.</p>
+<blockquote>
+<div><div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>python<span class="w"> </span>-m<span class="w"> </span>pip<span class="w"> </span>install<span class="w"> </span>--upgrade<span class="w"> </span>f90wrap
+</pre></div>
+</div>
+</div></blockquote>
+</div></blockquote>
+</section>
+<section id="signal-segmentation-fault">
+<h3>Signal: Segmentation fault...<a class="headerlink" href="#signal-segmentation-fault" title="Link to this heading"></a></h3>
+<ul>
+<li><p><cite>QEpy</cite> and <cite>mpi4py</cite> should installed with same compiler. If not, try reinstall the <cite>mpi4py</cite> by:</p>
+<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>python<span class="w"> </span>-m<span class="w"> </span>pip<span class="w"> </span>install<span class="w"> </span>mpi4py<span class="w"> </span>--no-cache-dir
+</pre></div>
+</div>
+</li>
+</ul>
+</section>
+<section id="bad-termination-of-one-of-your-application-processes">
+<h3>BAD TERMINATION OF ONE OF YOUR APPLICATION PROCESSES<a class="headerlink" href="#bad-termination-of-one-of-your-application-processes" title="Link to this heading"></a></h3>
+<p>Without <cite>mpi4py</cite>, the QEpy still can parallel running, but you cannot control the parallel. If you want to run a different job, you have to restart the script or the jupyter kernel.
+With <cite>mpi4py</cite> to run the parallel QEpy, you can add <code class="docutils literal notranslate"><span class="pre">comm</span></code> to <code class="docutils literal notranslate"><span class="pre">Driver</span></code>, or directly use <code class="docutils literal notranslate"><span class="pre">comm.py2f()</span></code> in the function.</p>
+</section>
+</section>
+<section id="bugs">
+<h2>Bugs<a class="headerlink" href="#bugs" title="Link to this heading"></a></h2>
+<section id="gcc">
+<h3>GCC<a class="headerlink" href="#gcc" title="Link to this heading"></a></h3>
+<blockquote>
+<div><p>For new version of gcc (eg. gcc=11.2) with LTO supported or under conda environment, if you met the problem when you install the <a class="reference external" href="https://gitlab.com/shaoxc/qepy">QEpy</a>:</p>
+<blockquote>
+<div><ul class="simple">
+<li><p><em>lto1: fatal error:...</em></p></li>
+</ul>
+</div></blockquote>
+<p>Try disable link-time-optimization by add <code class="docutils literal notranslate"><span class="pre">-fno-lto</span></code> to the variable <strong>FFLAGS</strong> and <strong>CFLAGS</strong>.</p>
+</div></blockquote>
+</section>
+<section id="gfortran">
+<h3>Gfortran<a class="headerlink" href="#gfortran" title="Link to this heading"></a></h3>
+<blockquote>
+<div><ol class="arabic">
+<li><p>For gfortran&gt;=10.0 sometimes still works, but will has error:</p>
+<ul class="simple">
+<li><p><em>Type mismatch between actual argument...</em></p></li>
+</ul>
+<p>Try to add <code class="docutils literal notranslate"><span class="pre">-fallow-argument-mismatch</span></code> to the variable <strong>FFLAGS</strong> (e.g. <code class="docutils literal notranslate"><span class="pre">FFLAGS='-fPIC</span> <span class="pre">-fallow-argument-mismatch'</span></code>).</p>
+</li>
+<li><p>For a few versions of BLAS library, will raise error:</p>
+<ul class="simple">
+<li><p><em>Segmentation fault - invalid memory reference...</em></p></li>
+</ul>
+<p>This is due to the <cite>zdotc</cite> function of external libraries. More details to <a class="reference external" href="https://gitlab.com/QEF/q-e/-/wikis/Support/zdotc-crash">here</a>. One solution is append the <code class="docutils literal notranslate"><span class="pre">-ff2c</span></code> to <strong>CFLAGS</strong>  of QE. For example, the following can be used for MacOS with Apple silicon:</p>
+</li>
+</ol>
+<blockquote>
+<div><div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>./configure<span class="w"> </span><span class="nv">FFLAGS</span><span class="o">=</span><span class="s1">&#39;-fPIC -fallow-argument-mismatch -ff2c -fno-second-underscore&#39;</span><span class="w"> </span><span class="nv">CFLAGS</span><span class="o">=</span><span class="s1">&#39;-fPIC -arch arm64&#39;</span><span class="w"> </span><span class="nv">CPP</span><span class="o">=</span><span class="s1">&#39;gcc -E&#39;</span><span class="w"> </span><span class="nv">LDFLAGS</span><span class="o">=</span>-headerpad_max_install_names
+</pre></div>
+</div>
+</div></blockquote>
+</div></blockquote>
+</section>
+<section id="intel-compiler">
+<h3>Intel Compiler<a class="headerlink" href="#intel-compiler" title="Link to this heading"></a></h3>
+<blockquote>
+<div><ol class="arabic">
+<li><p>If you met any problems like the following, please try a newer Intel compiler or GNU compiler.</p>
+<blockquote>
+<div><ul class="simple">
+<li><p><em>[MPID_nem_tmi_pending_ssend_dequeue]: ERROR: can not find matching ssend...</em></p></li>
+<li><p>The initial density totally wrong with more than one nodes.</p></li>
+</ul>
+</div></blockquote>
+</li>
+<li><p>The gcc version between 4.8-9.2 are supported by intel compiler, which upgraded until 2022.1 version. More details to <a class="reference external" href="https://community.intel.com/t5/Intel-oneAPI-Data-Parallel-C/Compilation-issues-with-ICPC-2021-4-and-C-14/td-p/1318571">here</a>.</p>
+<ul class="simple">
+<li><p><em>...error: attribute &quot;__malloc__&quot; does not take arguments...</em></p></li>
+</ul>
+</li>
+</ol>
+</div></blockquote>
+</section>
+<section id="openmpi">
+<h3>OpenMPI<a class="headerlink" href="#openmpi" title="Link to this heading"></a></h3>
+<blockquote>
+<div><p>If you met some problems like the following:</p>
+<ul class="simple">
+<li><p><em>mca_base_component_repository_open: unable to open
+mca_patcher_overwrite...</em></p></li>
+</ul>
+<p>Please update to latest version of OpenMPI, or fix with <code class="docutils literal notranslate"><span class="pre">patchelf</span></code>
+(<a class="reference external" href="https://github.com/open-mpi/ompi/issues/3705">openmpi=2.1.1</a>):</p>
+<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span><span class="ch">#!/bin/sh</span>
+<span class="nv">prefix</span><span class="o">=</span><span class="s2">&quot;/usr/lib/x86_64-linux-gnu/openmpi&quot;</span>
+<span class="k">for</span><span class="w"> </span>filename<span class="w"> </span><span class="k">in</span><span class="w"> </span><span class="k">$(</span>ls<span class="w"> </span><span class="nv">$prefix</span>/lib/openmpi/*.so<span class="k">)</span><span class="p">;</span><span class="w"> </span><span class="k">do</span>
+<span class="w">    </span>patchelf<span class="w"> </span>--add-needed<span class="w"> </span>libmpi.so.20<span class="w"> </span><span class="nv">$filename</span>
+<span class="w">    </span>patchelf<span class="w"> </span>--set-rpath<span class="w"> </span><span class="s2">&quot;\$ORIGIN/..&quot;</span><span class="w"> </span><span class="nv">$filename</span>
+<span class="k">done</span>
+</pre></div>
+</div>
+</div></blockquote>
+</section>
+<section id="macos">
+<h3>MacOS<a class="headerlink" href="#macos" title="Link to this heading"></a></h3>
+<blockquote>
+<div><ol class="arabic">
+<li><p>For some versions of the MacOS, maybe you will has error:</p>
+<ul class="simple">
+<li><p><em>Illegal Instruction: 4...</em></p></li>
+</ul>
+<p>Try to add <code class="docutils literal notranslate"><span class="pre">-mmacosx-version-min=10.14</span></code> to the <strong>FFLAGS</strong>.</p>
+</li>
+<li><p><em>clang: error: no input files...</em></p>
+<p>Redefine <em>CPP</em> as <em>CPP=gcc -E</em> in <a class="reference external" href="https://www.quantum-espresso.org/Doc/user_guide_PDF/user_guide.pdf">make.inc</a>.</p>
+</li>
+<li><p><em>changing install names or rpaths can't be redone for...</em></p>
+<p>Add <code class="docutils literal notranslate"><span class="pre">-headerpad_max_install_names</span></code> to the <strong>LDFLAGS</strong>.</p>
+</li>
+</ol>
+</div></blockquote>
+</section>
+<section id="qe">
+<h3>QE<a class="headerlink" href="#qe" title="Link to this heading"></a></h3>
+<blockquote>
+<div><ol class="arabic">
+<li><p><em>compilation aborted for mbd_c_api.F90</em></p>
+<p><em>ifx</em> not works for mbd until <a class="reference external" href="https://github.com/libmbd/libmbd/pull/60">#60</a>. The easiest way to fix is running the following before <cite>make</cite></p>
+</li>
+</ol>
+<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span><span class="nb">export</span><span class="w"> </span><span class="nv">LIBMBD_C_API</span><span class="o">=</span><span class="m">0</span>
+</pre></div>
+</div>
+</div></blockquote>
+</section>
+</section>
+<section id="abandon">
+<h2>Abandon<a class="headerlink" href="#abandon" title="Link to this heading"></a></h2>
+<blockquote>
+<div><ul>
+<li><p>Read old format XML file</p>
+<p>The old format (<strong>-D__OLDXML</strong>) has been deprecated since <a class="reference external" href="https://gitlab.com/QEF/q-e/-/releases/qe-6.4">version 6.4</a>. <code class="docutils literal notranslate"><span class="pre">oldxml</span></code> allows you to read the output (wavefunctions, etc) from an old XML file. Last version to support it is <cite>qepy==6.5.0</cite>.</p>
+</li>
+</ul>
+</div></blockquote>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="development/documentation.html" class="btn btn-neutral float-left" title="Documentation" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2019-2024 QEpy community.
+      <span class="lastupdated">Last updated on Friday, 01 Aug 2025 06:10:53.
+      </span></p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+  
+<button onclick="topFunction()" id="btn" title="Go to top">Top</button>
+
+<script>
+var mybutton = document.getElementById("btn");
+
+window.onscroll = function() {scrollFunction()};
+
+function scrollFunction() {
+  if (document.body.scrollTop > 20 || document.documentElement.scrollTop > 20) {
+    mybutton.style.display = "block";
+  } else {
+    mybutton.style.display = "none";
+  }
+}
+
+function topFunction() {
+  document.body.scrollTop = 0;
+  document.documentElement.scrollTop = 0;
+}
+</script>
+
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

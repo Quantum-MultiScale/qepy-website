@@ -1,0 +1,296 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="./">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Installation &mdash; QEpy  &#34;7.2.0&#34;
+ documentation</title>
+      <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="_static/custom.css?v=9b3c20d5" />
+      <link rel="stylesheet" type="text/css" href="_static/copybutton.css?v=76b2166b" />
+      <link rel="stylesheet" type="text/css" href="_static/tabs.css?v=4c969af8" />
+      <link rel="stylesheet" type="text/css" href="_static/panels-main.c949a650a448cc0ae9fd3441c0e17fb0.css?v=2a6c4383" />
+      <link rel="stylesheet" type="text/css" href="_static/panels-bootstrap.5fd3999ee7762ccc51105388f4a9d115.css?v=45cf7dbc" />
+      <link rel="stylesheet" type="text/css" href="_static/panels-variables.06eb56fa6e07937060861dad626602ad.css?v=d290406d" />
+
+  
+      <script src="_static/jquery.js?v=5d32c60e"></script>
+      <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="_static/documentation_options.js?v=fb160149"></script>
+      <script src="_static/doctools.js?v=9bcbadda"></script>
+      <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+      <script src="_static/clipboard.min.js?v=a7894cd8"></script>
+      <script src="_static/copybutton.js?v=f281be69"></script>
+      <script src="_static/tabs.js?v=3ee01567"></script>
+      <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Tutorials" href="tutorials/tutorials.html" />
+    <link rel="prev" title="Contact" href="contact.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="index.html" class="icon icon-home">
+            QEpy
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="contact.html">Contact</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Installation</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#requirements">Requirements</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#optional-highly-recommended">Optional (highly recommended):</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#id1">Installation</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#pip">Pip</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#source">Source</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#install-the-qe">1. Install the QE</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#install-the-qepy">2. Install the QEpy</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#tips">Tips</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#more-examples-for-qe">More examples for QE</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="tutorials/tutorials.html">Tutorials</a></li>
+<li class="toctree-l1"><a class="reference internal" href="qepy/qepy.html">Modules</a></li>
+<li class="toctree-l1"><a class="reference internal" href="development/development.html">Development</a></li>
+<li class="toctree-l1"><a class="reference internal" href="faq.html">Frequently Asked Questions</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">QEpy</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">Installation</li>
+      <li class="wy-breadcrumbs-aside">
+        
+			<a href=genindex.html>Index</a>
+		
+          
+			<a href="https://gitlab.com/shaoxc/qepy/tree/master/doc/source/install.rst">Source</a>
+          
+        
+      </li>
+    
+  </ul><div class="rst-breadcrumbs-buttons" role="navigation" aria-label="Sequential page navigation">
+        <a href="contact.html" class="btn btn-neutral float-left" title="Contact" accesskey="p"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="tutorials/tutorials.html" class="btn btn-neutral float-right" title="Tutorials" accesskey="n">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+  </div>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="installation">
+<span id="download-and-install"></span><h1>Installation<a class="headerlink" href="#installation" title="Link to this heading"></a></h1>
+<section id="requirements">
+<h2>Requirements<a class="headerlink" href="#requirements" title="Link to this heading"></a></h2>
+<ul class="simple">
+<li><p><a class="reference external" href="https://www.python.org/">Python</a> (&gt;=3.8)</p></li>
+<li><p><a class="reference external" href="https://gitlab.com/QEF/q-e/-/releases/qe-7.2">Quantum ESPRESSO</a> (==7.2)</p></li>
+<li><p><a class="reference external" href="https://numpy.org/doc/stable/reference/">NumPy</a></p></li>
+<li><p><a class="reference external" href="https://github.com/jameskermode/f90wrap">f90wrap</a></p></li>
+<li><p>Compiler (<a class="reference external" href="https://gcc.gnu.org/fortran/">GNU</a>(Recommended) or
+<a class="reference external" href="https://www.intel.com/content/www/us/en/developer/tools/oneapi/fortran-compiler.html">Intel</a>)</p></li>
+</ul>
+<section id="optional-highly-recommended">
+<h3>Optional (highly recommended):<a class="headerlink" href="#optional-highly-recommended" title="Link to this heading"></a></h3>
+<ul class="simple">
+<li><p><a class="reference external" href="https://mpi4py.readthedocs.io/en/stable/index.html">mpi4py</a> MPI for python</p></li>
+<li><p><a class="reference external" href="https://wiki.fysik.dtu.dk/ase/index.html">ASE</a> for atomic simulation</p></li>
+<li><p><a class="reference external" href="http://dftpy.rutgers.edu">DFTpy</a> for density functional</p></li>
+</ul>
+</section>
+</section>
+<section id="id1">
+<h2>Installation<a class="headerlink" href="#id1" title="Link to this heading"></a></h2>
+<section id="pip">
+<h3>Pip<a class="headerlink" href="#pip" title="Link to this heading"></a></h3>
+<p>Using pip can easy install the release version (serial) of QEpy from <a class="reference external" href="https://pypi.org/project/qepy">PyPI</a>:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ python -m pip install qepy
+</pre></div>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Install the QEpy using <code class="docutils literal notranslate"><span class="pre">pip</span></code> only support serial version. If want to run parallel version or use some custom features, please install <code class="docutils literal notranslate"><span class="pre">QEpy</span></code> from source.</p>
+</div>
+</section>
+<section id="source">
+<h3>Source<a class="headerlink" href="#source" title="Link to this heading"></a></h3>
+<section id="install-the-qe">
+<h4>1. Install the QE<a class="headerlink" href="#install-the-qe" title="Link to this heading"></a></h4>
+<blockquote>
+<div><p>The <code class="docutils literal notranslate"><span class="pre">QE</span></code> should be compiled before <code class="docutils literal notranslate"><span class="pre">QEpy</span></code> with the <code class="docutils literal notranslate"><span class="pre">-fPIC</span></code> (position-independent code) compiler
+option. Add <code class="docutils literal notranslate"><span class="pre">-fPIC</span></code> to the configuration options. E.g.,</p>
+<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>./configure<span class="w"> </span><span class="nv">CFLAGS</span><span class="o">=</span>-fPIC<span class="w"> </span><span class="nv">FFLAGS</span><span class="o">=</span>-fPIC
+</pre></div>
+</div>
+<p>Then,</p>
+<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>make<span class="w"> </span>all
+<span class="nb">export</span><span class="w"> </span><span class="nv">qedir</span><span class="o">=</span><span class="sb">`</span><span class="nb">pwd</span><span class="sb">`</span>
+</pre></div>
+</div>
+</div></blockquote>
+</section>
+<section id="install-the-qepy">
+<h4>2. Install the QEpy<a class="headerlink" href="#install-the-qepy" title="Link to this heading"></a></h4>
+<blockquote>
+<div><p>You can download the <code class="docutils literal notranslate"><span class="pre">QEpy</span></code> source file from <a class="reference external" href="git&#64;github.com:Quantum-MultiScale/QEpy.git">github</a>.</p>
+<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>git<span class="w"> </span>clone<span class="w"> </span>--recurse-submodules<span class="w"> </span>git@github.com:Quantum-MultiScale/QEpy.git
+python<span class="w"> </span>-m<span class="w"> </span>pip<span class="w"> </span>install<span class="w"> </span>./QEpy
+</pre></div>
+</div>
+</div></blockquote>
+<section id="example-on-ubuntu-22-04">
+<h5>Example on Ubuntu 22.04<a class="headerlink" href="#example-on-ubuntu-22-04" title="Link to this heading"></a></h5>
+<blockquote>
+<div><div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>sudo<span class="w"> </span>apt-get<span class="w"> </span>update
+sudo<span class="w"> </span>apt-get<span class="w"> </span>install<span class="w"> </span>--upgrade<span class="w"> </span>-y<span class="w"> </span>make<span class="w"> </span>git<span class="w"> </span>python3-dev<span class="w"> </span>python3-pip<span class="w"> </span>wget
+sudo<span class="w"> </span>apt-get<span class="w"> </span>install<span class="w"> </span>--upgrade<span class="w"> </span>-y<span class="w"> </span>gcc<span class="w"> </span>gfortran<span class="w"> </span>libblas-dev<span class="w"> </span>liblapack-dev<span class="w"> </span>libopenmpi-dev<span class="w"> </span>libfftw3-dev
+git<span class="w"> </span>clone<span class="w"> </span>--depth<span class="o">=</span><span class="m">1</span><span class="w"> </span>-b<span class="w"> </span>qe-7.2<span class="w"> </span>https://gitlab.com/QEF/q-e.git
+<span class="nb">cd</span><span class="w"> </span>q-e
+./configure<span class="w"> </span><span class="nv">CFLAGS</span><span class="o">=</span>-fPIC<span class="w"> </span><span class="nv">FFLAGS</span><span class="o">=</span><span class="s1">&#39;-fPIC -fallow-argument-mismatch&#39;</span><span class="w"> </span><span class="nv">MPIF90</span><span class="o">=</span>mpif90<span class="w"> </span>--with-scalapack<span class="o">=</span>no<span class="w"> </span><span class="nv">BLAS_LIBS</span><span class="o">=</span><span class="s1">&#39;-lblas&#39;</span><span class="w"> </span><span class="nv">LAPACK_LIBS</span><span class="o">=</span><span class="s1">&#39;-llapack&#39;</span>
+make<span class="w"> </span>all<span class="w"> </span>-j<span class="w"> </span><span class="m">8</span>
+make<span class="w"> </span>all<span class="w"> </span>-j<span class="w"> </span><span class="m">8</span>
+<span class="nb">cd</span><span class="w"> </span>..
+git<span class="w"> </span>clone<span class="w"> </span>--recurse-submodules<span class="w"> </span>git@github.com:Quantum-MultiScale/QEpy.git
+<span class="nv">qedir</span><span class="o">=</span><span class="sb">`</span><span class="nb">pwd</span><span class="sb">`</span>/q-e/<span class="w"> </span>python3<span class="w"> </span>-m<span class="w"> </span>pip<span class="w"> </span>install<span class="w"> </span>-U<span class="w"> </span>./QEpy
+</pre></div>
+</div>
+</div></blockquote>
+</section>
+</section>
+</section>
+</section>
+<section id="tips">
+<h2>Tips<a class="headerlink" href="#tips" title="Link to this heading"></a></h2>
+<ul>
+<li><p>Environment variable <code class="docutils literal notranslate"><span class="pre">qedir</span></code> should be the absolute path of <code class="docutils literal notranslate"><span class="pre">QE</span></code>, which contains the <em>make.inc</em> file.
+If not set <code class="docutils literal notranslate"><span class="pre">qedir</span></code>, the installation will download the QE code from gitlab and automatically compile it.</p></li>
+<li><p>If not clone the submodules in the beginning, can update through:</p>
+<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>git<span class="w"> </span>submodule<span class="w"> </span>update<span class="w"> </span>--init<span class="w"> </span>--recursive
+</pre></div>
+</div>
+</li>
+<li><p>Set the <em>variables</em> can help you customize your build.</p>
+<p>e.g.</p>
+<ul class="simple">
+<li><p>“<code class="docutils literal notranslate"><span class="pre">tddft=yes</span></code>” support real-time TDDFT by using <a class="reference external" href="https://github.com/dceresoli/ce-tddft">ce-tddft</a>.</p></li>
+</ul>
+<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span><span class="nv">tddft</span><span class="o">=</span>yes<span class="w"> </span>python<span class="w"> </span>-m<span class="w"> </span>pip<span class="w"> </span>install<span class="w"> </span>./QEpy
+</pre></div>
+</div>
+</li>
+</ul>
+<section id="more-examples-for-qe">
+<h3>More examples for QE<a class="headerlink" href="#more-examples-for-qe" title="Link to this heading"></a></h3>
+<blockquote>
+<div><div class="tab-set docutils">
+<input checked="True" class="tab-input" id="tab-set--0-input--1" name="tab-set--0" type="radio"><label class="tab-label" for="tab-set--0-input--1">Unix</label><div class="tab-content docutils">
+<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>./configure<span class="w"> </span><span class="nv">FFLAGS</span><span class="o">=</span><span class="s1">&#39;-fPIC -fallow-argument-mismatch&#39;</span><span class="w"> </span><span class="nv">CFLAGS</span><span class="o">=</span>-fPIC
+</pre></div>
+</div>
+</div>
+<input class="tab-input" id="tab-set--0-input--2" name="tab-set--0" type="radio"><label class="tab-label" for="tab-set--0-input--2">MacOS</label><div class="tab-content docutils">
+<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>./configure<span class="w"> </span><span class="nv">FFLAGS</span><span class="o">=</span><span class="s1">&#39;-fPIC -fallow-argument-mismatch -ff2c -fno-second-underscore&#39;</span><span class="w"> </span><span class="nv">CFLAGS</span><span class="o">=</span><span class="s1">&#39;-fPIC -arch arm64&#39;</span><span class="w"> </span><span class="nv">CPP</span><span class="o">=</span><span class="s1">&#39;gcc -E&#39;</span><span class="w"> </span><span class="nv">LDFLAGS</span><span class="o">=</span>-headerpad_max_install_names
+</pre></div>
+</div>
+</div>
+</div>
+</div></blockquote>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Because <code class="docutils literal notranslate"><span class="pre">QEpy</span></code> still under active development, non-backward-compatible changes can happen at any time. Please, clone the lastest release often.</p>
+</div>
+</section>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="contact.html" class="btn btn-neutral float-left" title="Contact" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="tutorials/tutorials.html" class="btn btn-neutral float-right" title="Tutorials" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2019-2024 QEpy community.
+      <span class="lastupdated">Last updated on Friday, 01 Aug 2025 06:26:10.
+      </span></p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+  
+<button onclick="topFunction()" id="btn" title="Go to top">Top</button>
+
+<script>
+var mybutton = document.getElementById("btn");
+
+window.onscroll = function() {scrollFunction()};
+
+function scrollFunction() {
+  if (document.body.scrollTop > 20 || document.documentElement.scrollTop > 20) {
+    mybutton.style.display = "block";
+  } else {
+    mybutton.style.display = "none";
+  }
+}
+
+function topFunction() {
+  document.body.scrollTop = 0;
+  document.documentElement.scrollTop = 0;
+}
+</script>
+
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>
