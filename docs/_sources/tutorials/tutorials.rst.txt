@@ -4,6 +4,12 @@
 Tutorials
 =========
 
+.. figure:: ../static/QEpy_SCF.gif
+   :alt: QEpy tutorials overview
+   :align: center
+   :width: 600px
+
+   Example of a QEpy SCF run
 
 Commands
 ========

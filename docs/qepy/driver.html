@@ -1,32 +1,31 @@
-
-
 <!DOCTYPE html>
-<html class="writer-html5" lang="en" data-content_root="../">
+<html class="writer-html5" lang="en" >
 <head>
-  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>The Driver object &mdash; QEpy  &#34;7.2.0&#34;
  documentation</title>
-      <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=b86133f3" />
-      <link rel="stylesheet" type="text/css" href="../_static/custom.css?v=9b3c20d5" />
-      <link rel="stylesheet" type="text/css" href="../_static/copybutton.css?v=76b2166b" />
-      <link rel="stylesheet" type="text/css" href="../_static/tabs.css?v=4c969af8" />
-      <link rel="stylesheet" type="text/css" href="../_static/panels-main.c949a650a448cc0ae9fd3441c0e17fb0.css?v=2a6c4383" />
-      <link rel="stylesheet" type="text/css" href="../_static/panels-bootstrap.5fd3999ee7762ccc51105388f4a9d115.css?v=45cf7dbc" />
-      <link rel="stylesheet" type="text/css" href="../_static/panels-variables.06eb56fa6e07937060861dad626602ad.css?v=d290406d" />
-
-  
+      <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/custom.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/copybutton.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/tabs.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/sphinx-design.min.css" type="text/css" />
     <link rel="shortcut icon" href="../_static/qepy_logo.ico"/>
-      <script src="../_static/jquery.js?v=5d32c60e"></script>
-      <script src="../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
-      <script src="../_static/documentation_options.js?v=fb160149"></script>
-      <script src="../_static/doctools.js?v=9bcbadda"></script>
-      <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
-      <script src="../_static/clipboard.min.js?v=a7894cd8"></script>
-      <script src="../_static/copybutton.js?v=f281be69"></script>
-      <script src="../_static/tabs.js?v=3ee01567"></script>
-      <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+  <!--[if lt IE 9]>
+    <script src="../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script src="../_static/jquery.js?v=5d32c60e"></script>
+        <script src="../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+        <script src="../_static/documentation_options.js?v=fb160149"></script>
+        <script src="../_static/doctools.js?v=9a2dae69"></script>
+        <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+        <script src="../_static/clipboard.min.js?v=a7894cd8"></script>
+        <script src="../_static/copybutton.js?v=f281be69"></script>
+        <script src="../_static/tabs.js?v=3ee01567"></script>
+        <script src="../_static/design-tabs.js?v=f930bc37"></script>
+        <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
     <script src="../_static/js/theme.js"></script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
@@ -60,17 +59,13 @@
 <li class="toctree-l1"><a class="reference internal" href="../tutorials/tutorials.html">Tutorials</a></li>
 <li class="toctree-l1 current"><a class="reference internal" href="qepy.html">Modules</a><ul class="current">
 <li class="toctree-l2 current"><a class="current reference internal" href="#">The Driver object</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="#list-of-all-methods">List of all Methods</a><ul>
-<li class="toctree-l4"><a class="reference internal" href="#qepy.driver.Driver"><code class="docutils literal notranslate"><span class="pre">Driver</span></code></a></li>
-</ul>
-</li>
+<li class="toctree-l3"><a class="reference internal" href="#list-of-all-methods">List of all Methods</a></li>
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="calculator.html">The QEpyCalculator object</a></li>
 <li class="toctree-l2"><a class="reference internal" href="io.html">The QEInput object</a></li>
 </ul>
 </li>
-<li class="toctree-l1"><a class="reference internal" href="../development/development.html">Development</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../faq.html">Frequently Asked Questions</a></li>
 </ul>
 
@@ -109,9 +104,33 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
              
-  <section id="the-driver-object">
+  
+<style>
+/* CSS overrides for sphinx_rtd_theme */
+
+/* 24px margin */
+.nbinput.nblast.container,
+.nboutput.nblast.container {
+    margin-bottom: 19px;  /* padding has already 5px */
+}
+
+/* ... except between code cells! */
+.nblast.container + .nbinput.container {
+    margin-top: -19px;
+}
+
+.admonition > p:before {
+    margin-right: 4px;  /* make room for the exclamation icon */
+}
+
+/* Fix math alignment, see https://github.com/rtfd/sphinx_rtd_theme/pull/686 */
+.math {
+    text-align: unset;
+}
+</style>
+<section id="the-driver-object">
 <span id="module-qepy.driver"></span><h1>The Driver object<a class="headerlink" href="#the-driver-object" title="Link to this heading"></a></h1>
-<p>The <a class="reference internal" href="#qepy.driver.Driver" title="qepy.driver.Driver"><code class="xref py py-class docutils literal notranslate"><span class="pre">Driver</span></code></a> object is a simple way to call the QE/QEpy from python side. Here is how to define a simple scf job:</p>
+<p>The <code class="xref py py-class docutils literal notranslate"><span class="pre">Driver</span></code> object is a simple way to call the QE/QEpy from python side. Here is how to define a simple scf job:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">qepy</span><span class="w"> </span><span class="kn">import</span> <span class="n">Driver</span>
 <span class="n">driver</span> <span class="o">=</span> <span class="n">Driver</span><span class="p">(</span><span class="s1">&#39;qe_in.in&#39;</span><span class="p">)</span>
 </pre></div>
@@ -119,712 +138,6 @@
 <p>Here, the first argument specifies the name of <a class="reference external" href="https://www.quantum-espresso.org/Doc/INPUT_PW.html">QE input file</a>.</p>
 <section id="list-of-all-methods">
 <h2>List of all Methods<a class="headerlink" href="#list-of-all-methods" title="Link to this heading"></a></h2>
-<dl class="py class">
-<dt class="sig sig-object py" id="qepy.driver.Driver">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">qepy.driver.</span></span><span class="sig-name descname"><span class="pre">Driver</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">inputfile</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">comm</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ldescf</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">iterative</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">task</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'scf'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">embed</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">prefix</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">outdir</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">logfile</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">qe_options</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">prog</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'pw'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">progress</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">atoms</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">needwf</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/qepy/driver.html#Driver"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#qepy.driver.Driver" title="Link to this definition"></a></dt>
-<dd><p>The driver of QEpy.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>inputfile</strong> (<em>str</em>) -- Name of QE input file</p></li>
-<li><p><strong>comm</strong> (<em>object</em>) -- Parallel communicator</p></li>
-<li><p><strong>ldescf</strong> (<em>bool</em>) -- If True, also print the SCF correction term for each SCF cycle</p></li>
-<li><p><strong>iterative</strong> (<em>bool</em>) -- Run SCF or real-time TDDFT one iteration at a time</p></li>
-<li><p><strong>task</strong> (<em>str</em>) -- <p>Task to be performed by the driver :</p>
-<blockquote>
-<div><ul>
-<li><p>'scf' : Self consistent field</p></li>
-<li><p>'nscf' : initialization of Driver from previous SCF calculation</p></li>
-<li><p>'optical' : Optical absorption spectrum (real-time TDDFT with ce-tddft of Davide Ceresoli)</p></li>
-<li><p>'tddfpt_davidson' : TDDFPT with davidson algorithm</p></li>
-</ul>
-</div></blockquote>
-</p></li>
-<li><p><strong>embed</strong> (<em>object</em><em> (</em><em>Fortran</em><em>)</em>) -- embed object itialized in the Fortran side of QEpy needed to communicate with QE.</p></li>
-<li><p><strong>prefix</strong> (<em>str</em>) -- prefix of QE input/output</p></li>
-<li><p><strong>outdir</strong> (<em>str</em>) -- The output directory of QE</p></li>
-<li><p><strong>logfile</strong> (<em>str</em><em>, </em><em>file</em><em> or </em><em>bool</em>) -- <p>The screen output of QE. If it is a file descriptor, it should open with 'w+'.</p>
-<blockquote>
-<div><ul>
-<li><p>None : Show on the screen.</p></li>
-<li><p>str  : Save to the given file.</p></li>
-<li><p>True : Save to the temporary file, see also <a class="reference internal" href="#qepy.driver.Driver.get_output" title="qepy.driver.Driver.get_output"><code class="xref py py-func docutils literal notranslate"><span class="pre">qepy.driver.Driver.get_output()</span></code></a>.</p></li>
-</ul>
-</div></blockquote>
-</p></li>
-<li><p><strong>outdir</strong> -- The output directory of QE</p></li>
-<li><p><strong>qe_options</strong> (<em>dict</em>) -- A dictionary with input parameters for QE to generate QE input file.
-See class QEInput</p></li>
-<li><p><strong>prog</strong> (<em>str</em>) -- The name of QE program, default is <cite>pw</cite> which is pw.x in QE.</p></li>
-<li><p><strong>progress</strong> (<em>bool</em>) -- If True, will continue run the QE without cleaning the workspace. Most times used for running TDDFT after scf.</p></li>
-<li><p><strong>atoms</strong> (<em>object</em>) -- An ase Atoms to generate the input file.</p></li>
-<li><p><strong>needwf</strong> (<em>bool</em>) -- If False, will not read wavefunctions and skip wavefunction-related initialization.</p></li>
-<li><p><strong>kwargs</strong> (<em>dict</em>) -- Other options</p></li>
-<li><p><strong>note::</strong> (<em>..</em>) -- <ul>
-<li><p>The bool <cite>gather</cite> parameter in functions means the data is gathered on root or distributed on all cpus.</p></li>
-<li><p>Units in QEpy are Bohr and Rydberg. These differ from ASE's units. Please, be careful!</p>
-<blockquote>
-<div><ul class="simple">
-<li><p>positions : Bohr</p></li>
-<li><p>lattice : Bohr</p></li>
-<li><p>energy : Ry</p></li>
-<li><p>forces : Ry/Bohr</p></li>
-<li><p>stress : Ry/Bohr**3</p></li>
-<li><p>potential : Ry</p></li>
-<li><p>density : 1.0/Bohr**3</p></li>
-</ul>
-</div></blockquote>
-</li>
-</ul>
-</p></li>
-</ul>
-</dd>
-</dl>
-<dl class="py method">
-<dt class="sig sig-object py" id="qepy.driver.Driver.calc_energy">
-<span class="sig-name descname"><span class="pre">calc_energy</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/qepy/driver.html#Driver.calc_energy"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#qepy.driver.Driver.calc_energy" title="Link to this definition"></a></dt>
-<dd><p>Calculate the energy with PW2CASINO of QE.
-Use this only if you have a good reason to use it! For example
-embedding calculations.</p>
-</dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="qepy.driver.Driver.check_convergence">
-<span class="sig-name descname"><span class="pre">check_convergence</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/qepy/driver.html#Driver.check_convergence"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#qepy.driver.Driver.check_convergence" title="Link to this definition"></a></dt>
-<dd><p>Check the convergence of the SCF</p>
-</dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="qepy.driver.Driver.create_array">
-<span class="sig-name descname"><span class="pre">create_array</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">gather</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">kind</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'rho'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/qepy/driver.html#Driver.create_array"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#qepy.driver.Driver.create_array" title="Link to this definition"></a></dt>
-<dd><p>Returns an empty array in real space.
-Nota bene: this is for real-space arrays like the density (rho) and potentials.</p>
-</dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="qepy.driver.Driver.data2field">
-<em class="property"><span class="pre">classmethod</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">data2field</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cell</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">grid</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">rank</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cplx</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/qepy/driver.html#Driver.data2field"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#qepy.driver.Driver.data2field" title="Link to this definition"></a></dt>
-<dd><p>QE data to DFTpy DirectField.
-If data is None or small temporary array will return np.zeros(1).</p>
-</dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="qepy.driver.Driver.diagonalize">
-<span class="sig-name descname"><span class="pre">diagonalize</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">print_level</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">2</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">nscf</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/qepy/driver.html#Driver.diagonalize"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#qepy.driver.Driver.diagonalize" title="Link to this definition"></a></dt>
-<dd><p>Diagonalize the Hamiltonian</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>print_level</strong> -- The level of output of QE</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="qepy.driver.Driver.driver_initialize">
-<span class="sig-name descname"><span class="pre">driver_initialize</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/qepy/driver.html#Driver.driver_initialize"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#qepy.driver.Driver.driver_initialize" title="Link to this definition"></a></dt>
-<dd><p>Initialize the driver</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>inputfile</strong> (<em>str</em>) -- Name of QE input file</p></li>
-<li><p><strong>commf</strong> (<em>object</em>) -- mpi4py parallel communicator to be sent to Fortran</p></li>
-<li><p><strong>task</strong> (<em>str</em>) -- <p>Task to be performed by the driver :</p>
-<blockquote>
-<div><ul>
-<li><p>'scf' : Self consistent field</p></li>
-<li><p>'nscf' : initialization of Driver from previous SCF calculation</p></li>
-<li><p>'optical' : Optical absorption spectrum (real-time TDDFT with ce-tddft of Davide Ceresoli)</p></li>
-</ul>
-</div></blockquote>
-</p></li>
-<li><p><strong>qe_options</strong> (<em>dict</em>) -- A dictionary with input parameters for QE to generate QE input file.</p></li>
-</ul>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="qepy.driver.Driver.electrons">
-<span class="sig-name descname"><span class="pre">electrons</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">original</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/qepy/driver.html#Driver.electrons"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#qepy.driver.Driver.electrons" title="Link to this definition"></a></dt>
-<dd><p>Execute original QE routine &quot;electrons&quot;</p>
-</dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="qepy.driver.Driver.end_scf">
-<span class="sig-name descname"><span class="pre">end_scf</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">nscf</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/qepy/driver.html#Driver.end_scf"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#qepy.driver.Driver.end_scf" title="Link to this definition"></a></dt>
-<dd><p>Ends the SCF and cleans the SCF workspace. Only run when in iterative mode (i.e., one cycle at a time)</p>
-</dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="qepy.driver.Driver.field2data">
-<em class="property"><span class="pre">classmethod</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">field2data</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">field</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">data</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/qepy/driver.html#Driver.field2data"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#qepy.driver.Driver.field2data" title="Link to this definition"></a></dt>
-<dd><p>DFTpy DirectField to QE data.
-If the input field is not 3d array, will return np.zeros((1, 1)).</p>
-</dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="qepy.driver.Driver.get_ase_atoms">
-<em class="property"><span class="pre">classmethod</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">get_ase_atoms</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/qepy/driver.html#Driver.get_ase_atoms"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#qepy.driver.Driver.get_ase_atoms" title="Link to this definition"></a></dt>
-<dd><p>Return the atom.Atoms from QE to ASE (using ASE units).</p>
-</dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="qepy.driver.Driver.get_bz_k_points">
-<em class="property"><span class="pre">classmethod</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">get_bz_k_points</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/qepy/driver.html#Driver.get_bz_k_points"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#qepy.driver.Driver.get_bz_k_points" title="Link to this definition"></a></dt>
-<dd><p>Return all the k-points in the 1. Brillouin zone.</p>
-<p>The coordinates are relative to reciprocal latice vectors.</p>
-</dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="qepy.driver.Driver.get_core_density">
-<span class="sig-name descname"><span class="pre">get_core_density</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">gather</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">out</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/qepy/driver.html#Driver.get_core_density"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#qepy.driver.Driver.get_core_density" title="Link to this definition"></a></dt>
-<dd><p>Returns core density array in real space.</p>
-</dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="qepy.driver.Driver.get_density">
-<span class="sig-name descname"><span class="pre">get_density</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">gather</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">out</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/qepy/driver.html#Driver.get_density"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#qepy.driver.Driver.get_density" title="Link to this definition"></a></dt>
-<dd><p>Returns valence pseudodensity array in real space.</p>
-</dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="qepy.driver.Driver.get_density_functional">
-<span class="sig-name descname"><span class="pre">get_density_functional</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">gather</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">out</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">add</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/qepy/driver.html#Driver.get_density_functional"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#qepy.driver.Driver.get_density_functional" title="Link to this definition"></a></dt>
-<dd><p>Return effective potential information.</p>
-<dl class="simple">
-<dt>Note :</dt><dd><p>Then final potential is saved in the v_obj</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="qepy.driver.Driver.get_dftpy_grid">
-<em class="property"><span class="pre">classmethod</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">get_dftpy_grid</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">nr</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cell</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">mp</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/qepy/driver.html#Driver.get_dftpy_grid"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#qepy.driver.Driver.get_dftpy_grid" title="Link to this definition"></a></dt>
-<dd><p>Return the DFTpy DirectGrid from QE.</p>
-</dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="qepy.driver.Driver.get_dftpy_ions">
-<em class="property"><span class="pre">classmethod</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">get_dftpy_ions</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/qepy/driver.html#Driver.get_dftpy_ions"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#qepy.driver.Driver.get_dftpy_ions" title="Link to this definition"></a></dt>
-<dd><p>Return the DFTpy.Ions from QE. (with DFTpy units)</p>
-</dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="qepy.driver.Driver.get_dipole_tddft">
-<span class="sig-name descname"><span class="pre">get_dipole_tddft</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/qepy/driver.html#Driver.get_dipole_tddft"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#qepy.driver.Driver.get_dipole_tddft" title="Link to this definition"></a></dt>
-<dd><p>Return the total dipole computed by a TDDFT run.
-Nota bene: only available during TDDFT runs.</p>
-</dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="qepy.driver.Driver.get_ecutrho">
-<em class="property"><span class="pre">classmethod</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">get_ecutrho</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/qepy/driver.html#Driver.get_ecutrho"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#qepy.driver.Driver.get_ecutrho" title="Link to this definition"></a></dt>
-<dd><p>Return the cutoff for density.</p>
-</dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="qepy.driver.Driver.get_eigenvalues">
-<em class="property"><span class="pre">classmethod</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">get_eigenvalues</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">kpt</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">spin</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/qepy/driver.html#Driver.get_eigenvalues"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#qepy.driver.Driver.get_eigenvalues" title="Link to this definition"></a></dt>
-<dd><p>Return eigenvalue array.</p>
-</dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="qepy.driver.Driver.get_elf">
-<span class="sig-name descname"><span class="pre">get_elf</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">gather</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">out</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/qepy/driver.html#Driver.get_elf"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#qepy.driver.Driver.get_elf" title="Link to this definition"></a></dt>
-<dd><p>Return electron localization function.</p>
-</dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="qepy.driver.Driver.get_energy">
-<span class="sig-name descname"><span class="pre">get_energy</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/qepy/driver.html#Driver.get_energy"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#qepy.driver.Driver.get_energy" title="Link to this definition"></a></dt>
-<dd><p>Return the total energy.
-Nota bene: Only use for regular QE runs (i.e., not when doing embedding).</p>
-</dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="qepy.driver.Driver.get_exchange_correlation">
-<span class="sig-name descname"><span class="pre">get_exchange_correlation</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">gather</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">out</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tau</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/qepy/driver.html#Driver.get_exchange_correlation"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#qepy.driver.Driver.get_exchange_correlation" title="Link to this definition"></a></dt>
-<dd><p>Return information about the exchange-correlation:
-LDA, GGA: tuple (potential, energy, v*rho)
-MGGA:     tuple (potential, energy, v*rho, tau)</p>
-<dl class="simple">
-<dt>TODO :</dt><dd><p>The interface will changed in the new version of QE!</p>
-</dd>
-<dt>Note :</dt><dd><p>For metaGGA, only return scattered tau</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="qepy.driver.Driver.get_fermi_level">
-<em class="property"><span class="pre">classmethod</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">get_fermi_level</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/qepy/driver.html#Driver.get_fermi_level"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#qepy.driver.Driver.get_fermi_level" title="Link to this definition"></a></dt>
-<dd><p>Return the Fermi level.</p>
-</dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="qepy.driver.Driver.get_forces">
-<span class="sig-name descname"><span class="pre">get_forces</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">icalc</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ignore</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">()</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/qepy/driver.html#Driver.get_forces"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#qepy.driver.Driver.get_forces" title="Link to this definition"></a></dt>
-<dd><p>Return the total forces. (n, 3)</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>icalc</strong> (<em>int</em>) -- <table class="docutils align-default">
-<thead>
-<tr class="row-odd"><th class="head"><p>icalc</p></th>
-<th class="head"><p>without</p></th>
-<th class="head"><p>bin</p></th>
-</tr>
-</thead>
-<tbody>
-<tr class="row-even"><td><p>0</p></td>
-<td><p>all</p></td>
-<td><p>000</p></td>
-</tr>
-<tr class="row-odd"><td><p>1</p></td>
-<td><p>no ewald</p></td>
-<td><p>001</p></td>
-</tr>
-<tr class="row-even"><td><p>2</p></td>
-<td><p>no localpp</p></td>
-<td><p>010</p></td>
-</tr>
-<tr class="row-odd"><td><p>4</p></td>
-<td><p>no nlcc</p></td>
-<td><p>100</p></td>
-</tr>
-</tbody>
-</table>
-</p></li>
-<li><p><strong>ignore</strong> (<em>list</em>) -- <p>ignore some forces, which does same job as <cite>icalc</cite>.</p>
-<blockquote>
-<div><ul>
-<li><p>ewald (1)</p></li>
-<li><p>localpp (2)</p></li>
-<li><p>nlcc (4)</p></li>
-</ul>
-</div></blockquote>
-</p></li>
-</ul>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="qepy.driver.Driver.get_hartree">
-<span class="sig-name descname"><span class="pre">get_hartree</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">gather</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">out</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">add</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/qepy/driver.html#Driver.get_hartree"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#qepy.driver.Driver.get_hartree" title="Link to this definition"></a></dt>
-<dd><p>Return information about Hartree energy:
-tuple (potential, energy, total charge)</p>
-</dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="qepy.driver.Driver.get_ibz_k_points">
-<em class="property"><span class="pre">classmethod</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">get_ibz_k_points</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/qepy/driver.html#Driver.get_ibz_k_points"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#qepy.driver.Driver.get_ibz_k_points" title="Link to this definition"></a></dt>
-<dd><p>Return k-points in the irreducible part of the Brillouin zone.</p>
-<p>The coordinates are relative to reciprocal latice vectors.</p>
-</dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="qepy.driver.Driver.get_ions_lattice">
-<em class="property"><span class="pre">classmethod</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">get_ions_lattice</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/qepy/driver.html#Driver.get_ions_lattice"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#qepy.driver.Driver.get_ions_lattice" title="Link to this definition"></a></dt>
-<dd><p>Return the matrix of the lattice vectors in Bohrs.</p>
-</dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="qepy.driver.Driver.get_ions_positions">
-<em class="property"><span class="pre">classmethod</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">get_ions_positions</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/qepy/driver.html#Driver.get_ions_positions"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#qepy.driver.Driver.get_ions_positions" title="Link to this definition"></a></dt>
-<dd><p>Return the cartesian positions of ions in Bohrs.</p>
-</dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="qepy.driver.Driver.get_ions_symbols">
-<em class="property"><span class="pre">classmethod</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">get_ions_symbols</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/qepy/driver.html#Driver.get_ions_symbols"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#qepy.driver.Driver.get_ions_symbols" title="Link to this definition"></a></dt>
-<dd><p>Return the symbols of ions.</p>
-</dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="qepy.driver.Driver.get_k_point_weights">
-<em class="property"><span class="pre">classmethod</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">get_k_point_weights</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/qepy/driver.html#Driver.get_k_point_weights"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#qepy.driver.Driver.get_k_point_weights" title="Link to this definition"></a></dt>
-<dd><p>Weights of the k-points.</p>
-<p>The sum of all weights is one.</p>
-</dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="qepy.driver.Driver.get_kinetic_energy_density">
-<span class="sig-name descname"><span class="pre">get_kinetic_energy_density</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">gather</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">out</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/qepy/driver.html#Driver.get_kinetic_energy_density"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#qepy.driver.Driver.get_kinetic_energy_density" title="Link to this definition"></a></dt>
-<dd><p>Returns KS kinetic energy density array in real space.</p>
-</dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="qepy.driver.Driver.get_local_pp">
-<span class="sig-name descname"><span class="pre">get_local_pp</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">gather</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">out</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/qepy/driver.html#Driver.get_local_pp"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#qepy.driver.Driver.get_local_pp" title="Link to this definition"></a></dt>
-<dd><p>Return local component of the pseudopotential.</p>
-</dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="qepy.driver.Driver.get_magnetic_moment">
-<em class="property"><span class="pre">classmethod</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">get_magnetic_moment</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/qepy/driver.html#Driver.get_magnetic_moment"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#qepy.driver.Driver.get_magnetic_moment" title="Link to this definition"></a></dt>
-<dd><p>Return the total magnetic moment.</p>
-</dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="qepy.driver.Driver.get_number_of_bands">
-<em class="property"><span class="pre">classmethod</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">get_number_of_bands</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/qepy/driver.html#Driver.get_number_of_bands"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#qepy.driver.Driver.get_number_of_bands" title="Link to this definition"></a></dt>
-<dd><p>Return the number of bands.</p>
-</dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="qepy.driver.Driver.get_number_of_grid_points">
-<em class="property"><span class="pre">classmethod</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">get_number_of_grid_points</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">gather</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/qepy/driver.html#Driver.get_number_of_grid_points"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#qepy.driver.Driver.get_number_of_grid_points" title="Link to this definition"></a></dt>
-<dd><p>Return the shape of arrays.</p>
-</dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="qepy.driver.Driver.get_number_of_k_points">
-<em class="property"><span class="pre">classmethod</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">get_number_of_k_points</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/qepy/driver.html#Driver.get_number_of_k_points"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#qepy.driver.Driver.get_number_of_k_points" title="Link to this definition"></a></dt>
-<dd><p>Return the number of kpoints.</p>
-</dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="qepy.driver.Driver.get_number_of_spins">
-<em class="property"><span class="pre">classmethod</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">get_number_of_spins</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/qepy/driver.html#Driver.get_number_of_spins"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#qepy.driver.Driver.get_number_of_spins" title="Link to this definition"></a></dt>
-<dd><p>Return the number of spins in the calculation.</p>
-<p>Spin-paired calculations: 1, spin-polarized calculation: 2.</p>
-</dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="qepy.driver.Driver.get_occupation_numbers">
-<em class="property"><span class="pre">classmethod</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">get_occupation_numbers</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">kpt</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">spin</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/qepy/driver.html#Driver.get_occupation_numbers"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#qepy.driver.Driver.get_occupation_numbers" title="Link to this definition"></a></dt>
-<dd><p>Return occupation number array.</p>
-</dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="qepy.driver.Driver.get_output">
-<span class="sig-name descname"><span class="pre">get_output</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/qepy/driver.html#Driver.get_output"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#qepy.driver.Driver.get_output" title="Link to this definition"></a></dt>
-<dd><p>Return the output of QE.</p>
-<p>It depends on the <cite>logfile</cite> of the initialization of the driver :</p>
-<blockquote>
-<div><ul class="simple">
-<li><p>None : return None.</p></li>
-<li><p>str  : return all outputs.</p></li>
-<li><p>True : It will return the output from last time.</p></li>
-</ul>
-</div></blockquote>
-</dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="qepy.driver.Driver.get_potential_energy">
-<span class="sig-name descname"><span class="pre">get_potential_energy</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/qepy/driver.html#Driver.get_potential_energy"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#qepy.driver.Driver.get_potential_energy" title="Link to this definition"></a></dt>
-<dd><p>Return the potential energy.</p>
-</dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="qepy.driver.Driver.get_pseudo_density">
-<span class="sig-name descname"><span class="pre">get_pseudo_density</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">spin</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">pad</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">gather</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/qepy/driver.html#Driver.get_pseudo_density"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#qepy.driver.Driver.get_pseudo_density" title="Link to this definition"></a></dt>
-<dd><p>Return pseudo-density array.</p>
-<p>If <em>spin</em> is not given, then the total density is returned.
-Otherwise, the spin up or down density is returned (spin=0 or
-1).</p>
-</dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="qepy.driver.Driver.get_pseudo_wave_function">
-<em class="property"><span class="pre">classmethod</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">get_pseudo_wave_function</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">band</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">kpt</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">spin</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">broadcast</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">pad</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/qepy/driver.html#Driver.get_pseudo_wave_function"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#qepy.driver.Driver.get_pseudo_wave_function" title="Link to this definition"></a></dt>
-<dd><p>Return pseudo-wave-function array.</p>
-</dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="qepy.driver.Driver.get_rdg">
-<span class="sig-name descname"><span class="pre">get_rdg</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">gather</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">out</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/qepy/driver.html#Driver.get_rdg"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#qepy.driver.Driver.get_rdg" title="Link to this definition"></a></dt>
-<dd><p>Return reduced density gradient.</p>
-</dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="qepy.driver.Driver.get_scf_error">
-<span class="sig-name descname"><span class="pre">get_scf_error</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/qepy/driver.html#Driver.get_scf_error"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#qepy.driver.Driver.get_scf_error" title="Link to this definition"></a></dt>
-<dd><p>Return the error of the SCF compared to previous cycle</p>
-</dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="qepy.driver.Driver.get_scf_steps">
-<span class="sig-name descname"><span class="pre">get_scf_steps</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/qepy/driver.html#Driver.get_scf_steps"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#qepy.driver.Driver.get_scf_steps" title="Link to this definition"></a></dt>
-<dd><p>Return the number of SCF steps</p>
-</dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="qepy.driver.Driver.get_spin_polarized">
-<em class="property"><span class="pre">classmethod</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">get_spin_polarized</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/qepy/driver.html#Driver.get_spin_polarized"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#qepy.driver.Driver.get_spin_polarized" title="Link to this definition"></a></dt>
-<dd><p>Is it a spin-polarized calculation?</p>
-</dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="qepy.driver.Driver.get_stress">
-<em class="property"><span class="pre">classmethod</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">get_stress</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/qepy/driver.html#Driver.get_stress"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#qepy.driver.Driver.get_stress" title="Link to this definition"></a></dt>
-<dd><p>Return the stress (3, 3).</p>
-</dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="qepy.driver.Driver.get_volume">
-<em class="property"><span class="pre">classmethod</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">get_volume</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/qepy/driver.html#Driver.get_volume"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#qepy.driver.Driver.get_volume" title="Link to this definition"></a></dt>
-<dd><p>Return the volume.</p>
-</dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="qepy.driver.Driver.get_wave_function">
-<span class="sig-name descname"><span class="pre">get_wave_function</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">band</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">kpt</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/qepy/driver.html#Driver.get_wave_function"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#qepy.driver.Driver.get_wave_function" title="Link to this definition"></a></dt>
-<dd><p>Returns wave-function array in real space.</p>
-</dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="qepy.driver.Driver.get_xc_functional">
-<em class="property"><span class="pre">classmethod</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">get_xc_functional</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/qepy/driver.html#Driver.get_xc_functional"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#qepy.driver.Driver.get_xc_functional" title="Link to this definition"></a></dt>
-<dd><p>Return the XC-functional identifier.</p>
-<p>'LDA', 'PBE', ...</p>
-</dd></dl>
-
-<dl class="py property">
-<dt class="sig sig-object py" id="qepy.driver.Driver.is_root">
-<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">is_root</span></span><a class="headerlink" href="#qepy.driver.Driver.is_root" title="Link to this definition"></a></dt>
-<dd><p>Whether it is the root.</p>
-<p>If the comm is set, root is rank == 0.
-If comm not set, root is ionode of QE.</p>
-</dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="qepy.driver.Driver.mix">
-<span class="sig-name descname"><span class="pre">mix</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">mix_coef</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.7</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">print_level</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">2</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/qepy/driver.html#Driver.mix"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#qepy.driver.Driver.mix" title="Link to this definition"></a></dt>
-<dd><p>Mix the density with the QE density mixing</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>print_level</strong> -- The level of output of QE</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="qepy.driver.Driver.non_scf">
-<span class="sig-name descname"><span class="pre">non_scf</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/qepy/driver.html#Driver.non_scf"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#qepy.driver.Driver.non_scf" title="Link to this definition"></a></dt>
-<dd><p>Single &quot;non-selfconsistent&quot; calculation</p>
-</dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="qepy.driver.Driver.pwscf_restart">
-<span class="sig-name descname"><span class="pre">pwscf_restart</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">starting_pot</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'file'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">starting_wfc</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'file'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/qepy/driver.html#Driver.pwscf_restart"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#qepy.driver.Driver.pwscf_restart" title="Link to this definition"></a></dt>
-<dd><p>Read PW ouput/restart files.</p>
-</dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="qepy.driver.Driver.restart">
-<span class="sig-name descname"><span class="pre">restart</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">prog</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/qepy/driver.html#Driver.restart"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#qepy.driver.Driver.restart" title="Link to this definition"></a></dt>
-<dd><p>Restart the driver losing all information about the previous driver</p>
-</dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="qepy.driver.Driver.save">
-<span class="sig-name descname"><span class="pre">save</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">what</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'all'</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/qepy/driver.html#Driver.save"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#qepy.driver.Driver.save" title="Link to this definition"></a></dt>
-<dd><p>Save the QE data to the disk in original QE files that can be accessed via post-processing
-or read with a QEpy driver</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>what</strong> (<em>str</em>) -- <ul class="simple">
-<li><dl class="simple">
-<dt>what = 'all'<span class="classifier">write xml data file, charge density, wavefunctions</span></dt><dd><p>(for final data);</p>
-</dd>
-</dl>
-</li>
-<li><dl class="simple">
-<dt>what = 'config'<span class="classifier">write xml data file and charge density; also,</span></dt><dd><p>for nks=1, wavefunctions in plain binary format
-(see why in comments below). For intermediate
-or incomplete results;</p>
-</dd>
-</dl>
-</li>
-<li><dl class="simple">
-<dt>what = 'config-nowf'<span class="classifier">write xml data file and charge density only;</span></dt><dd><p>(save density);</p>
-</dd>
-</dl>
-</li>
-<li><dl class="simple">
-<dt>what = 'config-init'<span class="classifier">write xml data file only excluding final results</span></dt><dd><p>(for dry run, can be called at early stages).</p>
-</dd>
-</dl>
-</li>
-</ul>
-<p>see PW/src/punch.f90</p>
-</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="qepy.driver.Driver.scf">
-<span class="sig-name descname"><span class="pre">scf</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">print_level</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">2</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">maxiter</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">original</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">nscf</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/qepy/driver.html#Driver.scf"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#qepy.driver.Driver.scf" title="Link to this definition"></a></dt>
-<dd><p>Run the scf/tddft until converged or reached the maximum number of iterations</p>
-</dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="qepy.driver.Driver.set_density">
-<span class="sig-name descname"><span class="pre">set_density</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">density</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">gather</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/qepy/driver.html#Driver.set_density"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#qepy.driver.Driver.set_density" title="Link to this definition"></a></dt>
-<dd><p>Set density array in real space.</p>
-</dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="qepy.driver.Driver.set_external_potential">
-<span class="sig-name descname"><span class="pre">set_external_potential</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">potential</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">exttype</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">gather</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">extene</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/qepy/driver.html#Driver.set_external_potential"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#qepy.driver.Driver.set_external_potential" title="Link to this definition"></a></dt>
-<dd><p>Set an external potential in addition to the ones already included in the QEpy run
-according to the logic enumerated below.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>potential</strong> (<em>(</em><em>nnr</em><em>, </em><em>nspin</em><em>)</em>) -- The external potential</p></li>
-<li><p><strong>exttype</strong> (<em>list</em><em> or </em><em>int</em>) -- <p>The type of external potential. It can be a list of name or a integer.
-e.g.  <cite>exttype = ('localpp', 'xc')</cite> or <cite>exttype = 5</cite>. <cite>external</cite> stands for an
-additional external potential.</p>
-<blockquote>
-<div><table class="docutils align-default">
-<thead>
-<tr class="row-odd"><th class="head"><p>type</p></th>
-<th class="head"><p>potential</p></th>
-<th class="head"><p>bin</p></th>
-</tr>
-</thead>
-<tbody>
-<tr class="row-even"><td><p>0</p></td>
-<td><p>external</p></td>
-<td><p>000</p></td>
-</tr>
-<tr class="row-odd"><td><p>1</p></td>
-<td><p>localpp</p></td>
-<td><p>001</p></td>
-</tr>
-<tr class="row-even"><td><p>2</p></td>
-<td><p>hartree</p></td>
-<td><p>010</p></td>
-</tr>
-<tr class="row-odd"><td><p>4</p></td>
-<td><p>xc</p></td>
-<td><p>100</p></td>
-</tr>
-</tbody>
-</table>
-</div></blockquote>
-</p></li>
-</ul>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="qepy.driver.Driver.stop">
-<span class="sig-name descname"><span class="pre">stop</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">exit_status</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">what</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'all'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">print_flag</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/qepy/driver.html#Driver.stop"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#qepy.driver.Driver.stop" title="Link to this definition"></a></dt>
-<dd><p>Stop the driver. This must be done anytime a new driver is created.
-This method is invoked automatically if a running driver is detected. Only
-one driver can run at any given time.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>exit_status</strong> (<em>int</em>) -- 0 : QE will remove it temporary files</p></li>
-<li><p><strong>print_flag</strong> (<em>int</em>) -- 0 : Not print time informations</p></li>
-<li><p><strong>what</strong> (<em>str</em>) -- see <a class="reference internal" href="#qepy.driver.Driver.save" title="qepy.driver.Driver.save"><code class="xref py py-func docutils literal notranslate"><span class="pre">qepy.driver.Driver.save()</span></code></a>.</p></li>
-</ul>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="qepy.driver.Driver.sum_band">
-<em class="property"><span class="pre">classmethod</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">sum_band</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">occupations</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/qepy/driver.html#Driver.sum_band"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#qepy.driver.Driver.sum_band" title="Link to this definition"></a></dt>
-<dd><p>Same as sum_band of QE with input occupations:</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>occupations</strong> (<em>np.ndarray</em><em> (</em><em>nbnd</em><em>, </em><em>nk</em><em>)</em>) -- occupation numbers</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="qepy.driver.Driver.switch_nlpp">
-<em class="property"><span class="pre">classmethod</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">switch_nlpp</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">nhm</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">nbetam</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">nkb</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">nh</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/qepy/driver.html#Driver.switch_nlpp"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#qepy.driver.Driver.switch_nlpp" title="Link to this definition"></a></dt>
-<dd><p>Switch on/off the nonlocal part of the pseudopotential</p>
-</dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="qepy.driver.Driver.tddfpt_davidson_stop">
-<span class="sig-name descname"><span class="pre">tddfpt_davidson_stop</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">exit_status</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">what</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'no'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">print_flag</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/qepy/driver.html#Driver.tddfpt_davidson_stop"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#qepy.driver.Driver.tddfpt_davidson_stop" title="Link to this definition"></a></dt>
-<dd><p>Stops TDDFPT run</p>
-</dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="qepy.driver.Driver.tddfpt_initialize">
-<span class="sig-name descname"><span class="pre">tddfpt_initialize</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">inputfile</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">commf</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/qepy/driver.html#Driver.tddfpt_initialize"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#qepy.driver.Driver.tddfpt_initialize" title="Link to this definition"></a></dt>
-<dd><p>Initialize the tddft</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>inputfile</strong> (<em>str</em>) -- Name of QE input file, which also contains <cite>&amp;inputtddft</cite> section.</p></li>
-<li><p><strong>commf</strong> (<em>object</em>) -- mpi4py parallel communicator to be sent to Fortran</p></li>
-</ul>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="qepy.driver.Driver.tddft_initialize">
-<span class="sig-name descname"><span class="pre">tddft_initialize</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">inputfile</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">commf</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/qepy/driver.html#Driver.tddft_initialize"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#qepy.driver.Driver.tddft_initialize" title="Link to this definition"></a></dt>
-<dd><p>Initialize the tddft</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>inputfile</strong> (<em>str</em>) -- Name of QE input file, which also contains <cite>&amp;inputtddft</cite> section.</p></li>
-<li><p><strong>commf</strong> (<em>object</em>) -- mpi4py parallel communicator to be sent to Fortran</p></li>
-</ul>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="qepy.driver.Driver.tddft_restart">
-<span class="sig-name descname"><span class="pre">tddft_restart</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">istep</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/qepy/driver.html#Driver.tddft_restart"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#qepy.driver.Driver.tddft_restart" title="Link to this definition"></a></dt>
-<dd><p>Restarts the TDDFT from previous interrupted run.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>istep</strong> (<em>int</em>) -- Start number of steps, just for output.</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="qepy.driver.Driver.tddft_stop">
-<span class="sig-name descname"><span class="pre">tddft_stop</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">exit_status</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">what</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'no'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">print_flag</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/qepy/driver.html#Driver.tddft_stop"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#qepy.driver.Driver.tddft_stop" title="Link to this definition"></a></dt>
-<dd><p>Stops TDDFT run</p>
-</dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="qepy.driver.Driver.update_exchange_correlation">
-<em class="property"><span class="pre">classmethod</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">update_exchange_correlation</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">xc</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">libxc</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/qepy/driver.html#Driver.update_exchange_correlation"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#qepy.driver.Driver.update_exchange_correlation" title="Link to this definition"></a></dt>
-<dd><p>Switch XC on the fly</p>
-</dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="qepy.driver.Driver.update_ions">
-<span class="sig-name descname"><span class="pre">update_ions</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">positions</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">lattice</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">update</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/qepy/driver.html#Driver.update_ions"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#qepy.driver.Driver.update_ions" title="Link to this definition"></a></dt>
-<dd><p>update the ions of QE. This is used for dynamic runs.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>positions</strong> (<em>np.ndarray</em><em> (</em><em>n</em><em>, </em><em>3</em><em>)</em>) -- positions of ions</p></li>
-<li><p><strong>lattice</strong> (<em>3x3 matrix</em>) -- lattice of ions</p></li>
-<li><p><strong>update</strong> (<em>int</em>) -- <ul>
-<li><p>0 : update everything (default)</p></li>
-<li><p>1 : only update atomic information, not update potential</p></li>
-</ul>
-</p></li>
-</ul>
-</dd>
-</dl>
-</dd></dl>
-
-</dd></dl>
-
 </section>
 </section>
 
@@ -840,7 +153,7 @@ one driver can run at any given time.</p>
 
   <div role="contentinfo">
     <p>&#169; Copyright 2019-2024 QEpy community.
-      <span class="lastupdated">Last updated on Friday, 01 Aug 2025 10:31:51.
+      <span class="lastupdated">Last updated on Tuesday, 25 Nov 2025 15:52:25.
       </span></p>
   </div>
 

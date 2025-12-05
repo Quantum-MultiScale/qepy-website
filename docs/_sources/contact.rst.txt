@@ -7,7 +7,7 @@ QEpy Developers
 
 Feel free to contact the developers:
  - `Xuecheng Shao <https://shaoxc.com>`_
- - `Michele Pavanello <https://sites.rutgers.edu/prg/people/michele-pavanello/>`_
+ - `Michele Pavanello <https://sasn.rutgers.edu/about-us/faculty-staff/michele-pavanello>`_
  - `Aniket Mandal <https://sites.rutgers.edu/prg/people/aniket-mandal/>`_
 
 GitHub
