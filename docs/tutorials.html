@@ -1,0 +1,315 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Tutorials: QEpy</title>
+  <meta name="description" content="QEpy tutorials: command-line usage, Jupyter notebooks, Python Driver API, and MPI communicators.">
+  <link rel="icon" href="_static/qepy_logo.ico" sizes="any">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="assets/css/style.css">
+</head>
+<body data-page="tutorials" data-root="">
+
+  <section class="page-hero">
+    <div class="container">
+      <div class="page-hero-inner">
+        <div class="crumbs"><a href="index.html">Home</a> <span>/</span> Tutorials</div>
+        <h1>Tutorials</h1>
+        <p>Three ways to use QEpy: as a drop-in QE executable, from Python scripts with MPI control, or interactively in Jupyter notebooks.</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="container prose">
+
+      <figure class="text-center reveal">
+        <img src="_static/QEpy_SCF.gif" alt="QEpy SCF density update animation" style="max-width:600px;width:100%;border-radius:var(--radius);box-shadow:var(--shadow-md)">
+        <figcaption class="muted mt-2">Iterative SCF: QEpy updates the electron density step by step from Python.</figcaption>
+      </figure>
+
+      <!-- Command line -->
+      <h2 id="cli">Run QEpy as QE (command line)</h2>
+      <p>QEpy can replace standard QE executables. List supported packages:</p>
+      <pre><code>python -m qepy -h</code></pre>
+      <p>Options ending in <code>.x</code> mirror QE executables; options ending in <code>.py</code> are QEpy-specific tools.</p>
+
+      <div class="cols-2">
+        <div>
+          <div class="code-label">Serial pw.x equivalent</div>
+          <pre><code>python -m qepy --pw.x -i qe.in</code></pre>
+        </div>
+        <div>
+          <div class="code-label">MPI parallel (OpenMPI / Intel MPI)</div>
+          <pre><code>mpirun -n 4 python -m qepy --pw.x -i qe.in</code></pre>
+        </div>
+      </div>
+
+      <p>QEpy-specific example: analyze and convert <code>pw.x</code> output:</p>
+      <pre><code>python -m qepy --pw2pp.py -h</code></pre>
+
+      <div class="note-box">
+        <p><strong>HPC clusters (SLURM):</strong> on some systems (e.g. Rutgers Amarel) plain <code>mpirun</code> may fail. Use the site-recommended MPI launcher: often <code>srun --mpi=pmi2 -n N python -m qepy ...</code>. Check your cluster documentation.</p>
+      </div>
+
+      <!-- Python API -->
+      <h2 id="python">Use QEpy in Python code</h2>
+      <p>The <code>Driver</code> class is the main entry point. Import <strong>qepy before mpi4py</strong> to avoid FFT allocation errors (see <a href="faq.html">FAQ</a>).</p>
+
+      <h3>Serial execution</h3>
+      <p>Pass <code>comm=None</code> (default) for a single-process run:</p>
+      <pre><code>import qepy
+from qepy import Driver
+
+driver = Driver('si.scf.in', comm=None)
+driver.scf()
+energy = driver.get_energy()
+driver.stop()</code></pre>
+
+      <h3>Parallel execution with mpi4py</h3>
+      <p>Pass an MPI communicator so Python and Fortran share the same process layout. Only rank 0 (<code>driver.is_root</code>) should print or write files unless you gather data explicitly.</p>
+      <pre><code>import qepy
+from mpi4py import MPI
+from qepy import Driver
+
+comm = MPI.COMM_WORLD
+driver = Driver('si.scf.in', comm=comm)
+
+if driver.is_root:
+    print(f"Running on {driver.nproc} MPI ranks")
+
+driver.scf()
+if driver.is_root:
+    print("Total energy:", driver.get_energy())
+driver.stop()</code></pre>
+
+      <p>Launch with your MPI runner, e.g.:</p>
+      <pre><code># OpenMPI / Intel MPI
+mpirun -n 4 python my_script.py
+
+# SLURM (example)
+srun --mpi=pmi2 -n 4 python my_script.py</code></pre>
+
+      <h3>Iterative SCF (step-by-step control)</h3>
+      <p>Set <code>iterative=True</code> to run one SCF iteration at a time: useful for custom mixing, external potentials, or coupling to other models.</p>
+      <pre><code>driver = Driver('si.scf.in', iterative=True, comm=comm)
+
+while not driver.check_convergence():
+    driver.diagonalize()
+    driver.mix()
+    rho = driver.get_density()
+    # inspect or modify rho, set external potentials, etc.
+
+driver.end_scf()
+driver.stop()</code></pre>
+
+      <h3>External potentials &amp; custom XC</h3>
+      <pre><code># Add an external potential on the real-space grid (Ry units)
+v_ext = driver.create_array(kind='rho')
+# ... fill v_ext ...
+driver.set_external_potential(v_ext)
+
+# Swap XC functional (requires DFTpy integration)
+driver.update_exchange_correlation(xc='PBE')</code></pre>
+
+      <h3>ASE calculator</h3>
+      <pre><code>from ase.build import bulk
+from qepy.calculator import QEpyCalculator
+
+atoms = bulk('Si')
+calc = QEpyCalculator(inputfile='si.scf.in', comm=comm)
+atoms.calc = calc
+energy = atoms.get_potential_energy()</code></pre>
+      <p class="muted">Note: ASE uses Å and eV; the <code>Driver</code> uses Bohr and Rydberg. The calculator handles unit conversion.</p>
+
+      <!-- Jupyter -->
+      <h2 id="jupyter">Jupyter notebooks</h2>
+      <p>Interactive examples live in the QEpy repository under <a href="https://github.com/Quantum-MultiScale/QEpy/tree/dev/examples/jupyter" target="_blank" rel="noopener"><code>examples/jupyter/</code></a>. Clone the repo and open them locally, or try the Google Colab notebooks.</p>
+
+      <div class="table-wrap">
+        <table class="qm">
+          <thead>
+            <tr>
+              <th>Topic</th>
+              <th>Notebook</th>
+              <th>What you learn</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><span class="tag">SCF</span></td>
+              <td><a href="https://github.com/Quantum-MultiScale/QEpy/blob/dev/examples/jupyter/scf/qepy_scf.ipynb" target="_blank" rel="noopener"><code>scf/qepy_scf.ipynb</code></a></td>
+              <td>Basic SCF with the Driver; energy, forces, density.</td>
+            </tr>
+            <tr>
+              <td><span class="tag">SCF</span></td>
+              <td><a href="https://github.com/Quantum-MultiScale/QEpy/blob/dev/examples/jupyter/scf/qepy_scf_iterative.ipynb" target="_blank" rel="noopener"><code>scf/qepy_scf_iterative.ipynb</code></a></td>
+              <td>Iterative SCF loop with convergence checks.</td>
+            </tr>
+            <tr>
+              <td><span class="tag">SCF</span></td>
+              <td><a href="https://github.com/Quantum-MultiScale/QEpy/blob/dev/examples/jupyter/scf/qepy_iterative.ipynb" target="_blank" rel="noopener"><code>scf/qepy_iterative.ipynb</code></a></td>
+              <td>Advanced iterative workflow patterns.</td>
+            </tr>
+            <tr>
+              <td><span class="tag">SCF</span></td>
+              <td><a href="https://github.com/Quantum-MultiScale/QEpy/blob/dev/examples/jupyter/scf/qepy_qeinput.ipynb" target="_blank" rel="noopener"><code>scf/qepy_qeinput.ipynb</code></a></td>
+              <td>Build and modify QE input programmatically with <code>QEInput</code>.</td>
+            </tr>
+            <tr>
+              <td><span class="tag">SCF</span></td>
+              <td><a href="https://github.com/Quantum-MultiScale/QEpy/blob/dev/examples/jupyter/scf/dftpy_mixer.ipynb" target="_blank" rel="noopener"><code>scf/dftpy_mixer.ipynb</code></a></td>
+              <td>Custom density mixing via DFTpy integration.</td>
+            </tr>
+            <tr>
+              <td><span class="tag">Bands / DOS</span></td>
+              <td><a href="https://github.com/Quantum-MultiScale/QEpy/blob/dev/examples/jupyter/band/dos_band_silicon.ipynb" target="_blank" rel="noopener"><code>band/dos_band_silicon.ipynb</code></a></td>
+              <td>Band structure and DOS for silicon.</td>
+            </tr>
+            <tr>
+              <td><span class="tag">Bands / DOS</span></td>
+              <td><a href="https://github.com/Quantum-MultiScale/QEpy/blob/dev/examples/jupyter/band/dos_band_graphene.ipynb" target="_blank" rel="noopener"><code>band/dos_band_graphene.ipynb</code></a></td>
+              <td>Band structure and DOS for graphene.</td>
+            </tr>
+            <tr>
+              <td><span class="tag">EOS</span></td>
+              <td><a href="https://github.com/Quantum-MultiScale/QEpy/blob/dev/examples/jupyter/eos/test_eos_vc.ipynb" target="_blank" rel="noopener"><code>eos/test_eos_vc.ipynb</code></a></td>
+              <td>Equation of state (volume/consistency tests).</td>
+            </tr>
+            <tr>
+              <td><span class="tag">EOS</span></td>
+              <td><a href="https://github.com/Quantum-MultiScale/QEpy/blob/dev/examples/jupyter/eos/test_eos_slow.ipynb" target="_blank" rel="noopener"><code>eos/test_eos_slow.ipynb</code></a></td>
+              <td>Slower EOS workflow with detailed output.</td>
+            </tr>
+            <tr>
+              <td><span class="tag">Post-processing</span></td>
+              <td><a href="https://github.com/Quantum-MultiScale/QEpy/blob/dev/examples/jupyter/pp/qepy_potentials.ipynb" target="_blank" rel="noopener"><code>pp/qepy_potentials.ipynb</code></a></td>
+              <td>Extract Hartree, XC, and local PP potentials.</td>
+            </tr>
+            <tr>
+              <td><span class="tag">Post-processing</span></td>
+              <td><a href="https://github.com/Quantum-MultiScale/QEpy/blob/dev/examples/jupyter/pp/qepy_parse_output.ipynb" target="_blank" rel="noopener"><code>pp/qepy_parse_output.ipynb</code></a></td>
+              <td>Parse QE output files from Python.</td>
+            </tr>
+            <tr>
+              <td><span class="tag">Post-processing</span></td>
+              <td><a href="https://github.com/Quantum-MultiScale/QEpy/blob/dev/examples/jupyter/pp/qepy_elf_rdg.ipynb" target="_blank" rel="noopener"><code>pp/qepy_elf_rdg.ipynb</code></a></td>
+              <td>Electron localization function (ELF) and reduced density gradient.</td>
+            </tr>
+            <tr>
+              <td><span class="tag">Extensions</span></td>
+              <td><a href="https://github.com/Quantum-MultiScale/QEpy/blob/dev/examples/jupyter/ext/dirac_exchange.ipynb" target="_blank" rel="noopener"><code>ext/dirac_exchange.ipynb</code></a></td>
+              <td>Custom Dirac exchange functional.</td>
+            </tr>
+            <tr>
+              <td><span class="tag">Extensions</span></td>
+              <td><a href="https://github.com/Quantum-MultiScale/QEpy/blob/dev/examples/jupyter/ext/dftpy_xc.ipynb" target="_blank" rel="noopener"><code>ext/dftpy_xc.ipynb</code></a></td>
+              <td>User-defined XC via DFTpy.</td>
+            </tr>
+            <tr>
+              <td><span class="tag">MD</span></td>
+              <td><a href="https://github.com/Quantum-MultiScale/QEpy/blob/dev/examples/jupyter/nvt/ase_nvt.ipynb" target="_blank" rel="noopener"><code>nvt/ase_nvt.ipynb</code></a></td>
+              <td>NVT ab initio MD with ASE + QEpy calculator.</td>
+            </tr>
+            <tr>
+              <td><span class="tag">Colab</span></td>
+              <td><a href="https://github.com/Quantum-MultiScale/QEpy/blob/dev/examples/jupyter/colab/qepy_scf.ipynb" target="_blank" rel="noopener"><code>colab/qepy_scf.ipynb</code></a></td>
+              <td>Run QEpy in Google Colaboratory (no local QE build).</td>
+            </tr>
+            <tr>
+              <td><span class="tag">Colab</span></td>
+              <td><a href="https://github.com/Quantum-MultiScale/QEpy/blob/dev/examples/jupyter/colab/qepy_colab.ipynb" target="_blank" rel="noopener"><code>colab/qepy_colab.ipynb</code></a></td>
+              <td>Colab setup and environment overview.</td>
+            </tr>
+            <tr>
+              <td><span class="tag">Testing</span></td>
+              <td><a href="https://github.com/Quantum-MultiScale/QEpy/blob/dev/examples/jupyter/testing/test_kpoints.ipynb" target="_blank" rel="noopener"><code>testing/test_kpoints.ipynb</code></a></td>
+              <td>K-point convergence workflows.</td>
+            </tr>
+            <tr>
+              <td><span class="tag">Testing</span></td>
+              <td><a href="https://github.com/Quantum-MultiScale/QEpy/blob/dev/examples/jupyter/testing/test_ecutwfc.ipynb" target="_blank" rel="noopener"><code>testing/test_ecutwfc.ipynb</code></a></td>
+              <td>Plane-wave cutoff convergence.</td>
+            </tr>
+            <tr>
+              <td><span class="tag">Testing</span></td>
+              <td><a href="https://github.com/Quantum-MultiScale/QEpy/blob/dev/examples/jupyter/testing/test_degauss.ipynb" target="_blank" rel="noopener"><code>testing/test_degauss.ipynb</code></a></td>
+              <td>Smearing (<code>degauss</code>) convergence tests.</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="callout mt-4">
+        <span class="ico" aria-hidden="true"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M4 19.5A2.5 2.5 0 016.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 014 19.5v-15A2.5 2.5 0 014 2z"/></svg></span>
+        <p><strong>Running notebooks with MPI:</strong> start Jupyter under an MPI allocation (e.g. <code>srun --mpi=pmi2 -n 4 jupyter notebook</code>) and pass <code>comm=MPI.COMM_WORLD</code> to <code>Driver</code>. For serial exploration, omit <code>comm</code> or use the Colab notebooks.</p>
+      </div>
+
+      <!-- Videos -->
+      <h2 id="videos">Video tutorials</h2>
+      <p><a href="https://youtube.com/playlist?list=PLDgw3fS4ncAHr13_d2LOLAS0xAzgZ-lhZ" target="_blank" rel="noopener">QEpy YouTube playlist ↗</a></p>
+      <div class="note-box">
+        <p>These videos span 2021–2025. The current QEpy release (QE 7.2, <code>dev</code> branch) may differ slightly in installation steps, API details, or recommended workflows from what is shown in the older recordings. Use the written tutorials and <a href="install.html">install guide</a> for up-to-date instructions.</p>
+      </div>
+      <div class="video-grid mt-2">
+        <div class="video-card">
+          <iframe src="https://www.youtube.com/embed/cWt0BVQs-_U?rel=0&modestbranding=1" title="Intro to QEpy" loading="lazy" allowfullscreen></iframe>
+          <div class="video-meta">
+            <strong>Intro to QEpy</strong>
+            <span>June 13, 2021</span>
+          </div>
+        </div>
+        <div class="video-card">
+          <iframe src="https://www.youtube.com/embed/-kKq8YgLorA?rel=0&modestbranding=1" title="QEpy for beginners" loading="lazy" allowfullscreen></iframe>
+          <div class="video-meta">
+            <strong>QEpy for beginners</strong>
+            <span>October 10, 2022</span>
+          </div>
+        </div>
+        <div class="video-card">
+          <iframe src="https://www.youtube.com/embed/SXPb3MNKFMA?rel=0&modestbranding=1" title="Installation of QEpy" loading="lazy" allowfullscreen></iframe>
+          <div class="video-meta">
+            <strong>Installation of QEpy</strong>
+            <span>October 10, 2022</span>
+          </div>
+        </div>
+        <div class="video-card">
+          <iframe src="https://www.youtube.com/embed/bMEXogY73sY?rel=0&modestbranding=1" title="QEpy with ASE" loading="lazy" allowfullscreen></iframe>
+          <div class="video-meta">
+            <strong>QEpy with ASE</strong>
+            <span>October 10, 2022</span>
+          </div>
+        </div>
+        <div class="video-card">
+          <iframe src="https://www.youtube.com/embed/gC9Qvz9p0K4?rel=0&modestbranding=1" title="QEpy on Google Colaboratory" loading="lazy" allowfullscreen></iframe>
+          <div class="video-meta">
+            <strong>QEpy on Google Colaboratory</strong>
+            <span>October 10, 2022</span>
+          </div>
+        </div>
+        <div class="video-card">
+          <iframe src="https://www.youtube.com/embed/SqA1MdYRhQY?rel=0&modestbranding=1" title="QEpy on Jupyter Notebooks" loading="lazy" allowfullscreen></iframe>
+          <div class="video-meta">
+            <strong>QEpy on Jupyter Notebooks</strong>
+            <span>October 10, 2022</span>
+          </div>
+        </div>
+        <div class="video-card">
+          <iframe src="https://www.youtube.com/embed/FfHkHfOFWUU?rel=0&modestbranding=1" title="Aniket Mandal, QEpy: Quantum ESPRESSO in Python" loading="lazy" allowfullscreen></iframe>
+          <div class="video-meta">
+            <strong>Aniket Mandal, QEpy: Quantum ESPRESSO in Python</strong>
+            <span>September 7, 2025</span>
+          </div>
+        </div>
+      </div>
+
+      <p class="mt-4">For the full Python API, see <a href="source.html">The code</a>.</p>
+    </div>
+  </section>
+
+  <script src="assets/js/main.js" defer></script>
+</body>
+</html>

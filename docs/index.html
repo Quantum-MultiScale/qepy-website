@@ -1,242 +1,193 @@
 <!DOCTYPE html>
-<html class="writer-html5" lang="en" >
+<html lang="en">
 <head>
-  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
-
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>QEpy - Quantum ESPRESSO in Python &mdash; QEpy  &#34;7.2.0&#34;
- documentation</title>
-      <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
-      <link rel="stylesheet" href="_static/custom.css" type="text/css" />
-      <link rel="stylesheet" href="_static/copybutton.css" type="text/css" />
-      <link rel="stylesheet" href="_static/tabs.css" type="text/css" />
-      <link rel="stylesheet" href="_static/sphinx-design.min.css" type="text/css" />
-    <link rel="shortcut icon" href="_static/qepy_logo.ico"/>
-  <!--[if lt IE 9]>
-    <script src="_static/js/html5shiv.min.js"></script>
-  <![endif]-->
-  
-        <script src="_static/jquery.js?v=5d32c60e"></script>
-        <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
-        <script src="_static/documentation_options.js?v=fb160149"></script>
-        <script src="_static/doctools.js?v=9a2dae69"></script>
-        <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
-        <script src="_static/clipboard.min.js?v=a7894cd8"></script>
-        <script src="_static/copybutton.js?v=f281be69"></script>
-        <script src="_static/tabs.js?v=3ee01567"></script>
-        <script src="_static/design-tabs.js?v=f930bc37"></script>
-        <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
-    <script src="_static/js/theme.js"></script>
-    <link rel="index" title="Index" href="genindex.html" />
-    <link rel="search" title="Search" href="search.html" />
-    <link rel="next" title="Contact" href="contact.html" /> 
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>QEpy: Quantum ESPRESSO in Python</title>
+  <meta name="description" content="QEpy turns Quantum ESPRESSO into a Python DFT engine for nonstandard workflows: external potentials, custom XC functionals, iterative SCF, and ASE integration.">
+  <meta property="og:title" content="QEpy: Quantum ESPRESSO in Python">
+  <meta property="og:description" content="A Python interface to Quantum ESPRESSO for programmable DFT workflows.">
+  <meta property="og:type" content="website">
+  <link rel="icon" href="_static/qepy_logo.ico" sizes="any">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="assets/css/style.css">
 </head>
+<body data-page="home" data-root="">
 
-<body class="wy-body-for-nav"> 
-  <div class="wy-grid-for-nav">
-    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
-      <div class="wy-side-scroll">
-        <div class="wy-side-nav-search" >
-
-          
-          
-          <a href="#" class="icon icon-home">
-            QEpy
-              <img src="_static/qepy_logo.png" class="logo" alt="Logo"/>
-          </a>
-<div role="search">
-  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
-    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
-    <input type="hidden" name="check_keywords" value="yes" />
-    <input type="hidden" name="area" value="default" />
-  </form>
-</div>
-        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
-              <ul>
-<li class="toctree-l1"><a class="reference internal" href="contact.html">Contact</a></li>
-<li class="toctree-l1"><a class="reference internal" href="install.html">Installation</a></li>
-<li class="toctree-l1"><a class="reference internal" href="tutorials/tutorials.html">Tutorials</a></li>
-<li class="toctree-l1"><a class="reference internal" href="qepy/qepy.html">Modules</a></li>
-<li class="toctree-l1"><a class="reference internal" href="faq.html">Frequently Asked Questions</a></li>
-</ul>
-
-        </div>
+  <section class="hero">
+    <div class="container hero-inner">
+      <img class="hero-logo" src="_static/qepy_logo.png" alt="QEpy logo">
+      <a class="pill" href="https://www.quantum-multiscale.org/" target="_blank" rel="noopener"><span class="dot"></span> Supported by Q-MS</a>
+      <h1>Quantum ESPRESSO in <span class="grad">Python</span></h1>
+      <p><strong>QEpy</strong> turns <a href="https://www.quantum-espresso.org/" style="color:#ffb8c4">Quantum ESPRESSO (QE)</a> into a programmable DFT engine. Drive SCF and beyond from Python scripts or Jupyter notebooks: inject external potentials, swap XC functionals on the fly, and integrate with ASE and DFTpy.</p>
+      <div class="hero-actions">
+        <a class="btn btn-accent" href="install.html">Get started</a>
+        <a class="btn btn-outline" href="tutorials.html" style="background:rgba(255,255,255,.06);color:#eaf2ff;border-color:rgba(255,255,255,.25)">Tutorials</a>
+        <a class="btn btn-outline" href="source.html" style="background:rgba(255,255,255,.06);color:#eaf2ff;border-color:rgba(255,255,255,.25)">The code</a>
       </div>
-    </nav>
-
-    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
-          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
-          <a href="#">QEpy</a>
-      </nav>
-
-      <div class="wy-nav-content">
-        <div class="rst-content">
-          <div role="navigation" aria-label="Page navigation">
-  <ul class="wy-breadcrumbs">
-      <li><a href="#" class="icon icon-home" aria-label="Home"></a></li>
-      <li class="breadcrumb-item active">QEpy - Quantum ESPRESSO in Python</li>
-      <li class="wy-breadcrumbs-aside">
-        
-			<a href=genindex.html>Index</a>
-		
-          
-			<a href="https://gitlab.com/shaoxc/qepy/tree/master/doc/source/index.rst">Source</a>
-          
-        
-      </li>
-    
-  </ul><div class="rst-breadcrumbs-buttons" role="navigation" aria-label="Sequential page navigation">
-        <a href="contact.html" class="btn btn-neutral float-right" title="Contact" accesskey="n">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
-  </div>
-  <hr/>
-</div>
-          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
-           <div itemprop="articleBody">
-             
-  
-<style>
-/* CSS overrides for sphinx_rtd_theme */
-
-/* 24px margin */
-.nbinput.nblast.container,
-.nboutput.nblast.container {
-    margin-bottom: 19px;  /* padding has already 5px */
-}
-
-/* ... except between code cells! */
-.nblast.container + .nbinput.container {
-    margin-top: -19px;
-}
-
-.admonition > p:before {
-    margin-right: 4px;  /* make room for the exclamation icon */
-}
-
-/* Fix math alignment, see https://github.com/rtfd/sphinx_rtd_theme/pull/686 */
-.math {
-    text-align: unset;
-}
-</style>
-<section id="qepy-quantum-espresso-in-python">
-<h1>QEpy - Quantum ESPRESSO in Python<a class="headerlink" href="#qepy-quantum-espresso-in-python" title="Link to this heading"></a></h1>
-<p><a class="reference external" href="https://github.com/Quantum-MultiScale/QEpy">QEpy</a> turns <a class="reference external" href="https://www.quantum-espresso.org/">Quantum ESPRESSO (QE)</a> into a Python DFT engine for nonstandard workflows. <a class="reference external" href="https://github.com/Quantum-MultiScale/QEpy">QEpy</a> allows the user to include external potentials, use custom xc functionals, and much much more.</p>
-<section id="contributors-and-funding">
-<h2>Contributors and funding<a class="headerlink" href="#contributors-and-funding" title="Link to this heading"></a></h2>
-<blockquote>
-<div><ul class="simple">
-<li><p>Main author: <a class="reference external" href="https://www.shaoxc.com/">Xuecheng Shao</a> (former <a class="reference external" href="https://sites.rutgers.edu/prg">PRG</a> member, now at Jilin University)</p></li>
-<li><p>Aniket Mandal (Rutgers), Oliviero Andreussi (Boise State), Davide Ceresoli (CNR, Italy), Andrew Baczewski (Sandia), Quinn Campbell (Sandia), <a class="reference external" href="https://sasn.rutgers.edu/about-us/faculty-staff/michele-pavanello">Michele Pavanello</a> (Rutgers).</p></li>
-<li><p><a class="reference external" href="http://www.quantum-multiscale.org/">The Quantum MultiScale collaboration</a>.</p></li>
-</ul>
-</div></blockquote>
-</section>
-<section id="thanks-to">
-<h2>Thanks to ...<a class="headerlink" href="#thanks-to" title="Link to this heading"></a></h2>
-<blockquote>
-<div><ul class="simple">
-<li><p>The Quantum ESPRESSO developers for the QE codebase</p></li>
-<li><p>NSF for funding the Quantum MultiScale collaboration</p></li>
-</ul>
-</div></blockquote>
-</section>
-<section id="what-s-in-this-code">
-<h2>What's in this code?<a class="headerlink" href="#what-s-in-this-code" title="Link to this heading"></a></h2>
-<p>Minor modifications to QE routines (e.g., electrons.f90) and a compilation with Python wrappers. <a class="reference external" href="https://github.com/Quantum-MultiScale/QEpy">QEpy</a> is kept up to date with the latest QE stable release.</p>
-</section>
-<section id="if-you-like-qepy-then">
-<h2>If you like <a class="reference external" href="https://github.com/Quantum-MultiScale/QEpy">QEpy</a> then ...<a class="headerlink" href="#if-you-like-qepy-then" title="Link to this heading"></a></h2>
-<p>...you likely also would like to play around with <a class="reference external" href="http://dftpy.rutgers.edu">DFTpy</a></p>
-</section>
-<section id="contents">
-<h2>Contents<a class="headerlink" href="#contents" title="Link to this heading"></a></h2>
-<div class="toctree-wrapper compound">
-<ul>
-<li class="toctree-l1"><a class="reference internal" href="contact.html">Contact</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="contact.html#qepy-developers">QEpy Developers</a></li>
-<li class="toctree-l2"><a class="reference internal" href="contact.html#github">GitHub</a></li>
-<li class="toctree-l2"><a class="reference internal" href="contact.html#references">References</a></li>
-</ul>
-</li>
-<li class="toctree-l1"><a class="reference internal" href="install.html">Installation</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="install.html#requirements">Requirements</a></li>
-<li class="toctree-l2"><a class="reference internal" href="install.html#id1">Installation</a></li>
-<li class="toctree-l2"><a class="reference internal" href="install.html#tips">Tips</a></li>
-</ul>
-</li>
-<li class="toctree-l1"><a class="reference internal" href="tutorials/tutorials.html">Tutorials</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="tutorials/tutorials.html#commands">Commands</a></li>
-<li class="toctree-l2"><a class="reference internal" href="tutorials/tutorials.html#jupyter-notebooks">Jupyter notebooks</a></li>
-</ul>
-</li>
-<li class="toctree-l1"><a class="reference internal" href="qepy/qepy.html">Modules</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="qepy/driver.html">The Driver object</a></li>
-<li class="toctree-l2"><a class="reference internal" href="qepy/calculator.html">The QEpyCalculator object</a></li>
-<li class="toctree-l2"><a class="reference internal" href="qepy/io.html">The QEInput object</a></li>
-</ul>
-</li>
-<li class="toctree-l1"><a class="reference internal" href="faq.html">Frequently Asked Questions</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="faq.html#installation">Installation</a></li>
-<li class="toctree-l2"><a class="reference internal" href="faq.html#running">Running</a></li>
-<li class="toctree-l2"><a class="reference internal" href="faq.html#bugs">Bugs</a></li>
-<li class="toctree-l2"><a class="reference internal" href="faq.html#abandon">Abandon</a></li>
-</ul>
-</li>
-</ul>
-</div>
-</section>
-</section>
-
-
-           </div>
-          </div>
-          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
-        <a href="contact.html" class="btn btn-neutral float-right" title="Contact" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+      <div class="hero-stats">
+        <div class="stat"><b>QE 7.2</b><span>Current stable target</span></div>
+        <div class="stat"><b>Python ≥3.8</b><span>Serial &amp; MPI parallel</span></div>
+        <div class="stat"><b>20+</b><span>Jupyter examples</span></div>
+      </div>
     </div>
+  </section>
 
-  <hr/>
-
-  <div role="contentinfo">
-    <p>&#169; Copyright 2019-2024 QEpy community.
-      <span class="lastupdated">Last updated on Tuesday, 25 Nov 2025 15:52:25.
-      </span></p>
-  </div>
-
-  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
-    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
-    provided by <a href="https://readthedocs.org">Read the Docs</a>.
-  
-<button onclick="topFunction()" id="btn" title="Go to top">Top</button>
-
-<script>
-var mybutton = document.getElementById("btn");
-
-window.onscroll = function() {scrollFunction()};
-
-function scrollFunction() {
-  if (document.body.scrollTop > 20 || document.documentElement.scrollTop > 20) {
-    mybutton.style.display = "block";
-  } else {
-    mybutton.style.display = "none";
-  }
-}
-
-function topFunction() {
-  document.body.scrollTop = 0;
-  document.documentElement.scrollTop = 0;
-}
-</script>
-
-
-</footer>
+  <section class="section--tight section">
+    <div class="container">
+      <div class="grid grid-3">
+        <div class="card reveal">
+          <div class="ibubble" aria-hidden="true">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><path d="M8 9l3 3-3 3M13 15h3M4 4h16v16H4z"/></svg>
+          </div>
+          <h3>Programmable DFT</h3>
+          <p>Control QE from Python with the <code>Driver</code> class: step through SCF iterations, modify density and potentials, and restart calculations without leaving your script.</p>
+        </div>
+        <div class="card reveal">
+          <div class="ibubble" aria-hidden="true">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><circle cx="12" cy="12" r="3"/><path d="M12 2v4M12 18v4M2 12h4M18 12h4"/></svg>
+          </div>
+          <h3>Nonstandard workflows</h3>
+          <p>Add external potentials, custom exchange–correlation functionals (via DFTpy), real-time TDDFT, and multiscale embedding: workflows that are awkward or impossible with plain QE input files alone.</p>
+        </div>
+        <div class="card reveal">
+          <div class="ibubble" aria-hidden="true">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><path d="M4 19.5A2.5 2.5 0 016.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 014 19.5v-15A2.5 2.5 0 016.5 2z"/></svg>
+          </div>
+          <h3>Drop-in QE replacement</h3>
+          <p>Run standard QE packages from the command line: <code>python -m qepy --pw.x -i qe.in</code>. Almost all QE executables are supported, plus QEpy-specific tools.</p>
         </div>
       </div>
-    </section>
-  </div>
-  <script>
-      jQuery(function () {
-          SphinxRtdTheme.Navigation.enable(true);
-      });
-  </script> 
+    </div>
+  </section>
 
+  <hr class="rule">
+
+  <section class="section">
+    <div class="container">
+      <div class="section-head reveal">
+        <span class="eyebrow">Architecture</span>
+        <h2>How QEpy works</h2>
+        <p>QEpy wraps selected QE routines with Python bindings (via f90wrap). A thin Python layer exposes the <code>Driver</code>, while an embedded Fortran object (<code>EMBED</code>) bridges Python and the PWSCF engine.</p>
+      </div>
+      <div class="arch-flow reveal">
+        <div class="arch-box"><strong>Python</strong>Driver · Calculator · QEInput</div>
+        <span class="arch-arrow">↔</span>
+        <div class="arch-box"><strong>EMBED</strong>Fortran bridge object</div>
+        <span class="arch-arrow">↔</span>
+        <div class="arch-box"><strong>PWSCF</strong>QE electrons &amp; ions</div>
+      </div>
+      <p class="muted text-center reveal">Minor modifications to QE (e.g. <code>electrons.f90</code>) plus f90wrap compilation. QEpy tracks the latest QE stable release.</p>
+      <div class="mt-4 text-center reveal">
+        <a class="btn btn-primary" href="source.html">Explore the source &amp; API →</a>
+      </div>
+    </div>
+  </section>
+
+  <section class="section section--tight" style="background:var(--surface-2)">
+    <div class="container">
+      <div class="section-head reveal">
+        <span class="eyebrow">Example</span>
+        <h2>Iterative SCF in Python</h2>
+        <p>Step through SCF one iteration at a time, inspect density, inject corrections, or couple to an external model between QE calls.</p>
+      </div>
+      <div class="example-grid reveal">
+        <div class="example-panel">
+          <div class="example-panel-head">
+            <span class="eyebrow">Notebook</span>
+            <h3>Jupyter walkthrough</h3>
+          </div>
+          <div class="example-panel-body">
+            <img class="example-shot" src="_static/QEpy_SCF.gif" alt="QEpy iterative SCF notebook updating the electron density">
+          </div>
+        </div>
+        <div class="example-panel">
+          <div class="example-panel-head">
+            <span class="eyebrow">Script</span>
+            <h3>Minimal example</h3>
+          </div>
+          <div class="example-panel-body example-panel-body--code">
+            <pre><code>from qepy import Driver
+
+driver = Driver('si.scf.in', iterative=True)
+while not driver.check_convergence():
+    driver.diagonalize()
+    driver.mix()
+    rho = driver.get_density()
+    # ... modify density or potential ...
+driver.stop()</code></pre>
+          </div>
+        </div>
+      </div>
+      <p class="muted text-center mt-3 reveal">See <a href="tutorials.html#python">tutorials</a> for serial and MPI examples, Jupyter notebooks, and HPC launch instructions.</p>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="container">
+      <div class="section-head reveal">
+        <span class="eyebrow">People &amp; funding</span>
+        <h2>Contributors</h2>
+      </div>
+      <div class="grid grid-2 reveal">
+        <div class="card">
+          <h3>Core team</h3>
+          <ul class="people">
+            <li class="lead-person"><a href="https://www.shaoxc.com/" target="_blank" rel="noopener">Xuecheng Shao</a>: main author</li>
+            <li><a href="https://sites.rutgers.edu/prg/people/aniket-mandal/" target="_blank" rel="noopener">Aniket Mandal</a> (Rutgers)</li>
+            <li><a href="http://www.materialab.org/" target="_blank" rel="noopener">Oliviero Andreussi</a> (Boise State)</li>
+            <li>Davide Ceresoli (CNR, Italy)</li>
+            <li>Andrew Baczewski &amp; Quinn Campbell (Sandia)</li>
+            <li><a href="https://sasn.rutgers.edu/about-us/faculty-staff/michele-pavanello" target="_blank" rel="noopener">Michele Pavanello</a> (Rutgers)</li>
+          </ul>
+        </div>
+        <div class="card">
+          <h3>Thanks to</h3>
+          <ul class="people">
+            <li>The Quantum ESPRESSO developers</li>
+            <li><a href="https://www.quantum-multiscale.org/" target="_blank" rel="noopener">Quantum Multiscale (Q-MS)</a> collaboration</li>
+            <li>NSF CyberTraining funding</li>
+            <li>NSF CTMC and DOE CTC funding</li>
+          </ul>
+          <p class="muted mt-3">If you like QEpy, you may also enjoy <a href="http://dftpy.rutgers.edu" target="_blank" rel="noopener">DFTpy</a> for grid-based DFT and custom XC.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section section--tight">
+    <div class="container">
+      <div class="section-head reveal">
+        <span class="eyebrow">Quick links</span>
+        <h2>Start here</h2>
+      </div>
+      <div class="grid grid-4 reveal">
+        <a class="card link-card hover" href="install.html">
+          <h3>Install</h3>
+          <p>Pip, source build, QE 7.2 configuration tips.</p>
+          <span class="arrow">Read guide <span class="chev">→</span></span>
+        </a>
+        <a class="card link-card hover" href="tutorials.html">
+          <h3>Tutorials</h3>
+          <p>CLI, Jupyter notebooks, MPI communicators.</p>
+          <span class="arrow">View tutorials <span class="chev">→</span></span>
+        </a>
+        <a class="card link-card hover" href="source.html">
+          <h3>The code</h3>
+          <p>Driver, Calculator, I/O modules, and API reference.</p>
+          <span class="arrow">Browse API <span class="chev">→</span></span>
+        </a>
+        <a class="card link-card hover" href="https://github.com/Quantum-MultiScale/QEpy" target="_blank" rel="noopener">
+          <h3>GitHub</h3>
+          <p>Source, issues, and example notebooks.</p>
+          <span class="arrow">Open repo <span class="chev">→</span></span>
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <script src="assets/js/main.js" defer></script>
 </body>
 </html>

@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>The code: QEpy</title>
+  <meta name="description" content="QEpy source architecture: Driver, EMBED, QEpyCalculator, QEInput, MPI communicators, and API reference.">
+  <link rel="icon" href="_static/qepy_logo.ico" sizes="any">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="assets/css/style.css">
+</head>
+<body data-page="source" data-root="">
+
+  <section class="page-hero">
+    <div class="container">
+      <div class="page-hero-inner">
+        <div class="crumbs"><a href="index.html">Home</a> <span>/</span> The code</div>
+        <h1>The code</h1>
+        <p>QEpy’s Python layer, Fortran bridge, and Quantum ESPRESSO integration: how the pieces fit together and what each module provides.</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="container prose">
+
+      <h2>Architecture overview</h2>
+      <p>QEpy extends Quantum ESPRESSO with minimal changes to core routines (notably the SCF driver in <a href="https://github.com/Quantum-MultiScale/QEpy/blob/dev/src/pw/qepy_electrons.f90" target="_blank" rel="noopener"><code>qepy_electrons.f90</code></a>). Python bindings are generated with <a href="https://github.com/jameskermode/f90wrap">f90wrap</a>. The design centers on three layers:</p>
+
+      <div class="arch-flow">
+        <div class="arch-box"><strong>Python API</strong>
+          <a href="https://github.com/Quantum-MultiScale/QEpy/blob/dev/qepy/driver.py#L32" target="_blank" rel="noopener"><code>Driver</code></a><br>
+          <a href="https://github.com/Quantum-MultiScale/QEpy/blob/dev/qepy/calculator.py#L15" target="_blank" rel="noopener"><code>QEpyCalculator</code></a><br>
+          <a href="https://github.com/Quantum-MultiScale/QEpy/blob/dev/qepy/io.py#L7" target="_blank" rel="noopener"><code>QEInput</code></a>
+        </div>
+        <span class="arch-arrow">↔</span>
+        <div class="arch-box"><strong>EMBED</strong>
+          <a href="https://github.com/Quantum-MultiScale/QEpy/blob/dev/src/pw/qepy_common.f90#L118" target="_blank" rel="noopener"><code>embed_base</code></a><br>
+          iterative flags, TDDFT state, SCF control hooks
+        </div>
+        <span class="arch-arrow">↔</span>
+        <div class="arch-box"><strong>PWSCF</strong>
+          <a href="https://github.com/Quantum-MultiScale/QEpy/blob/dev/src/pw/qepy_pwscf.f90#L9" target="_blank" rel="noopener"><code>qepy_pwscf</code></a><br>
+          <a href="https://github.com/Quantum-MultiScale/QEpy/blob/dev/src/pw/qepy_electrons.f90#L14" target="_blank" rel="noopener"><code>qepy_electrons</code></a>, ions, FFT grids
+        </div>
+      </div>
+
+      <ul>
+        <li><strong><a href="https://github.com/Quantum-MultiScale/QEpy/blob/dev/qepy/driver.py#L32" target="_blank" rel="noopener">Driver</a></strong>: high-level Python interface; initializes QE, runs SCF/TDDFT, exposes densities, potentials, forces, and stress.</li>
+        <li><strong><a href="https://github.com/Quantum-MultiScale/QEpy/blob/dev/src/pw/qepy_common.f90#L118" target="_blank" rel="noopener">EMBED</a></strong> (<code>embed_base</code>): Fortran-side object passed into QE routines; holds iterative-SCF and TDDFT state and enables Python↔Fortran callbacks.</li>
+        <li><strong><a href="https://github.com/Quantum-MultiScale/QEpy/blob/dev/src/pw/qepy_pwscf.f90#L9" target="_blank" rel="noopener">PWSCF</a></strong>: the modified QE plane-wave engine, invoked through wrapped Fortran entry points.</li>
+      </ul>
+
+      <p>Input can come from a QE input file, a <a href="https://github.com/Quantum-MultiScale/QEpy/blob/dev/qepy/io.py#L7" target="_blank" rel="noopener"><code>QEInput</code></a> dictionary, or ASE <code>Atoms</code>. Output is accessible via Python arrays (with optional MPI gather to rank 0) or through <a href="https://github.com/Quantum-MultiScale/QEpy/blob/dev/qepy/driver.py#L716" target="_blank" rel="noopener"><code>driver.get_output()</code></a> for the QE text log.</p>
+
+      <div class="note-box">
+        <p><strong>Units:</strong> QEpy uses atomic units: Bohr for lengths, Rydberg for energies. ASE integration converts automatically; direct <a href="https://github.com/Quantum-MultiScale/QEpy/blob/dev/qepy/driver.py#L32" target="_blank" rel="noopener"><code>Driver</code></a> usage requires care.</p>
+      </div>
+
+      <!-- Driver -->
+      <h2 id="driver"><a href="https://github.com/Quantum-MultiScale/QEpy/blob/dev/qepy/driver.py" target="_blank" rel="noopener"><code>qepy.driver</code></a>: <a href="https://github.com/Quantum-MultiScale/QEpy/blob/dev/qepy/driver.py#L32" target="_blank" rel="noopener">The Driver</a></h2>
+      <p>The primary class for programmatic DFT. Construct with a QE input file and optional MPI communicator:</p>
+      <pre><code>from qepy import Driver
+from mpi4py import MPI
+
+driver = Driver(
+    inputfile='qe.in',
+    comm=MPI.COMM_WORLD,   # or None for serial
+    iterative=False,       # True → one SCF step at a time
+    task='scf',            # 'scf' | 'nscf' | 'optical' | 'tddfpt_davidson'
+    ldescf=True,           # print SCF correction each cycle
+    logfile=None,          # None=screen, str=file, True=temp file
+)</code></pre>
+
+      <h3>MPI communicator (<code>comm</code>)</h3>
+      <p>The <code>comm</code> argument accepts an mpi4py communicator or <code>None</code>. Internally, QEpy converts mpi4py communicators to Fortran handles via <code>comm.py2f()</code> and passes them to QE’s <code>my_world_comm</code> (see <a href="https://github.com/Quantum-MultiScale/QEpy/blob/dev/qepy/driver.py#L166" target="_blank" rel="noopener"><code>Driver.comm</code></a> and <a href="https://github.com/Quantum-MultiScale/QEpy/blob/dev/qepy/driver.py#L216" target="_blank" rel="noopener"><code>driver_initialize</code></a>).</p>
+      <ul>
+        <li><a href="https://github.com/Quantum-MultiScale/QEpy/blob/dev/qepy/driver.py#L185" target="_blank" rel="noopener"><code>driver.is_root</code></a>: <code>True</code> on MPI rank 0 (or QE ionode if no mpi4py).</li>
+        <li><a href="https://github.com/Quantum-MultiScale/QEpy/blob/dev/qepy/driver.py#L197" target="_blank" rel="noopener"><code>driver.nproc</code></a>: number of MPI ranks.</li>
+        <li><a href="https://github.com/Quantum-MultiScale/QEpy/blob/dev/qepy/driver.py#L181" target="_blank" rel="noopener"><code>driver.commf</code></a>: Fortran communicator handle.</li>
+        <li>Grid quantities accept <code>gather=True</code> (default) to collect data on root.</li>
+      </ul>
+      <p>Import order matters: <code>import qepy</code> must come <strong>before</strong> <code>from mpi4py import MPI</code> (<a href="https://github.com/Quantum-MultiScale/QEpy/blob/dev/qepy/__init__.py" target="_blank" rel="noopener"><code>qepy/__init__.py</code></a> handles this when you import from <code>qepy</code> first).</p>
+
+      <h3>SCF &amp; convergence</h3>
+      <div class="table-wrap">
+        <table class="qm">
+          <thead><tr><th>Method</th><th>Description</th></tr></thead>
+          <tbody>
+            <tr><td><a href="https://github.com/Quantum-MultiScale/QEpy/blob/dev/qepy/driver.py#L390" target="_blank" rel="noopener"><code>driver.scf()</code></a></td><td>Run full SCF to convergence (or use iterative mode). Calls <a href="https://github.com/Quantum-MultiScale/QEpy/blob/dev/src/pw/qepy_electrons.f90#L14" target="_blank" rel="noopener"><code>qepy_electrons</code></a> in Fortran.</td></tr>
+            <tr><td><a href="https://github.com/Quantum-MultiScale/QEpy/blob/dev/qepy/driver.py#L325" target="_blank" rel="noopener"><code>driver.diagonalize()</code></a></td><td>One diagonalization step (iterative mode).</td></tr>
+            <tr><td><a href="https://github.com/Quantum-MultiScale/QEpy/blob/dev/qepy/driver.py#L353" target="_blank" rel="noopener"><code>driver.mix()</code></a></td><td>One density-mixing step.</td></tr>
+            <tr><td><a href="https://github.com/Quantum-MultiScale/QEpy/blob/dev/qepy/driver.py#L365" target="_blank" rel="noopener"><code>driver.check_convergence()</code></a></td><td>Whether SCF has converged.</td></tr>
+            <tr><td><a href="https://github.com/Quantum-MultiScale/QEpy/blob/dev/qepy/driver.py#L376" target="_blank" rel="noopener"><code>driver.get_scf_error()</code></a></td><td>Current SCF residual.</td></tr>
+            <tr><td><a href="https://github.com/Quantum-MultiScale/QEpy/blob/dev/qepy/driver.py#L383" target="_blank" rel="noopener"><code>driver.get_scf_steps()</code></a></td><td>Number of SCF iterations completed.</td></tr>
+            <tr><td><a href="https://github.com/Quantum-MultiScale/QEpy/blob/dev/qepy/driver.py#L455" target="_blank" rel="noopener"><code>driver.end_scf()</code></a></td><td>Finalize after iterative loop.</td></tr>
+            <tr><td><a href="https://github.com/Quantum-MultiScale/QEpy/blob/dev/qepy/driver.py#L436" target="_blank" rel="noopener"><code>driver.non_scf()</code></a></td><td>NSCF calculation from saved charge density.</td></tr>
+            <tr><td><a href="https://github.com/Quantum-MultiScale/QEpy/blob/dev/qepy/driver.py#L465" target="_blank" rel="noopener"><code>driver.stop()</code></a></td><td>Clean shutdown and release QE workspace.</td></tr>
+            <tr><td><a href="https://github.com/Quantum-MultiScale/QEpy/blob/dev/qepy/driver.py#L520" target="_blank" rel="noopener"><code>driver.save()</code></a></td><td>Save wavefunctions, density, etc. to disk.</td></tr>
+            <tr><td><a href="https://github.com/Quantum-MultiScale/QEpy/blob/dev/qepy/driver.py#L211" target="_blank" rel="noopener"><code>driver.restart()</code></a></td><td>Restart with different QE program or options.</td></tr>
+            <tr><td><a href="https://github.com/Quantum-MultiScale/QEpy/blob/dev/qepy/driver.py#L447" target="_blank" rel="noopener"><code>driver.electrons()</code></a></td><td>Direct call to the Fortran <a href="https://github.com/Quantum-MultiScale/QEpy/blob/dev/src/pw/qepy_electrons.f90#L14" target="_blank" rel="noopener"><code>qepy_electrons</code></a> routine.</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <h3>Density, potentials &amp; XC</h3>
+      <div class="table-wrap">
+        <table class="qm">
+          <thead><tr><th>Method</th><th>Description</th></tr></thead>
+          <tbody>
+            <tr><td><a href="https://github.com/Quantum-MultiScale/QEpy/blob/dev/qepy/driver.py#L622" target="_blank" rel="noopener"><code>get_density()</code></a> / <a href="https://github.com/Quantum-MultiScale/QEpy/blob/dev/qepy/driver.py#L667" target="_blank" rel="noopener"><code>set_density()</code></a></td><td>Total electron density on real-space grid.</td></tr>
+            <tr><td><a href="https://github.com/Quantum-MultiScale/QEpy/blob/dev/qepy/driver.py#L628" target="_blank" rel="noopener"><code>get_core_density()</code></a></td><td>Non-linear core correction density.</td></tr>
+            <tr><td><a href="https://github.com/Quantum-MultiScale/QEpy/blob/dev/qepy/driver.py#L678" target="_blank" rel="noopener"><code>set_external_potential()</code></a></td><td>Inject external potential (<code>exttype</code>, optional energy correction); uses <a href="https://github.com/Quantum-MultiScale/QEpy/blob/dev/src/pw/qepy_common.f90#L124" target="_blank" rel="noopener"><code>embed%extpot</code></a>.</td></tr>
+            <tr><td><a href="https://github.com/Quantum-MultiScale/QEpy/blob/dev/qepy/driver.py#L762" target="_blank" rel="noopener"><code>get_hartree()</code></a>, <a href="https://github.com/Quantum-MultiScale/QEpy/blob/dev/qepy/driver.py#L771" target="_blank" rel="noopener"><code>get_exchange_correlation()</code></a></td><td>Individual energy components.</td></tr>
+            <tr><td><a href="https://github.com/Quantum-MultiScale/QEpy/blob/dev/qepy/driver.py#L817" target="_blank" rel="noopener"><code>get_hartree_potential()</code></a>, <a href="https://github.com/Quantum-MultiScale/QEpy/blob/dev/qepy/driver.py#L820" target="_blank" rel="noopener"><code>get_exchange_correlation_potential()</code></a></td><td>Potential components on the grid.</td></tr>
+            <tr><td><a href="https://github.com/Quantum-MultiScale/QEpy/blob/dev/qepy/driver.py#L826" target="_blank" rel="noopener"><code>get_effective_potential()</code></a></td><td>Total effective single-particle potential.</td></tr>
+            <tr><td><a href="https://github.com/Quantum-MultiScale/QEpy/blob/dev/qepy/driver.py#L1148" target="_blank" rel="noopener"><code>update_exchange_correlation()</code></a></td><td>Change XC functional (incl. libxc / DFTpy).</td></tr>
+            <tr><td><a href="https://github.com/Quantum-MultiScale/QEpy/blob/dev/qepy/driver.py#L742" target="_blank" rel="noopener"><code>get_elf()</code></a>, <a href="https://github.com/Quantum-MultiScale/QEpy/blob/dev/qepy/driver.py#L748" target="_blank" rel="noopener"><code>get_rdg()</code></a></td><td>ELF and reduced density gradient.</td></tr>
+            <tr><td><a href="https://github.com/Quantum-MultiScale/QEpy/blob/dev/qepy/driver.py#L755" target="_blank" rel="noopener"><code>get_local_pp()</code></a></td><td>Local pseudopotential on the grid.</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <h3>Structure, forces &amp; stress</h3>
+      <div class="table-wrap">
+        <table class="qm">
+          <thead><tr><th>Method</th><th>Description</th></tr></thead>
+          <tbody>
+            <tr><td><a href="https://github.com/Quantum-MultiScale/QEpy/blob/dev/qepy/driver.py#L548" target="_blank" rel="noopener"><code>get_energy()</code></a> / <a href="https://github.com/Quantum-MultiScale/QEpy/blob/dev/qepy/driver.py#L559" target="_blank" rel="noopener"><code>calc_energy()</code></a></td><td>Total energy (Ry).</td></tr>
+            <tr><td><a href="https://github.com/Quantum-MultiScale/QEpy/blob/dev/qepy/driver.py#L838" target="_blank" rel="noopener"><code>get_forces()</code></a></td><td>Forces on atoms (Ry/Bohr); optional component filter.</td></tr>
+            <tr><td><a href="https://github.com/Quantum-MultiScale/QEpy/blob/dev/qepy/driver.py#L865" target="_blank" rel="noopener"><code>get_stress()</code></a></td><td>Stress tensor (Ry/Bohr³); see also <a href="https://github.com/Quantum-MultiScale/QEpy/blob/dev/src/pw/qepy_stress.f90" target="_blank" rel="noopener"><code>qepy_stress.f90</code></a>.</td></tr>
+            <tr><td><a href="https://github.com/Quantum-MultiScale/QEpy/blob/dev/qepy/driver.py#L566" target="_blank" rel="noopener"><code>update_ions()</code></a></td><td>Update atomic positions and/or lattice.</td></tr>
+            <tr><td><a href="https://github.com/Quantum-MultiScale/QEpy/blob/dev/qepy/driver.py#L1029" target="_blank" rel="noopener"><code>get_ions_positions()</code></a>, <a href="https://github.com/Quantum-MultiScale/QEpy/blob/dev/qepy/driver.py#L1022" target="_blank" rel="noopener"><code>get_ions_lattice()</code></a></td><td>Current ionic geometry.</td></tr>
+            <tr><td><a href="https://github.com/Quantum-MultiScale/QEpy/blob/dev/qepy/driver.py#L1105" target="_blank" rel="noopener"><code>get_ase_atoms()</code></a></td><td>Export structure as ASE Atoms.</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <h3>Electronic structure</h3>
+      <div class="table-wrap">
+        <table class="qm">
+          <thead><tr><th>Method</th><th>Description</th></tr></thead>
+          <tbody>
+            <tr><td><a href="https://github.com/Quantum-MultiScale/QEpy/blob/dev/qepy/driver.py#L640" target="_blank" rel="noopener"><code>get_wave_function()</code></a></td><td>Kohn–Sham orbitals for a band/k-point.</td></tr>
+            <tr><td><a href="https://github.com/Quantum-MultiScale/QEpy/blob/dev/qepy/driver.py#L964" target="_blank" rel="noopener"><code>get_eigenvalues()</code></a>, <a href="https://github.com/Quantum-MultiScale/QEpy/blob/dev/qepy/driver.py#L969" target="_blank" rel="noopener"><code>get_occupation_numbers()</code></a></td><td>Band energies and occupations.</td></tr>
+            <tr><td><a href="https://github.com/Quantum-MultiScale/QEpy/blob/dev/qepy/driver.py#L974" target="_blank" rel="noopener"><code>get_fermi_level()</code></a></td><td>Fermi energy.</td></tr>
+            <tr><td><a href="https://github.com/Quantum-MultiScale/QEpy/blob/dev/qepy/driver.py#L926" target="_blank" rel="noopener"><code>get_ibz_k_points()</code></a>, <a href="https://github.com/Quantum-MultiScale/QEpy/blob/dev/qepy/driver.py#L934" target="_blank" rel="noopener"><code>get_k_point_weights()</code></a></td><td>K-point mesh information.</td></tr>
+            <tr><td><a href="https://github.com/Quantum-MultiScale/QEpy/blob/dev/qepy/driver.py#L895" target="_blank" rel="noopener"><code>get_number_of_bands()</code></a>, <a href="https://github.com/Quantum-MultiScale/QEpy/blob/dev/qepy/driver.py#L914" target="_blank" rel="noopener"><code>get_number_of_spins()</code></a></td><td>System dimensions.</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <h3>TDDFT &amp; TDDFPT</h3>
+      <div class="table-wrap">
+        <table class="qm">
+          <thead><tr><th>Method</th><th>Description</th></tr></thead>
+          <tbody>
+            <tr><td><code>task='optical'</code></td><td>Real-time TDDFT via <a href="https://github.com/Quantum-MultiScale/QEpy/blob/dev/qepy/driver.py#L279" target="_blank" rel="noopener"><code>tddft_initialize</code></a> (requires <code>tddft=yes</code> build with ce-tddft).</td></tr>
+            <tr><td><a href="https://github.com/Quantum-MultiScale/QEpy/blob/dev/qepy/driver.py#L350" target="_blank" rel="noopener"><code>propagate()</code></a></td><td>Advance real-time TDDFT by one time step.</td></tr>
+            <tr><td><a href="https://github.com/Quantum-MultiScale/QEpy/blob/dev/qepy/driver.py#L660" target="_blank" rel="noopener"><code>get_dipole_tddft()</code></a></td><td>Dipole moment during propagation.</td></tr>
+            <tr><td><code>task='tddfpt_davidson'</code></td><td>Linear-response TDDFPT via <a href="https://github.com/Quantum-MultiScale/QEpy/blob/dev/qepy/driver.py#L300" target="_blank" rel="noopener"><code>tddfpt_initialize</code></a> and <a href="https://github.com/Quantum-MultiScale/QEpy/blob/dev/src/tddfpt/qepy_lr_dav_main.f90" target="_blank" rel="noopener"><code>qepy_lr_dav_main.f90</code></a>.</td></tr>
+            <tr><td><a href="https://github.com/Quantum-MultiScale/QEpy/blob/dev/qepy/driver.py#L411" target="_blank" rel="noopener"><code>tddfpt_davidson_scf()</code></a></td><td>Davidson diag. step for TDDFPT.</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <h3>DFTpy &amp; grid utilities</h3>
+      <ul>
+        <li><a href="https://github.com/Quantum-MultiScale/QEpy/blob/dev/qepy/driver.py#L1092" target="_blank" rel="noopener"><code>get_dftpy_grid()</code></a>: export grid for DFTpy field operations.</li>
+        <li><a href="https://github.com/Quantum-MultiScale/QEpy/blob/dev/qepy/driver.py#L1117" target="_blank" rel="noopener"><code>get_dftpy_ions()</code></a>: ionic structure in DFTpy format.</li>
+        <li><a href="https://github.com/Quantum-MultiScale/QEpy/blob/dev/qepy/driver.py#L1048" target="_blank" rel="noopener"><code>data2field()</code></a> / <a href="https://github.com/Quantum-MultiScale/QEpy/blob/dev/qepy/driver.py#L1070" target="_blank" rel="noopener"><code>field2data()</code></a>: convert between numpy arrays and DFTpy fields.</li>
+        <li><a href="https://github.com/Quantum-MultiScale/QEpy/blob/dev/qepy/driver.py#L603" target="_blank" rel="noopener"><code>create_array()</code></a>: allocate a grid array with correct MPI distribution.</li>
+      </ul>
+
+      <!-- Calculator -->
+      <h2 id="calculator"><a href="https://github.com/Quantum-MultiScale/QEpy/blob/dev/qepy/calculator.py" target="_blank" rel="noopener"><code>qepy.calculator</code></a>: <a href="https://github.com/Quantum-MultiScale/QEpy/blob/dev/qepy/calculator.py#L15" target="_blank" rel="noopener">QEpyCalculator</a></h2>
+      <p>ASE-compatible calculator wrapping the <a href="https://github.com/Quantum-MultiScale/QEpy/blob/dev/qepy/driver.py#L32" target="_blank" rel="noopener"><code>Driver</code></a>. Useful for geometry optimization, MD, and workflows that already use ASE:</p>
+      <pre><code>from qepy.calculator import QEpyCalculator
+
+calc = QEpyCalculator(inputfile='qe.in', comm=comm)
+atoms.calc = calc
+energy = atoms.get_potential_energy()
+forces = atoms.get_forces()</code></pre>
+      <p>Key methods: <a href="https://github.com/Quantum-MultiScale/QEpy/blob/dev/qepy/calculator.py#L179" target="_blank" rel="noopener"><code>calculate()</code></a>, <a href="https://github.com/Quantum-MultiScale/QEpy/blob/dev/qepy/calculator.py#L276" target="_blank" rel="noopener"><code>get_potential_energy()</code></a>, <a href="https://github.com/Quantum-MultiScale/QEpy/blob/dev/qepy/calculator.py#L283" target="_blank" rel="noopener"><code>get_forces()</code></a>, <a href="https://github.com/Quantum-MultiScale/QEpy/blob/dev/qepy/calculator.py#L363" target="_blank" rel="noopener"><code>get_stress()</code></a>. Units follow ASE conventions (eV, Å) rather than the Driver’s Ry/Bohr.</p>
+
+      <!-- IO -->
+      <h2 id="io"><a href="https://github.com/Quantum-MultiScale/QEpy/blob/dev/qepy/io.py" target="_blank" rel="noopener"><code>qepy.io</code></a>: <a href="https://github.com/Quantum-MultiScale/QEpy/blob/dev/qepy/io.py#L7" target="_blank" rel="noopener">QEInput</a> &amp; output handling</h2>
+      <p>Programmatic construction and parsing of QE input decks:</p>
+      <pre><code>from qepy.io import QEInput
+
+qeinput = QEInput()
+qeinput.set('control', 'calculation', 'scf')
+qeinput.set('system', 'ecutwfc', 40)
+qeinput.write('generated.in')
+
+# Or pass qe_options dict directly to Driver:
+driver = Driver(qe_options={'system': {'ecutwfc': 40}}, atoms=atoms)</code></pre>
+      <p>The I/O module also supports reading QE output via <a href="https://github.com/Quantum-MultiScale/QEpy/blob/dev/qepy/io.py#L390" target="_blank" rel="noopener"><code>QEOutput</code></a> (<a href="https://github.com/Quantum-MultiScale/QEpy/blob/dev/qepy/io.py#L212" target="_blank" rel="noopener"><code>read_qe_input</code></a>, <a href="https://github.com/Quantum-MultiScale/QEpy/blob/dev/qepy/io.py#L477" target="_blank" rel="noopener"><code>get_output</code></a>) for post-processing workflows (see <a href="tutorials.html#jupyter"><code>pp/qepy_parse_output.ipynb</code></a>).</p>
+
+      <!-- CLI -->
+      <h2 id="cli-module"><a href="https://github.com/Quantum-MultiScale/QEpy/blob/dev/qepy/__main__.py" target="_blank" rel="noopener"><code>python -m qepy</code></a>: Command-line interface</h2>
+      <p>The CLI module (<a href="https://github.com/Quantum-MultiScale/QEpy/blob/dev/qepy/cui/main.py#L42" target="_blank" rel="noopener"><code>cui/main.py</code></a>) dispatches to wrapped QE executables and QEpy tools:</p>
+      <ul>
+        <li><code>--pw.x</code>, <code>--ph.x</code>, …: standard QE packages via <a href="https://github.com/Quantum-MultiScale/QEpy/blob/dev/qepy/cui/qex.py#L27" target="_blank" rel="noopener"><code>cui/qex.py</code></a> (mirror <code>*.x</code> binaries).</li>
+        <li><code>--pw2pp.py</code>: QEpy post-processing via <a href="https://github.com/Quantum-MultiScale/QEpy/blob/dev/qepy/cui/pw2pp.py#L59" target="_blank" rel="noopener"><code>cui/pw2pp.py</code></a>.</li>
+        <li><code>-h</code> on any subcommand shows package-specific options.</li>
+      </ul>
+      <p>Under MPI, launch the Python module with your site’s MPI runner; the Fortran layer inherits the world communicator from <a href="https://github.com/Quantum-MultiScale/QEpy/blob/dev/src/pw/qepy_pwscf.f90#L9" target="_blank" rel="noopener"><code>qepy_pwscf</code></a>.</p>
+
+    </div>
+  </section>
+
+  <script src="assets/js/main.js" defer></script>
+</body>
+</html>
