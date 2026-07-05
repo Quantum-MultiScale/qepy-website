@@ -26,7 +26,7 @@
       '<div class="container nav">' +
         '<a class="brand" href="' + root + 'index.html" aria-label="QEpy home">' +
           '<img class="brand-logo" src="' + root + '_static/qepy_logo_light.png" alt="QEpy">' +
-          '<span class="brand-text"><b>QEpy</b><span>Quantum ESPRESSO in Python</span></span>' +
+          '<span class="brand-text"><span>Quantum ESPRESSO in Python</span></span>' +
         '</a>' +
         '<button class="nav-toggle" aria-label="Toggle navigation" aria-expanded="false"><span></span></button>' +
         '<div class="nav-menu">' +

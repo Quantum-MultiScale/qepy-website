@@ -108,9 +108,8 @@ hr.rule {
   height: 32px; width: auto; max-width: none; flex: none;
   object-fit: contain; object-position: left center; display: block;
 }
-.brand .brand-text { display: flex; flex-direction: column; line-height: 1.05; }
-.brand .brand-text b { font-size: 1.02rem; }
-.brand .brand-text span { font-size: .68rem; font-weight: 500; color: var(--muted); letter-spacing: .04em; }
+.brand .brand-text { display: flex; flex-direction: column; line-height: 1.15; }
+.brand .brand-text span { font-size: .78rem; font-weight: 600; color: var(--muted); letter-spacing: .04em; }
 
 .nav-links { display: flex; align-items: center; gap: 4px; list-style: none; margin: 0; padding: 0; }
 .nav-links a {
