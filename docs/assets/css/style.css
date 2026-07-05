@@ -262,6 +262,7 @@ a.card:hover .arrow .chev { transform: translateX(3px); }
 .people li { color: var(--ink); padding: 5px 0; border-top: 1px dashed var(--border); font-size: .96rem; }
 .people li:first-child { border-top: 0; }
 .people li.lead-person { font-weight: 600; }
+.home-note { margin: 0; font-size: .96rem; color: var(--ink); }
 
 /* software card */
 .soft-card { display: flex; flex-direction: column; height: 100%; }
